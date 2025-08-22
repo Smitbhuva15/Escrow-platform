@@ -23,6 +23,17 @@ contract Escrow {
 
     event Unstaked(address withdrawer, uint256 amount);
 
+    event Deposit(
+        uint256 dealId,
+        address buyer,
+        address seller,
+        uint256 amount, 
+        string status,
+        string title,
+        string description,
+        bool isDisputed
+    );
+
     /////////////////////////   errors   /////////////////////////////
 
     error invalidAddress();
@@ -30,6 +41,10 @@ contract Escrow {
     error invalidDeadline();
     error inValidTransaction();
     error insufficientStakeamount();
+    error inValidDealId();
+    error deadlineExeceed();
+    error dealNotCreated();
+    error invalidBuyerAddress();
 
     /////////////////////////   enum   /////////////////////////////
 
@@ -156,6 +171,48 @@ contract Escrow {
             false
         );
     }
+
+   
+   function deposit(uint256 dealId) external payable{
+ 
+    const deal=getDeal(dealId);
+
+    if(dealId < = 0 || dealId > dealCount ){
+        revert inValidDealId();
+    }
+
+       if(msg.sender==address(0)){
+              revert invalidAddress();
+        }
+  
+        if(msg.sender!=deal.buyer ){
+              revert invalidBuyerAddress();
+
+        }
+
+        if (msg.value <= 0 || deal.amount!=msg.value) {
+            revert invalidAmount();       
+        }
+
+        if(deal.deadline<block.timestamp){
+            revert deadlineExeceed();
+        }
+
+        if(deal.status!=dealstatus.Created){
+            revert dealNotCreated();
+        }
+
+     (bool success,)=payable(msg.sender).call{value:msg.value}("");
+
+     if(!success){
+        revert inValidTransaction();
+     }
+
+     deal.status=dealstatus.Funded;
+    
+    emit Deposit(deal.dealId, deal.buyer,deal.seller, deal.amount, deal.status,  deal.title, deal.description, deal.isDisputed);
+   }
+
 
     /////////////////////////  getter functions   /////////////////////////////
 
