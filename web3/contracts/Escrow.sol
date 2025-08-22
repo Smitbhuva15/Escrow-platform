@@ -71,6 +71,10 @@ contract Escrow {
             revert invalidAmount();
         }
 
+        if(msg.sender==address(0)){
+            revert invalidAddress();
+        }
+
         totalStake += msg.value;
         staked[msg.sender] += msg.value;
 
@@ -85,6 +89,11 @@ contract Escrow {
         if (staked[msg.sender] < amount ) {
             revert insufficientStakeamount();
         }
+
+        if(msg.sender==address(0)){
+            revert invalidAddress();
+        }
+
 
         (bool success, ) = payable(msg.sender).call{value: amount}("");
 

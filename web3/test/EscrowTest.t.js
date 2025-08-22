@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("Escrow", () => {
-  let transaction, result, signer, deployer, seller, buyer;
+  let transaction, result, deployer, seller, buyer;
 
   const tokens = (amount) => {
     return ethers.utils.parseEther(amount.toString());
@@ -47,7 +47,18 @@ describe("Escrow", () => {
       })
 
     })
+
+    describe("faliure", () => {
+
+
+      it("handel invalidAmount faliure", async () => {
+       await expect(escrow.connect(buyer).stake({ value: tokens(0) })).to.be.reverted
+      })
+ 
+
+    })
   })
+
 
   describe("unstake", () => {
     describe("success", () => {
@@ -79,7 +90,22 @@ describe("Escrow", () => {
       })
 
     })
+
+     describe("faliure", () => {
+
+       it("handel invalidAmount faliure", async () => {
+     await expect(  escrow.connect(buyer).unstake(tokens(0))).to.be.reverted ;
+      })
+
+      it("handel insufficientStakeamount faliure", async () => {
+     await expect(  escrow.connect(buyer).unstake(tokens(1))).to.be.reverted ;
+      })
+ 
+
+    })
   })
+
+
   describe("EscrowCreation", () => {
 
     describe("success", () => {
@@ -136,20 +162,21 @@ describe("Escrow", () => {
 
 
     describe("faliure", () => {
-      it("handel seller address failure", async () => {
-        await expect(escrow.connect(buyer).dealCreation("0x0000000000000000000000000000000000000000", "ui design", "design ui for web3 webiste", tokens(1), 7)).to.be.reverted
+      it("handel invalid seller address failure", async () => {
+       await expect(  escrow.connect(buyer).dealCreation("0x0000000000000000000000000000000000000000", "ui design", "design ui for web3 webiste", tokens(1), 7)).to.be.reverted
       })
 
-      it("handel amount failure", async () => {
+      it("handel invalid amount failure", async () => {
         await expect(escrow.connect(buyer).dealCreation(seller.address, "ui design", "design ui for web3 webiste", tokens(0), 7)).to.be.reverted
       })
 
-      it("handel deadline failure", async () => {
+      it("handel invalid deadline failure", async () => {
         await expect(escrow.connect(buyer).dealCreation(seller.address, "ui design", "design ui for web3 webiste", tokens(1), 0)).to.be.reverted
       })
 
     })
   });
 
+  
 
 });
