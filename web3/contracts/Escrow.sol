@@ -86,7 +86,7 @@ contract Escrow {
             revert insufficientStakeamount();
         }
 
-        (bool success, ) = payable(msg.sender).call{value: amount}();
+        (bool success, ) = payable(msg.sender).call{value: amount}("");
 
         if (!success) {
             revert inValidTransaction();

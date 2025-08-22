@@ -18,6 +18,68 @@ describe("Escrow", () => {
     result = await transaction.wait();
 
   });
+
+  describe("stake", () => {
+    describe("success", () => {
+
+      beforeEach(async () => {
+        transaction = await escrow.connect(buyer).stake({ value: tokens(1) });
+        result = await transaction.wait();
+
+      })
+
+      it("stake successfully", async () => {
+
+        const totalStake = await escrow.connect(buyer).totalStake();
+        expect(totalStake).to.be.equal(tokens(1));
+        const staked = await escrow.connect(buyer).staked(buyer.address);
+        expect(staked).to.be.equal(tokens(1));
+
+      })
+
+      it("Stake event", async () => {
+        const event = result.events[0];
+        const args = event.args;
+
+        expect(event.event).to.be.equal("Staked");
+        expect(args.depositer).to.be.equal(buyer.address);
+        expect(args.amount).to.be.equal(tokens(1));
+      })
+
+    })
+  })
+
+  describe("unstake", () => {
+    describe("success", () => {
+
+      beforeEach(async () => {
+        transaction = await escrow.connect(buyer).stake({ value: tokens(2) });
+        result = await transaction.wait();
+ 
+          transaction = await escrow.connect(buyer).unstake(tokens(0.5));
+        result = await transaction.wait();
+      })
+
+      it("unstake successfully", async () => {
+
+        const totalStake = await escrow.connect(buyer).totalStake();
+        expect(totalStake).to.be.equal(tokens(1.5));
+        const staked = await escrow.connect(buyer).staked(buyer.address);
+        expect(staked).to.be.equal(tokens(1.5));
+
+      })
+
+      it("Stake event", async () => {
+        const event = result.events[0];
+        const args = event.args;
+
+        expect(event.event).to.be.equal("Unstaked");
+        expect(args.withdrawer).to.be.equal(buyer.address);
+        expect(args.amount).to.be.equal(tokens(0.5));
+      })
+
+    })
+  })
   describe("EscrowCreation", () => {
 
     describe("success", () => {
@@ -36,37 +98,26 @@ describe("Escrow", () => {
       })
 
       it("get Deal", async () => {
-        const deal =await escrow.connect(buyer.address).getDeal(1);
-  
+        const deal = await escrow.connect(buyer.address).getDeal(1);
+
         expect(deal.dealId).to.be.equal(1);
         expect(deal.buyer).to.be.equal(buyer.address);
         expect(deal.seller).to.be.equal(seller.address);
         expect(deal.amount).to.be.equal(tokens(1));
         expect(deal.title).to.be.equal("ui design");
         expect(deal.description).to.be.equal("design ui for web3 webiste");
-         expect(deal.status).to.be.equal(1);
+        expect(deal.status).to.be.equal(1);
         expect(deal.createdAt).to.be.equal(currentTimestamp);
         expect(deal.deadline).to.be.equal(currentTimestamp + durationInSeconds);
         expect(deal.isDisputed).to.be.equal(false);
 
 
       })
-   
-       it("deal creation event",async()=>{
-        const event=result.events[0];
-        const args=event.args;
-        
 
-        //   uint256 dealId,
-        // address buyer,
-        // address seller,
-        // uint256 amount,
-        // string title,
-        // string description,
-        // string status,
-        // uint256 createdAt,
-        // uint256 deadline,
-        // bool isDisputed
+      it("deal creation event", async () => {
+        const event = result.events[0];
+        const args = event.args;
+
         expect(event.event).to.be.equal("Deal");
         expect(args.dealId).to.be.equal(1);
         expect(args.buyer).to.be.equal(buyer.address);
@@ -76,10 +127,26 @@ describe("Escrow", () => {
         expect(args.description).to.be.equal("design ui for web3 webiste");
         expect(args.status).to.be.equal("Created");
         expect(args.createdAt).to.be.equal(currentTimestamp);
-        expect(args.deadline).to.be.equal(currentTimestamp+durationInSeconds);
+        expect(args.deadline).to.be.equal(currentTimestamp + durationInSeconds);
         expect(args.isDisputed).to.be.equal(false);
 
-       })
+      })
+
+    })
+
+
+    describe("faliure", () => {
+      it("handel seller address failure", async () => {
+        await expect(escrow.connect(buyer).dealCreation("0x0000000000000000000000000000000000000000", "ui design", "design ui for web3 webiste", tokens(1), 7)).to.be.reverted
+      })
+
+      it("handel amount failure", async () => {
+        await expect(escrow.connect(buyer).dealCreation(seller.address, "ui design", "design ui for web3 webiste", tokens(0), 7)).to.be.reverted
+      })
+
+      it("handel deadline failure", async () => {
+        await expect(escrow.connect(buyer).dealCreation(seller.address, "ui design", "design ui for web3 webiste", tokens(1), 0)).to.be.reverted
+      })
 
     })
   });
