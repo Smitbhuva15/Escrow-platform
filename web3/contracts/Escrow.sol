@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 import "hardhat/console.sol";
+import "../libs/events.sol";
+import "../libs/Structures.sol";
+import "../libs/errors.sol";
+
 
 contract Escrow {
     uint256 public dealCount = 0;
@@ -13,128 +17,6 @@ contract Escrow {
     address public owner;
     uint256 public votingDays = 7 days;
 
-    /////////////////////////   events   /////////////////////////////
-    event Deal(
-        uint256 dealId,
-        address buyer,
-        address seller,
-        uint256 amount,
-        string title,
-        string description,
-        string status,
-        uint256 createdAt,
-        uint256 deadline,
-        bool isDisputed,
-        uint256 disputedId
-    );
-
-    event Staked(address depositer, uint256 amount);
-
-    event Unstaked(address withdrawer, uint256 amount);
-
-    event Deposit(
-        uint256 dealId,
-        address buyer,
-        address seller,
-        uint256 amount,
-        string status,
-        string title,
-        string description,
-        bool isDisputed,
-        uint256 disputedId
-    );
-
-    event Delivered(
-        uint256 dealId,
-        address buyer,
-        address seller,
-        uint256 amount,
-        string status,
-        string title,
-        string description,
-        bool isDisputed,
-        uint256 disputedId
-    );
-
-    event Confirmation(
-        uint256 dealId,
-        address buyer,
-        address seller,
-        uint256 amount,
-        string status,
-        string title,
-        string description,
-        bool isDisputed,
-        uint256 disputedId
-    );
-
-    event Dispute(
-        uint256 disbutedId,
-        uint256 votingEndTime,
-        uint256 YesVoting,
-        uint256 Novoting,
-        uint256 quorumTarget,
-        bool closed,
-        uint256 dealId
-    );
-
-    /////////////////////////   errors   /////////////////////////////
-
-    error invalidAddress();
-    error invalidAmount();
-    error invalidDeadline();
-    error inValidTransaction();
-    error insufficientStakeamount();
-    error inValidDealId();
-    error deadlineExeceed();
-    error dealNotCreated();
-    error invalidBuyerAddress();
-    error invalidSellerAddress();
-    error dealNotFunded();
-    error dealNotDelivered();
-    error dealNotDeliveredOrFunded();
-    error onlyOwnerAccess();
-    error invalidBuyerOrSellerAddress();
-    error Alreadydisputed();
-    error invalidquorum();
-
-    /////////////////////////   enum   /////////////////////////////
-
-    enum dealstatus {
-        none,
-        Created,
-        Funded,
-        Delivered,
-        Confirmation,
-        Disputed,
-        Resolved
-    }
-
-    /////////////////////////   struct   /////////////////////////////
-
-    struct deal {
-        uint256 dealId;
-        address buyer;
-        address seller;
-        uint256 amount;
-        string title;
-        string description;
-        dealstatus status;
-        uint256 createdAt;
-        uint256 deadline;
-        bool isDisputed;
-        uint256 disputedId;
-    }
-
-    struct disbuted {
-        uint256 disbutedId;
-        uint256 votingEndTime;
-        uint256 YesVoting;
-        uint256 Novoting;
-        uint256 quorumTarget; // minimum total votes required
-        bool closed;
-        uint256 dealId;
-    }
 
     /////////////////////////   mapping   /////////////////////////////
 
