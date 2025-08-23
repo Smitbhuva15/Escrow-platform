@@ -65,3 +65,11 @@ event Dispute(
     bool closed,
     uint256 dealId
 );
+
+event Voted(
+    uint256 disbutedId,
+    uint256 dealId,
+    address voterAddress,
+    uint256 weight,
+    bool support
+);

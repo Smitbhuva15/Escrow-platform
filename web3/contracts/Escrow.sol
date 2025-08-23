@@ -5,18 +5,15 @@ import "../libs/events.sol";
 import "../libs/Structures.sol";
 import "../libs/errors.sol";
 
-
 contract Escrow {
     uint256 public dealCount = 0;
     uint256 public disputeCount = 0;
     uint256 public totalStake = 0;
     uint256 public totalAllTimeDeposit = 0;
     uint256 public totalAllTimeStake = 0;
-    uint256 public currentlyLocked = 0;
     uint256 public minmumvotedweightPercentage = 10;
     address public owner;
     uint256 public votingDays = 7 days;
-
 
     /////////////////////////   mapping   /////////////////////////////
 
@@ -29,6 +26,7 @@ contract Escrow {
     mapping(uint256 disbutedId => disbuted) public disbutes;
     mapping(uint256 => mapping(address => uint256)) public usedWeight;
     mapping(uint256 => mapping(address => bool)) public hashvoted;
+    mapping(address=>uint256)public currentlyLocked;
 
     constructor() {
         owner = msg.sender;
@@ -295,7 +293,7 @@ contract Escrow {
             revert invalidAddress();
         }
 
-        if (msg.sender != dealed.buyer) {
+        if (msg.sender != dealed.buyer && msg.sender != dealed.seller) {
             revert invalidBuyerOrSellerAddress();
         }
 
@@ -316,7 +314,9 @@ contract Escrow {
             100;
         uint256 votingEndTime = block.timestamp + votingDays;
 
-        dealed.disputedId=disputeCount;
+        dealed.disputedId = disputeCount;
+        dealed.isDisputed=true;
+        dealed.status=dealstatus.Disputed;
 
         if (quorumTarget == 0 || minmumvotedweightPercentage == 0) {
             revert invalidquorum();
@@ -341,6 +341,65 @@ contract Escrow {
             false,
             dealId
         );
+    }
+
+    function vote(uint256 disbutedId,bool supportYes, uint256 weight) external {
+        if (disbutedId > disputeCount || disbutedId <= 0) {
+            revert inValidDisputedId();
+        }
+
+        disbuted storage dp = disbutes[disbutedId];
+        deal storage dealed = deals[dp.dealId];
+        
+
+        if (
+            msg.sender == dealed.buyer ||
+            msg.sender != dealed.seller ||
+            msg.sender == address(0)
+        ) {
+            revert invalidAddress();
+        }
+
+        if (dp.dealId == 0) {
+            revert inValidDealId();
+        }
+
+        if (dp.closed == true) {
+            revert disbuteIsClosed();
+        }
+
+        if (dp.votingEndTime < block.timestamp) {
+            revert deadlineExeceed();
+        }
+
+        if(hashvoted[disbutedId][msg.sender]==true){
+            revert AlReadyVoted();
+        }
+
+        if(weight<=0){
+            revert ZeroWeight();
+        }
+
+        if(currentlyLocked[msg.sender]+weight>staked[msg.sender]){
+            revert AlreadyUseAllStake();
+        }
+
+       currentlyLocked[msg.sender]+=weight;
+
+       hashvoted[disbutedId][msg.sender]=true;
+       usedWeight[disbutedId][msg.sender]+=weight;
+
+      if(supportYes==true){
+        // support seller
+        dp.YesVoting+=weight;
+      }
+      else{
+        //support buyer
+        dp.Novoting+=weight;
+      }
+ 
+     emit Voted(dp.disbutedId,dp.dealId,msg.sender,weight,supportYes);
+
     }
 
     /////////////////////////  getter functions   /////////////////////////////

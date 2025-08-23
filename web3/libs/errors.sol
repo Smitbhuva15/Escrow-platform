@@ -20,3 +20,8 @@ error onlyOwnerAccess();
 error invalidBuyerOrSellerAddress();
 error Alreadydisputed();
 error invalidquorum();
+error inValidDisputedId();
+error disbuteIsClosed();
+error AlReadyVoted();
+error ZeroWeight();
+error AlreadyUseAllStake();
