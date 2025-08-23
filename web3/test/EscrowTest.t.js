@@ -52,9 +52,9 @@ describe("Escrow", () => {
 
 
       it("handel invalidAmount faliure", async () => {
-       await expect(escrow.connect(buyer).stake({ value: tokens(0) })).to.be.reverted
+        await expect(escrow.connect(buyer).stake({ value: tokens(0) })).to.be.reverted
       })
- 
+
 
     })
   })
@@ -66,8 +66,8 @@ describe("Escrow", () => {
       beforeEach(async () => {
         transaction = await escrow.connect(buyer).stake({ value: tokens(2) });
         result = await transaction.wait();
- 
-          transaction = await escrow.connect(buyer).unstake(tokens(0.5));
+
+        transaction = await escrow.connect(buyer).unstake(tokens(0.5));
         result = await transaction.wait();
       })
 
@@ -91,16 +91,16 @@ describe("Escrow", () => {
 
     })
 
-     describe("faliure", () => {
+    describe("faliure", () => {
 
-       it("handel invalidAmount faliure", async () => {
-     await expect(  escrow.connect(buyer).unstake(tokens(0))).to.be.reverted ;
+      it("handel invalidAmount faliure", async () => {
+        await expect(escrow.connect(buyer).unstake(tokens(0))).to.be.reverted;
       })
 
       it("handel insufficientStakeamount faliure", async () => {
-     await expect(  escrow.connect(buyer).unstake(tokens(1))).to.be.reverted ;
+        await expect(escrow.connect(buyer).unstake(tokens(1))).to.be.reverted;
       })
- 
+
 
     })
   })
@@ -163,7 +163,7 @@ describe("Escrow", () => {
 
     describe("faliure", () => {
       it("handel invalid seller address failure", async () => {
-       await expect(  escrow.connect(buyer).dealCreation("0x0000000000000000000000000000000000000000", "ui design", "design ui for web3 webiste", tokens(1), 7)).to.be.reverted
+        await expect(escrow.connect(buyer).dealCreation("0x0000000000000000000000000000000000000000", "ui design", "design ui for web3 webiste", tokens(1), 7)).to.be.reverted
       })
 
       it("handel invalid amount failure", async () => {
@@ -177,6 +177,72 @@ describe("Escrow", () => {
     })
   });
 
-  
+  describe("Deposit", async () => {
+
+
+    describe("success", () => {
+
+      let deal;
+      beforeEach(async () => {
+        transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
+        result = await transaction.wait();
+        deal = await escrow.connect(buyer).getDeal(1);
+      })
+
+      it("deposit success with change dealStatus", async () => {
+        const deposited = await escrow.connect(buyer).getdeposited(buyer.address);
+        expect(deposited).to.be.equal(tokens(1));
+        expect(await escrow.connect(buyer).gettotalDepositAsBuyer(buyer.address)).to.be.equal(tokens(1));
+        expect(await escrow.connect(buyer).totalAllTimeDeposit()).to.be.equal(tokens(1));
+        expect(deal.status).to.be.equal(2);
+
+      })
+
+      it("deposit event", async () => {
+        const event = result.events[0];
+        const args = event.args;
+
+
+        expect(event.event).to.be.equal("Deposit");
+        expect(args.dealId).to.be.equal(1);
+        expect(args.buyer).to.be.equal(buyer.address);
+        expect(args.seller).to.be.equal(seller.address);
+        expect(args.amount).to.be.equal(tokens(1));
+        expect(args.title).to.be.equal("ui design");
+        expect(args.description).to.be.equal("design ui for web3 webiste");
+        expect(args.status).to.be.equal("Funded");
+        expect(args.isDisputed).to.be.equal(false);
+
+      })
+
+
+    })
+
+
+    describe("faliure", () => {
+      it("handel dealId faliure", async () => {
+        await expect(escrow.connect(buyer).deposit(9, { value: tokens(1) })).to.be.reverted;
+      })
+
+      it("handel buyer address faliure", async () => {
+        await expect(escrow.connect(seller).deposit(1, { value: tokens(1) })).to.be.reverted;
+      })
+
+      it("handel amount faliure", async () => {
+        await expect(escrow.connect(buyer).deposit(1, { value: tokens(2) })).to.be.reverted;
+      })
+
+      it("handel deadline faliure", async () => {
+
+        // Fast forward time by 7 days
+        await network.provider.send("evm_increaseTime", [7 * 24 * 60 * 60]);
+        await network.provider.send("evm_mine");
+
+
+        await expect(escrow.connect(buyer).deposit(1, { value: tokens(1) })).to.be.reverted;
+      })
+
+    })
+  })
 
 });

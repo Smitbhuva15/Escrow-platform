@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
+import "hardhat/console.sol";
 
 contract Escrow {
     uint256 public dealCount = 0;
     uint256 public totalStake = 0;
+    uint256 public totalAllTimeDeposit=0;
+    uint256 public totalAllTimeStake=0;
 
     /////////////////////////   events   /////////////////////////////
     event Deal(
@@ -77,6 +80,9 @@ contract Escrow {
 
     mapping(uint256 dealId => deal) public deals;
     mapping(address => uint256) public staked;
+    mapping(address => uint256) public deposited;
+    mapping(address => uint256) public totalDepositAsBuyer;
+    mapping(address => uint256) public totalreciveAsSeller;
 
     /////////////////////////  Deal functions   /////////////////////////////
 
@@ -90,6 +96,7 @@ contract Escrow {
             revert invalidAddress();
         }
 
+        totalAllTimeStake+=msg.value;
         totalStake += msg.value;
         staked[msg.sender] += msg.value;
 
@@ -174,43 +181,44 @@ contract Escrow {
 
    
    function deposit(uint256 dealId) external payable{
- 
-    const deal=getDeal(dealId);
 
-    if(dealId < = 0 || dealId > dealCount ){
+    if(dealId > dealCount || dealId <=0){
         revert inValidDealId();
     }
+ 
+     deal storage dealed = deals[dealId];
 
        if(msg.sender==address(0)){
               revert invalidAddress();
         }
   
-        if(msg.sender!=deal.buyer ){
+        if(msg.sender!=dealed.buyer ){
               revert invalidBuyerAddress();
 
         }
 
-        if (msg.value <= 0 || deal.amount!=msg.value) {
+        if (msg.value <= 0 || dealed.amount!=msg.value) {
             revert invalidAmount();       
         }
 
-        if(deal.deadline<block.timestamp){
+        if(dealed.deadline<block.timestamp){
             revert deadlineExeceed();
         }
 
-        if(deal.status!=dealstatus.Created){
+        if(dealed.status!=dealstatus.Created){
             revert dealNotCreated();
         }
 
-     (bool success,)=payable(msg.sender).call{value:msg.value}("");
+     deposited[msg.sender]+=msg.value;
 
-     if(!success){
-        revert inValidTransaction();
-     }
+     totalDepositAsBuyer[msg.sender]+=msg.value;
 
-     deal.status=dealstatus.Funded;
+     totalAllTimeDeposit+=msg.value;   
+
+     dealed.status=dealstatus.Funded;
     
-    emit Deposit(deal.dealId, deal.buyer,deal.seller, deal.amount, deal.status,  deal.title, deal.description, deal.isDisputed);
+
+    emit Deposit(dealed.dealId, dealed.buyer,dealed.seller, dealed.amount, "Funded",  dealed.title, dealed.description, dealed.isDisputed);
    }
 
 
@@ -218,5 +226,13 @@ contract Escrow {
 
     function getDeal(uint256 dealId) public view returns (deal memory) {
         return deals[dealId];
+    }
+
+    function getdeposited(address buyer) public view returns( uint256){
+        return deposited[buyer];
+    }
+
+    function gettotalDepositAsBuyer(address buyer)public view returns( uint256){
+        return totalDepositAsBuyer[buyer];
     }
 }
