@@ -68,6 +68,16 @@ contract Escrow {
         uint256 disputedId
     );
 
+    event Dispute(
+        uint256 disbutedId,
+        uint256 votingEndTime,
+        uint256 YesVoting,
+        uint256 Novoting,
+        uint256 quorumTarget,
+        bool closed,
+        uint256 dealId
+    );
+
     /////////////////////////   errors   /////////////////////////////
 
     error invalidAddress();
@@ -84,6 +94,9 @@ contract Escrow {
     error dealNotDelivered();
     error dealNotDeliveredOrFunded();
     error onlyOwnerAccess();
+    error invalidBuyerOrSellerAddress();
+    error Alreadydisputed();
+    error invalidquorum();
 
     /////////////////////////   enum   /////////////////////////////
 
@@ -150,8 +163,8 @@ contract Escrow {
 
     /////////////////////////  Owner Access functions   /////////////////////////////
     function setvotingDay(uint256 newvotingday) public onlyowner(msg.sender) {
-        newvotingday=newvotingday*24*60*60;
-        votingDays= newvotingday ;
+        newvotingday = newvotingday * 24 * 60 * 60;
+        votingDays = newvotingday;
     }
 
     function setminmumvotedweightPercentage(
@@ -210,7 +223,7 @@ contract Escrow {
         string memory description,
         uint256 amount,
         uint256 deadline
-    ) public {
+    ) external {
         if (seller == address(0) || msg.sender == address(0)) {
             revert invalidAddress();
         }
@@ -387,12 +400,64 @@ contract Escrow {
         );
     }
 
-
     /////////////////////////  DAO functions   /////////////////////////////
 
-    
+    function openDispute(uint256 dealId) external {
+        if (dealId > dealCount || dealId <= 0) {
+            revert inValidDealId();
+        }
 
-    
+        deal storage dealed = deals[dealId];
+
+        if (msg.sender == address(0)) {
+            revert invalidAddress();
+        }
+
+        if (msg.sender != dealed.buyer) {
+            revert invalidBuyerOrSellerAddress();
+        }
+
+        if (
+            dealed.status != dealstatus.Delivered &&
+            dealed.status != dealstatus.Funded
+        ) {
+            revert dealNotDeliveredOrFunded();
+        }
+
+        if (dealed.disputedId != 0) {
+            revert Alreadydisputed();
+        }
+
+        disputeCount++;
+        uint256 disbutedId = disputeCount;
+        uint256 quorumTarget = (dealed.amount * minmumvotedweightPercentage) /
+            100;
+        uint256 votingEndTime = block.timestamp + votingDays;
+
+        if (quorumTarget == 0 || minmumvotedweightPercentage == 0) {
+            revert invalidquorum();
+        }
+
+        disbutes[disbutedId] = disbuted(
+            disbutedId,
+            votingEndTime,
+            0,
+            0,
+            quorumTarget,
+            false,
+            dealId
+        );
+
+        emit Dispute(
+            disbutedId,
+            votingEndTime,
+            0,
+            0,
+            quorumTarget,
+            false,
+            dealId
+        );
+    }
 
     /////////////////////////  getter functions   /////////////////////////////
 
