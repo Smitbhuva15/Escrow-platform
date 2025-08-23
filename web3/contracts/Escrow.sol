@@ -316,6 +316,8 @@ contract Escrow {
             100;
         uint256 votingEndTime = block.timestamp + votingDays;
 
+        dealed.disputedId=disputeCount;
+
         if (quorumTarget == 0 || minmumvotedweightPercentage == 0) {
             revert invalidquorum();
         }

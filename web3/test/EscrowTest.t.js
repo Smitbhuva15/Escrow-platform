@@ -451,7 +451,117 @@ describe("Escrow", () => {
 
   })
 
+  describe("Open Dispute", async () => {
+    describe("success", () => {
 
+      let currentTimestamp, durationInSeconds;
+
+      beforeEach(async () => {
+        transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
+        result = await transaction.wait();
+
+        transaction = await escrow.connect(seller).markDelivered(1);
+        result = await transaction.wait();
+
+        transaction = await escrow.connect(buyer).openDispute(1);
+        result = await transaction.wait();
+
+        // Get current block timestamp
+        const blockNum = await ethers.provider.getBlockNumber();
+        const block = await ethers.provider.getBlock(blockNum);
+        currentTimestamp = block.timestamp;
+        let durationInDays = 7;
+        durationInSeconds = durationInDays * 24 * 60 * 60;
+
+      })
+
+      it("create open Dispute", async () => {
+
+        const dispute = await escrow.connect(buyer).disbutes(1);
+        expect(dispute.disbutedId).to.be.equal(1);
+        expect(dispute.votingEndTime).to.be.equal(currentTimestamp + durationInSeconds)
+        expect(dispute.YesVoting).to.be.equal(0);
+        expect(dispute.Novoting).to.be.equal(0);
+        expect(dispute.quorumTarget).to.be.equal(tokens(0.1));
+        expect(dispute.closed).to.be.equal(false);
+        expect(dispute.dealId).to.be.equal(1);
+
+
+      })
+
+      it("Dispute event", async () => {
+
+        const event = result.events[0];
+        const args = event.args;
+
+
+        expect(event.event).to.be.equal("Dispute");
+        expect(args.disbutedId).to.be.equal(1);
+        expect(args.votingEndTime).to.be.equal(currentTimestamp + durationInSeconds);
+        expect(args.YesVoting).to.be.equal(0);
+        expect(args.Novoting).to.be.equal(0);
+        expect(args.closed).to.be.equal(false);
+        expect(args.quorumTarget).to.be.equal(tokens(0.1));
+        expect(args.dealId).to.be.equal(1);
+
+      })
+
+
+    })
+
+    describe("failure", () => {
+
+
+      describe("amount funded and delivered", () => {
+        let deal;
+        beforeEach(async () => {
+          transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
+          result = await transaction.wait()
+
+          transaction = await escrow.connect(seller).markDelivered(1);
+          result = await transaction.wait();
+
+          deal = await escrow.connect(buyer).getDeal(1);
+
+
+        })
+
+        it("handel dealId faliure", async () => {
+          await expect(escrow.connect(buyer).openDispute(5)).to.be.reverted;
+        })
+
+        it("handel buyer and seller address faliure", async () => {
+          await expect(escrow.connect(deployer).confirmReceived(1)).to.be.reverted;
+        })
+
+        it("handel dispute id faliure", async () => {
+          transaction = await escrow.connect(buyer).openDispute(1);
+          result = await transaction.wait()
+
+          await expect(escrow.connect(buyer).openDispute(1)).to.be.reverted;
+        })
+      })
+
+      describe("amount not funded and deliverd", () => {
+        it("handel amount funded and delivered faliure", async () => {
+          await expect(escrow.connect(buyer).openDispute(1)).to.be.reverted;
+        })
+      })
+
+       describe("amount funded but not deliverd", () => {
+        it("handel amount funded and delivered faliure", async () => {
+          //deal funded
+          transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
+          result = await transaction.wait()
+
+          await (escrow.connect(buyer).openDispute(1))
+        })
+      })
+
+
+    })
+
+  })
 
 
 });
