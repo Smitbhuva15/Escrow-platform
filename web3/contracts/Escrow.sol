@@ -73,6 +73,7 @@ contract Escrow {
     error invalidSellerAddress();
     error dealNotFunded();
     error dealNotDelivered();
+    error dealNotDeliveredOrFunded();
 
     /////////////////////////   enum   /////////////////////////////
 
@@ -297,23 +298,19 @@ contract Escrow {
             revert invalidBuyerAddress();
         }
 
-        if (dealed.status != dealstatus.Funded) {
-            revert dealNotFunded();
+        if (dealed.status != dealstatus.Delivered && dealed.status != dealstatus.Funded) {
+            revert dealNotDeliveredOrFunded();
         }
 
-        if (dealed.status != dealstatus.Delivered) {
-            revert dealNotDelivered();
-        }
-
-        (bool success, ) = payable(msg.sender).call{value: dealed.amount}("");
+        (bool success, ) = payable(dealed.seller).call{value: dealed.amount}("");
 
         if (!success) {
             revert inValidTransaction();
         }
   
-         deposited[msg.sender] -= msg.value;
+         deposited[msg.sender] -= dealed.amount;
 
-         totalreciveAsSeller[dealed.seller]+=msg.value;
+         totalreciveAsSeller[dealed.seller]+=dealed.amount;
 
          dealed.status=dealstatus.Resolved;
          dealed.amount=0;
@@ -323,7 +320,7 @@ contract Escrow {
             dealed.buyer,
             dealed.seller,
             dealed.amount,
-            "Confirmation",
+            "Resolved",
             dealed.title,
             dealed.description,
             dealed.isDisputed
@@ -345,5 +342,11 @@ contract Escrow {
         address buyer
     ) public view returns (uint256) {
         return totalDepositAsBuyer[buyer];
+    }
+
+     function gettotalreciveAsSeller(
+        address buyer
+    ) public view returns (uint256) {
+        return totalreciveAsSeller[buyer];
     }
 }

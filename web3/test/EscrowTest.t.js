@@ -184,6 +184,7 @@ describe("Escrow", () => {
 
       let deal;
       beforeEach(async () => {
+
         transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
         result = await transaction.wait();
         deal = await escrow.connect(buyer).getDeal(1);
@@ -195,7 +196,7 @@ describe("Escrow", () => {
         expect(await escrow.connect(buyer).gettotalDepositAsBuyer(buyer.address)).to.be.equal(tokens(1));
         expect(await escrow.connect(buyer).totalAllTimeDeposit()).to.be.equal(tokens(1));
         expect(deal.status).to.be.equal(2);
-
+     
       })
 
       it("deposit event", async () => {
@@ -259,7 +260,7 @@ describe("Escrow", () => {
         deal = await escrow.connect(buyer).getDeal(1);
       })
 
-      it("change deal status", async () => {
+      it("check change deal status", async () => {
         expect(deal.status).to.be.equal(3);
       })
 
@@ -311,5 +312,108 @@ describe("Escrow", () => {
     })
 
   })
+
+
+  describe("confirmation", async () => {
+
+    describe("success", () => {
+      let deal,balanceBefore;
+      beforeEach(async () => {
+        transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
+        result = await transaction.wait();
+
+        transaction = await escrow.connect(seller).markDelivered(1);
+        result = await transaction.wait();
+
+        balanceBefore = await ethers.provider.getBalance(seller.address);
+    
+        transaction = await escrow.connect(buyer).confirmReceived(1);
+        result = await transaction.wait();
+
+
+        deal = await escrow.connect(buyer).getDeal(1);
+      })
+
+      it("check changes in deal", async () => {
+        const deposited = await escrow.connect(buyer).getdeposited(buyer.address);
+        expect(deposited).to.be.equal(tokens(0));
+        expect(await escrow.connect(buyer).gettotalreciveAsSeller(seller.address)).to.be.equal(tokens(1));
+        expect(deal.amount).to.be.equal(0);
+        expect(deal.status).to.be.equal(6);
+
+        const balanceafter=await ethers.provider.getBalance(seller.address)
+         expect(balanceafter.sub(balanceBefore)).to.be.equal(tokens(1));
+
+
+      })
+
+      it("confirmation event", async () => {
+        const event = result.events[0];
+        const args = event.args;
+
+
+        expect(event.event).to.be.equal("Confirmation");
+        expect(args.dealId).to.be.equal(1);
+        expect(args.buyer).to.be.equal(buyer.address);
+        expect(args.seller).to.be.equal(seller.address);
+        expect(args.amount).to.be.equal(tokens(0));
+        expect(args.title).to.be.equal("ui design");
+        expect(args.description).to.be.equal("design ui for web3 webiste");
+        expect(args.status).to.be.equal("Resolved");
+        expect(args.isDisputed).to.be.equal(false);
+
+      })
+
+
+    })
+
+    describe("failure", () => {
+
+
+      describe("amonut funded and delivered", () => {
+        let deal;
+        beforeEach(async () => {
+          transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
+          result = await transaction.wait()
+
+          transaction = await escrow.connect(seller).markDelivered(1);
+          result = await transaction.wait();
+
+          deal = await escrow.connect(buyer).getDeal(1);
+
+
+        })
+
+        it("handel dealId faliure", async () => {
+          await expect(escrow.connect(buyer).confirmReceived(5)).to.be.reverted;
+        })
+
+        it("handel buyer address faliure", async () => {
+          await expect(escrow.connect(seller).confirmReceived(1)).to.be.reverted;
+        })
+      })
+
+      describe("amount not funded and deliverd", () => {
+        it("handel amount funded and delivered faliure", async () => {
+          await expect(escrow.connect(buyer).confirmReceived(1)).to.be.reverted;
+        })
+      })
+
+       describe("amount funded but not deliverd", () => {
+        it("handel amount funded and delivered faliure", async () => {
+          //deal funded
+          transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
+          result = await transaction.wait()
+
+          await (escrow.connect(buyer).confirmReceived(1));
+        })
+      })
+ 
+
+    })
+
+  })
+
+  
 
 });
