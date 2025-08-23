@@ -4,9 +4,14 @@ import "hardhat/console.sol";
 
 contract Escrow {
     uint256 public dealCount = 0;
+    uint256 public disputeCount = 0;
     uint256 public totalStake = 0;
     uint256 public totalAllTimeDeposit = 0;
     uint256 public totalAllTimeStake = 0;
+    uint256 public currentlyLocked = 0;
+    uint256 public minmumvotedweightPercentage = 10;
+    address public owner;
+    uint256 public votingDays = 7 days;
 
     /////////////////////////   events   /////////////////////////////
     event Deal(
@@ -19,7 +24,8 @@ contract Escrow {
         string status,
         uint256 createdAt,
         uint256 deadline,
-        bool isDisputed
+        bool isDisputed,
+        uint256 disputedId
     );
 
     event Staked(address depositer, uint256 amount);
@@ -34,7 +40,8 @@ contract Escrow {
         string status,
         string title,
         string description,
-        bool isDisputed
+        bool isDisputed,
+        uint256 disputedId
     );
 
     event Delivered(
@@ -45,10 +52,11 @@ contract Escrow {
         string status,
         string title,
         string description,
-        bool isDisputed
+        bool isDisputed,
+        uint256 disputedId
     );
 
-     event Confirmation(
+    event Confirmation(
         uint256 dealId,
         address buyer,
         address seller,
@@ -56,7 +64,8 @@ contract Escrow {
         string status,
         string title,
         string description,
-        bool isDisputed
+        bool isDisputed,
+        uint256 disputedId
     );
 
     /////////////////////////   errors   /////////////////////////////
@@ -74,6 +83,7 @@ contract Escrow {
     error dealNotFunded();
     error dealNotDelivered();
     error dealNotDeliveredOrFunded();
+    error onlyOwnerAccess();
 
     /////////////////////////   enum   /////////////////////////////
 
@@ -100,6 +110,17 @@ contract Escrow {
         uint256 createdAt;
         uint256 deadline;
         bool isDisputed;
+        uint256 disputedId;
+    }
+
+    struct disbuted {
+        uint256 disbutedId;
+        uint256 votingEndTime;
+        uint256 YesVoting;
+        uint256 Novoting;
+        uint256 quorumTarget; // minimum total votes required
+        bool closed;
+        uint256 dealId;
     }
 
     /////////////////////////   mapping   /////////////////////////////
@@ -109,6 +130,35 @@ contract Escrow {
     mapping(address => uint256) public deposited;
     mapping(address => uint256) public totalDepositAsBuyer;
     mapping(address => uint256) public totalreciveAsSeller;
+
+    mapping(uint256 disbutedId => disbuted) public disbutes;
+    mapping(uint256 => mapping(address => uint256)) public usedWeight;
+    mapping(uint256 => mapping(address => bool)) public hashvoted;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    /////////////////////////   modifier   /////////////////////////////
+
+    modifier onlyowner(address user) {
+        if (user != owner) {
+            revert onlyOwnerAccess();
+        }
+        _;
+    }
+
+    /////////////////////////  Owner Access functions   /////////////////////////////
+    function setvotingDay(uint256 newvotingday) public onlyowner(msg.sender) {
+        newvotingday=newvotingday*24*60*60;
+        votingDays= newvotingday ;
+    }
+
+    function setminmumvotedweightPercentage(
+        uint256 newpercentage
+    ) public onlyowner(msg.sender) {
+        minmumvotedweightPercentage = newpercentage;
+    }
 
     /////////////////////////  Deal functions   /////////////////////////////
 
@@ -187,7 +237,8 @@ contract Escrow {
             dealstatus.Created,
             block.timestamp,
             deadline,
-            false
+            false,
+            0
         );
 
         emit Deal(
@@ -200,7 +251,8 @@ contract Escrow {
             "Created",
             block.timestamp,
             deadline,
-            false
+            false,
+            0
         );
     }
 
@@ -246,7 +298,8 @@ contract Escrow {
             "Funded",
             dealed.title,
             dealed.description,
-            dealed.isDisputed
+            dealed.isDisputed,
+            dealed.disputedId
         );
     }
 
@@ -279,7 +332,8 @@ contract Escrow {
             "Delivered",
             dealed.title,
             dealed.description,
-            dealed.isDisputed
+            dealed.isDisputed,
+            dealed.disputedId
         );
     }
 
@@ -298,24 +352,29 @@ contract Escrow {
             revert invalidBuyerAddress();
         }
 
-        if (dealed.status != dealstatus.Delivered && dealed.status != dealstatus.Funded) {
+        if (
+            dealed.status != dealstatus.Delivered &&
+            dealed.status != dealstatus.Funded
+        ) {
             revert dealNotDeliveredOrFunded();
         }
 
-        (bool success, ) = payable(dealed.seller).call{value: dealed.amount}("");
+        (bool success, ) = payable(dealed.seller).call{value: dealed.amount}(
+            ""
+        );
 
         if (!success) {
             revert inValidTransaction();
         }
-  
-         deposited[msg.sender] -= dealed.amount;
 
-         totalreciveAsSeller[dealed.seller]+=dealed.amount;
+        deposited[msg.sender] -= dealed.amount;
 
-         dealed.status=dealstatus.Resolved;
-         dealed.amount=0;
+        totalreciveAsSeller[dealed.seller] += dealed.amount;
 
-          emit Confirmation(
+        dealed.status = dealstatus.Resolved;
+        dealed.amount = 0;
+
+        emit Confirmation(
             dealed.dealId,
             dealed.buyer,
             dealed.seller,
@@ -323,10 +382,17 @@ contract Escrow {
             "Resolved",
             dealed.title,
             dealed.description,
-            dealed.isDisputed
+            dealed.isDisputed,
+            dealed.disputedId
         );
-
     }
+
+
+    /////////////////////////  DAO functions   /////////////////////////////
+
+    
+
+    
 
     /////////////////////////  getter functions   /////////////////////////////
 
@@ -344,7 +410,7 @@ contract Escrow {
         return totalDepositAsBuyer[buyer];
     }
 
-     function gettotalreciveAsSeller(
+    function gettotalreciveAsSeller(
         address buyer
     ) public view returns (uint256) {
         return totalreciveAsSeller[buyer];

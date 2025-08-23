@@ -19,6 +19,43 @@ describe("Escrow", () => {
 
   });
 
+  describe("onlyOwnerAceess", () => {
+    it("check owner", async () => {
+      const deploy = await escrow.connect(buyer).owner();
+      expect(deploy).to.be.equal(deployer.address);
+    })
+
+
+    describe("success", () => {
+
+      it("set voting days", async () => {
+        transaction = await escrow.connect(deployer).setvotingDay(100);
+        result = await transaction.wait();
+        const votingday = await escrow.connect(deployer).votingDays();
+        expect(votingday).to.be.equal(100 * 60 * 60 * 24);
+      })
+
+      it("set minmum vote weight Percentage", async () => {
+        transaction = await escrow.connect(deployer).setminmumvotedweightPercentage(70);
+        result = await transaction.wait();
+        const Percentage = await escrow.connect(deployer).minmumvotedweightPercentage();
+        expect(Percentage).to.be.equal(70);
+      })
+
+    })
+
+    describe("faliure",()=>{
+      it("handel only owner revert in set voting Day", async () => {
+      await expect(escrow.connect(buyer).setvotingDay(100)).to.be.reverted;
+      })
+
+      it("handel only owner revert in set minmum vote weight Percentage", async () => {
+      await expect(escrow.connect(buyer).setminmumvotedweightPercentage(100)).to.be.reverted;
+      })
+    })
+
+  })
+
   describe("stake", () => {
     describe("success", () => {
 
@@ -196,7 +233,7 @@ describe("Escrow", () => {
         expect(await escrow.connect(buyer).gettotalDepositAsBuyer(buyer.address)).to.be.equal(tokens(1));
         expect(await escrow.connect(buyer).totalAllTimeDeposit()).to.be.equal(tokens(1));
         expect(deal.status).to.be.equal(2);
-     
+
       })
 
       it("deposit event", async () => {
@@ -326,7 +363,7 @@ describe("Escrow", () => {
         result = await transaction.wait();
 
         balanceBefore = await ethers.provider.getBalance(seller.address);
-    
+
         transaction = await escrow.connect(buyer).confirmReceived(1);
         result = await transaction.wait();
 
@@ -408,12 +445,13 @@ describe("Escrow", () => {
           await (escrow.connect(buyer).confirmReceived(1));
         })
       })
- 
+
 
     })
 
   })
 
-  
+
+
 
 });
