@@ -5,8 +5,8 @@ import "hardhat/console.sol";
 contract Escrow {
     uint256 public dealCount = 0;
     uint256 public totalStake = 0;
-    uint256 public totalAllTimeDeposit=0;
-    uint256 public totalAllTimeStake=0;
+    uint256 public totalAllTimeDeposit = 0;
+    uint256 public totalAllTimeStake = 0;
 
     /////////////////////////   events   /////////////////////////////
     event Deal(
@@ -30,7 +30,18 @@ contract Escrow {
         uint256 dealId,
         address buyer,
         address seller,
-        uint256 amount, 
+        uint256 amount,
+        string status,
+        string title,
+        string description,
+        bool isDisputed
+    );
+
+    event Delivered(
+        uint256 dealId,
+        address buyer,
+        address seller,
+        uint256 amount,
         string status,
         string title,
         string description,
@@ -48,6 +59,8 @@ contract Escrow {
     error deadlineExeceed();
     error dealNotCreated();
     error invalidBuyerAddress();
+    error invalidSellerAddress();
+    error dealNotFunded();
 
     /////////////////////////   enum   /////////////////////////////
 
@@ -92,11 +105,11 @@ contract Escrow {
             revert invalidAmount();
         }
 
-        if(msg.sender==address(0)){
+        if (msg.sender == address(0)) {
             revert invalidAddress();
         }
 
-        totalAllTimeStake+=msg.value;
+        totalAllTimeStake += msg.value;
         totalStake += msg.value;
         staked[msg.sender] += msg.value;
 
@@ -108,14 +121,13 @@ contract Escrow {
             revert invalidAmount();
         }
 
-        if (staked[msg.sender] < amount ) {
+        if (staked[msg.sender] < amount) {
             revert insufficientStakeamount();
         }
 
-        if(msg.sender==address(0)){
+        if (msg.sender == address(0)) {
             revert invalidAddress();
         }
-
 
         (bool success, ) = payable(msg.sender).call{value: amount}("");
 
@@ -179,48 +191,85 @@ contract Escrow {
         );
     }
 
-   
-   function deposit(uint256 dealId) external payable{
-
-    if(dealId > dealCount || dealId <=0){
-        revert inValidDealId();
-    }
- 
-     deal storage dealed = deals[dealId];
-
-       if(msg.sender==address(0)){
-              revert invalidAddress();
-        }
-  
-        if(msg.sender!=dealed.buyer ){
-              revert invalidBuyerAddress();
-
+    function deposit(uint256 dealId) external payable {
+        if (dealId > dealCount || dealId <= 0) {
+            revert inValidDealId();
         }
 
-        if (msg.value <= 0 || dealed.amount!=msg.value) {
-            revert invalidAmount();       
+        deal storage dealed = deals[dealId];
+
+        if (msg.sender == address(0)) {
+            revert invalidAddress();
         }
 
-        if(dealed.deadline<block.timestamp){
+        if (msg.sender != dealed.buyer) {
+            revert invalidBuyerAddress();
+        }
+
+        if (msg.value <= 0 || dealed.amount != msg.value) {
+            revert invalidAmount();
+        }
+        if (dealed.deadline < block.timestamp) {
             revert deadlineExeceed();
         }
 
-        if(dealed.status!=dealstatus.Created){
+        if (dealed.status != dealstatus.Created) {
             revert dealNotCreated();
         }
 
-     deposited[msg.sender]+=msg.value;
+        deposited[msg.sender] += msg.value;
 
-     totalDepositAsBuyer[msg.sender]+=msg.value;
+        totalDepositAsBuyer[msg.sender] += msg.value;
 
-     totalAllTimeDeposit+=msg.value;   
+        totalAllTimeDeposit += msg.value;
 
-     dealed.status=dealstatus.Funded;
-    
+        dealed.status = dealstatus.Funded;
 
-    emit Deposit(dealed.dealId, dealed.buyer,dealed.seller, dealed.amount, "Funded",  dealed.title, dealed.description, dealed.isDisputed);
-   }
+        emit Deposit(
+            dealed.dealId,
+            dealed.buyer,
+            dealed.seller,
+            dealed.amount,
+            "Funded",
+            dealed.title,
+            dealed.description,
+            dealed.isDisputed
+        );
+    }
 
+    function markDelivered(uint256 dealId) external {
+
+        if (dealId > dealCount || dealId <= 0) {
+            revert inValidDealId();
+        }
+
+        deal storage dealed = deals[dealId];
+
+        if (msg.sender == address(0)) {
+            revert invalidAddress();
+        }
+
+        if (msg.sender != dealed.seller) {
+            revert invalidSellerAddress();
+        }
+
+        if (dealed.status != dealstatus.Funded) {
+            revert dealNotFunded();
+        }
+
+        dealed.status = dealstatus.Delivered;
+
+        emit Delivered(
+            dealed.dealId,
+            dealed.buyer,
+            dealed.seller,
+            dealed.amount,
+            "Delivered",
+            dealed.title,
+            dealed.description,
+            dealed.isDisputed
+        );
+    }
 
     /////////////////////////  getter functions   /////////////////////////////
 
@@ -228,11 +277,13 @@ contract Escrow {
         return deals[dealId];
     }
 
-    function getdeposited(address buyer) public view returns( uint256){
+    function getdeposited(address buyer) public view returns (uint256) {
         return deposited[buyer];
     }
 
-    function gettotalDepositAsBuyer(address buyer)public view returns( uint256){
+    function gettotalDepositAsBuyer(
+        address buyer
+    ) public view returns (uint256) {
         return totalDepositAsBuyer[buyer];
     }
 }

@@ -245,4 +245,71 @@ describe("Escrow", () => {
     })
   })
 
+  describe("Delivered", async () => {
+
+    describe("success", () => {
+      let deal;
+      beforeEach(async () => {
+        transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
+        result = await transaction.wait();
+
+        transaction = await escrow.connect(seller).markDelivered(1);
+        result = await transaction.wait();
+
+        deal = await escrow.connect(buyer).getDeal(1);
+      })
+
+      it("change deal status", async () => {
+        expect(deal.status).to.be.equal(3);
+      })
+
+      it("delivered event", async () => {
+        const event = result.events[0];
+        const args = event.args;
+
+
+        expect(event.event).to.be.equal("Delivered");
+        expect(args.dealId).to.be.equal(1);
+        expect(args.buyer).to.be.equal(buyer.address);
+        expect(args.seller).to.be.equal(seller.address);
+        expect(args.amount).to.be.equal(tokens(1));
+        expect(args.title).to.be.equal("ui design");
+        expect(args.description).to.be.equal("design ui for web3 webiste");
+        expect(args.status).to.be.equal("Delivered");
+        expect(args.isDisputed).to.be.equal(false);
+
+      })
+
+    })
+
+    describe("failure", () => {
+
+
+      describe("amonut funded", () => {
+        beforeEach(async () => {
+          transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
+          result = await transaction.wait()
+        })
+
+        it("handel dealId faliure", async () => {
+          await expect(escrow.connect(seller).markDelivered(5)).to.be.reverted;
+        })
+
+        it("handel seller address faliure", async () => {
+          await expect(escrow.connect(buyer).markDelivered(1)).to.be.reverted;
+        })
+      })
+
+      describe("amount not funded", () => {
+        it("handel amount funded faliure", async () => {
+          await expect(escrow.connect(seller).markDelivered(1)).to.be.reverted;
+        })
+      })
+
+
+
+    })
+
+  })
+
 });
