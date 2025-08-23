@@ -48,6 +48,17 @@ contract Escrow {
         bool isDisputed
     );
 
+     event Confirmation(
+        uint256 dealId,
+        address buyer,
+        address seller,
+        uint256 amount,
+        string status,
+        string title,
+        string description,
+        bool isDisputed
+    );
+
     /////////////////////////   errors   /////////////////////////////
 
     error invalidAddress();
@@ -61,6 +72,7 @@ contract Escrow {
     error invalidBuyerAddress();
     error invalidSellerAddress();
     error dealNotFunded();
+    error dealNotDelivered();
 
     /////////////////////////   enum   /////////////////////////////
 
@@ -238,7 +250,6 @@ contract Escrow {
     }
 
     function markDelivered(uint256 dealId) external {
-
         if (dealId > dealCount || dealId <= 0) {
             revert inValidDealId();
         }
@@ -269,6 +280,55 @@ contract Escrow {
             dealed.description,
             dealed.isDisputed
         );
+    }
+
+    function confirmReceived(uint256 dealId) external {
+        if (dealId > dealCount || dealId <= 0) {
+            revert inValidDealId();
+        }
+
+        deal storage dealed = deals[dealId];
+
+        if (msg.sender == address(0)) {
+            revert invalidAddress();
+        }
+
+        if (msg.sender != dealed.buyer) {
+            revert invalidBuyerAddress();
+        }
+
+        if (dealed.status != dealstatus.Funded) {
+            revert dealNotFunded();
+        }
+
+        if (dealed.status != dealstatus.Delivered) {
+            revert dealNotDelivered();
+        }
+
+        (bool success, ) = payable(msg.sender).call{value: dealed.amount}("");
+
+        if (!success) {
+            revert inValidTransaction();
+        }
+  
+         deposited[msg.sender] -= msg.value;
+
+         totalreciveAsSeller[dealed.seller]+=msg.value;
+
+         dealed.status=dealstatus.Resolved;
+         dealed.amount=0;
+
+          emit Confirmation(
+            dealed.dealId,
+            dealed.buyer,
+            dealed.seller,
+            dealed.amount,
+            "Confirmation",
+            dealed.title,
+            dealed.description,
+            dealed.isDisputed
+        );
+
     }
 
     /////////////////////////  getter functions   /////////////////////////////
