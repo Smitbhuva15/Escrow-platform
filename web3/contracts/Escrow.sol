@@ -353,6 +353,11 @@ contract Escrow {
         }
 
         disbuted storage dp = disbutes[disbutedId];
+
+        if (dp.dealId == 0) {
+            revert inValidDealId();
+        }
+
         deal storage dealed = deals[dp.dealId];
 
         if (
@@ -361,10 +366,6 @@ contract Escrow {
             msg.sender == address(0)
         ) {
             revert invalidAddress();
-        }
-
-        if (dp.dealId == 0) {
-            revert inValidDealId();
         }
 
         if (dp.closed == true) {
@@ -401,6 +402,89 @@ contract Escrow {
         }
 
         emit Voted(dp.disbutedId, dp.dealId, msg.sender, weight, supportYes);
+    }
+
+    function closeDispute(uint256 disbutedId) external {
+        if (disbutedId > disputeCount || disbutedId <= 0) {
+            revert inValidDisputedId();
+        }
+
+        disbuted storage dp = disbutes[disbutedId];
+
+        if (dp.dealId == 0) {
+            revert inValidDealId();
+        }
+
+        deal storage dealed = deals[dp.dealId];
+
+        if (msg.sender == address(0)) {
+            revert invalidAddress();
+        }
+
+        if (msg.sender != dealed.buyer && msg.sender != dealed.seller) {
+            revert invalidBuyerOrSellerAddress();
+        }
+
+        if (dp.votingEndTime > block.timestamp) {
+            revert deadlinenotExceed();
+        }
+
+        if (dp.closed == true) {
+            revert disbuteIsClosed();
+        }
+
+        if (dealed.status != dealstatus.Disputed) {
+            revert dealIsNotDispute();
+        }
+
+        uint256 totalVotes = dp.YesVoting + dp.Novoting;
+        // 1-->means buyer win
+        // 2-->means seller win
+        uint256 winner;
+        if (totalVotes > dp.quorumTarget) {
+            if (dp.YesVoting > dp.Novoting) {
+                winner = 2; //seller win
+            } else {
+                winner = 1; // buyer win
+            }
+        } else {
+            winner = 1; // buyer win
+        }
+        address winnerAddress;
+        if (winner == 1) {
+            winnerAddress = dealed.buyer;
+        } else {
+            winnerAddress = dealed.seller;
+        }
+
+        (bool success, ) = payable(winnerAddress).call{value: dealed.amount}(
+            ""
+        );
+        if (!success) {
+            revert inValidTransaction();
+        }
+
+        if (winner == 2) {
+            totalreciveAsSeller[dealed.seller] += dealed.amount;
+        }
+
+        deposited[dealed.buyer] -= dealed.amount;
+
+        dealed.amount = 0;
+        dealed.isDisputed = false;
+        dealed.status = dealstatus.Resolved;
+        dp.closed = true;
+
+        emit DisputeClosed(
+            dp.disbutedId,
+            dp.dealId,
+            dp.YesVoting,
+            dp.Novoting,
+            winner,
+            winnerAddress,
+            dp.quorumTarget,
+            "Resolved"
+        );
     }
 
     /////////////////////////  getter functions   /////////////////////////////

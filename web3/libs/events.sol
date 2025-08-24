@@ -73,3 +73,14 @@ event Voted(
     uint256 weight,
     bool support
 );
+
+event DisputeClosed(
+    uint256 disbutedId,
+    uint256 dealId,
+    uint256 YesVoting,
+    uint256 Novoting,
+    uint256 winner,
+    address winnerAddress,
+    uint256 quorumTarget,
+    string status
+);
