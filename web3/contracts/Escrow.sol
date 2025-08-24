@@ -26,7 +26,7 @@ contract Escrow {
     mapping(uint256 disbutedId => disbuted) public disbutes;
     mapping(uint256 => mapping(address => uint256)) public usedWeight;
     mapping(uint256 => mapping(address => bool)) public hashvoted;
-    mapping(address=>uint256)public currentlyLocked;
+    mapping(address => uint256) public currentlyLocked;
 
     constructor() {
         owner = msg.sender;
@@ -315,8 +315,8 @@ contract Escrow {
         uint256 votingEndTime = block.timestamp + votingDays;
 
         dealed.disputedId = disputeCount;
-        dealed.isDisputed=true;
-        dealed.status=dealstatus.Disputed;
+        dealed.isDisputed = true;
+        dealed.status = dealstatus.Disputed;
 
         if (quorumTarget == 0 || minmumvotedweightPercentage == 0) {
             revert invalidquorum();
@@ -343,18 +343,21 @@ contract Escrow {
         );
     }
 
-    function vote(uint256 disbutedId,bool supportYes, uint256 weight) external {
+    function vote(
+        uint256 disbutedId,
+        bool supportYes,
+        uint256 weight
+    ) external {
         if (disbutedId > disputeCount || disbutedId <= 0) {
             revert inValidDisputedId();
         }
 
         disbuted storage dp = disbutes[disbutedId];
         deal storage dealed = deals[dp.dealId];
-        
 
         if (
             msg.sender == dealed.buyer ||
-            msg.sender != dealed.seller ||
+            msg.sender == dealed.seller ||
             msg.sender == address(0)
         ) {
             revert invalidAddress();
@@ -372,34 +375,32 @@ contract Escrow {
             revert deadlineExeceed();
         }
 
-        if(hashvoted[disbutedId][msg.sender]==true){
+        if (hashvoted[disbutedId][msg.sender] == true) {
             revert AlReadyVoted();
         }
 
-        if(weight<=0){
+        if (weight <= 0) {
             revert ZeroWeight();
         }
 
-        if(currentlyLocked[msg.sender]+weight>staked[msg.sender]){
+        if (currentlyLocked[msg.sender] + weight > staked[msg.sender]) {
             revert AlreadyUseAllStake();
         }
 
-       currentlyLocked[msg.sender]+=weight;
+        currentlyLocked[msg.sender] += weight;
 
-       hashvoted[disbutedId][msg.sender]=true;
-       usedWeight[disbutedId][msg.sender]+=weight;
+        hashvoted[disbutedId][msg.sender] = supportYes;
+        usedWeight[disbutedId][msg.sender] += weight;
 
-      if(supportYes==true){
-        // support seller
-        dp.YesVoting+=weight;
-      }
-      else{
-        //support buyer
-        dp.Novoting+=weight;
-      }
- 
-     emit Voted(dp.disbutedId,dp.dealId,msg.sender,weight,supportYes);
+        if (supportYes == true) {
+            // support seller
+            dp.YesVoting += weight;
+        } else {
+            //support buyer
+            dp.Novoting += weight;
+        }
 
+        emit Voted(dp.disbutedId, dp.dealId, msg.sender, weight, supportYes);
     }
 
     /////////////////////////  getter functions   /////////////////////////////
@@ -408,19 +409,47 @@ contract Escrow {
         return deals[dealId];
     }
 
-    function getdeposited(address buyer) public view returns (uint256) {
-        return deposited[buyer];
+    function getDispute(
+        uint256 disputeId
+    ) public view returns (disbuted memory) {
+        return disbutes[disputeId];
+    }
+
+    function getdeposited(address user) public view returns (uint256) {
+        return deposited[user];
     }
 
     function gettotalDepositAsBuyer(
-        address buyer
+        address user
     ) public view returns (uint256) {
-        return totalDepositAsBuyer[buyer];
+        return totalDepositAsBuyer[user];
     }
 
     function gettotalreciveAsSeller(
-        address buyer
+        address user
     ) public view returns (uint256) {
-        return totalreciveAsSeller[buyer];
+        return totalreciveAsSeller[user];
+    }
+
+    function getusedWeight(
+        uint256 disbutedId,
+        address user
+    ) public view returns (uint256) {
+        return usedWeight[disbutedId][user];
+    }
+
+    function gethashvoted(
+        uint256 disbutedId,
+        address user
+    ) public view returns (bool) {
+        return hashvoted[disbutedId][user];
+    }
+
+    function getcurrentlyLocked(address user) public view returns (uint256) {
+        return currentlyLocked[user];
+    }
+
+    function getstaked(address user) public view returns (uint256) {
+        return staked[user];
     }
 }
