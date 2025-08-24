@@ -25,7 +25,7 @@ contract Escrow {
 
     mapping(uint256 disputedId => disputed) public disputes;
     mapping(uint256 => mapping(address => uint256)) public usedWeight;
-    mapping(uint256 => mapping(address => bool)) public hashvoted;
+    mapping(uint256 => mapping(address => bool)) public hasvoted;
     mapping(address => uint256) public currentlyLocked;
 
     constructor() {
@@ -280,6 +280,10 @@ contract Escrow {
         );
     }
 
+      receive() external payable {
+       revert NotAllowedDirectETHtransfer();
+      }
+
     /////////////////////////  DAO functions   /////////////////////////////
 
     function openDispute(uint256 dealId) external {
@@ -376,7 +380,7 @@ contract Escrow {
             revert deadlineExeceed();
         }
 
-        if (hashvoted[disputedId][msg.sender] == true) {
+        if (hasvoted[disputedId][msg.sender] == true) {
             revert AlReadyVoted();
         }
 
@@ -390,7 +394,7 @@ contract Escrow {
 
         currentlyLocked[msg.sender] += weight;
 
-        hashvoted[disputedId][msg.sender] = supportYes;
+        hasvoted[disputedId][msg.sender] = supportYes;
         usedWeight[disputedId][msg.sender] += weight;
 
         if (supportYes == true) {
@@ -510,6 +514,9 @@ contract Escrow {
         usedWeight[disputedId][msg.sender] = 0;
     }
 
+  
+
+
     /////////////////////////  getter functions   /////////////////////////////
 
     function getDeal(uint256 dealId) public view returns (deal memory) {
@@ -545,11 +552,11 @@ contract Escrow {
         return usedWeight[disputedId][user];
     }
 
-    function gethashvoted(
+    function gethasvoted(
         uint256 disputedId,
         address user
     ) public view returns (bool) {
-        return hashvoted[disputedId][user];
+        return hasvoted[disputedId][user];
     }
 
     function getcurrentlyLocked(address user) public view returns (uint256) {

@@ -29,3 +29,4 @@ error deadlinenotExceed();
 error dealIsNotDispute(); 
 error NotContibuteTheDispute();
 error diputeIsNotClosed();
+error NotAllowedDirectETHtransfer();
