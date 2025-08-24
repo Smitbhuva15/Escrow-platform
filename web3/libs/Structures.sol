@@ -30,8 +30,8 @@ struct deal {
     uint256 disputedId;
 }
 
-struct disbuted {
-    uint256 disbutedId;
+struct disputed {
+    uint256 disputedId;
     uint256 votingEndTime;
     uint256 YesVoting;
     uint256 Novoting;

@@ -23,7 +23,7 @@ contract Escrow {
     mapping(address => uint256) public totalDepositAsBuyer;
     mapping(address => uint256) public totalreciveAsSeller;
 
-    mapping(uint256 disbutedId => disbuted) public disbutes;
+    mapping(uint256 disputedId => disputed) public disputes;
     mapping(uint256 => mapping(address => uint256)) public usedWeight;
     mapping(uint256 => mapping(address => bool)) public hashvoted;
     mapping(address => uint256) public currentlyLocked;
@@ -309,7 +309,7 @@ contract Escrow {
         }
 
         disputeCount++;
-        uint256 disbutedId = disputeCount;
+        uint256 disputedId = disputeCount;
         uint256 quorumTarget = (dealed.amount * minmumvotedweightPercentage) /
             100;
         uint256 votingEndTime = block.timestamp + votingDays;
@@ -322,8 +322,8 @@ contract Escrow {
             revert invalidquorum();
         }
 
-        disbutes[disbutedId] = disbuted(
-            disbutedId,
+        disputes[disputedId] = disputed(
+            disputedId,
             votingEndTime,
             0,
             0,
@@ -333,7 +333,7 @@ contract Escrow {
         );
 
         emit Dispute(
-            disbutedId,
+            disputedId,
             votingEndTime,
             0,
             0,
@@ -344,15 +344,15 @@ contract Escrow {
     }
 
     function vote(
-        uint256 disbutedId,
+        uint256 disputedId,
         bool supportYes,
         uint256 weight
     ) external {
-        if (disbutedId > disputeCount || disbutedId <= 0) {
+        if (disputedId > disputeCount || disputedId <= 0) {
             revert inValidDisputedId();
         }
 
-        disbuted storage dp = disbutes[disbutedId];
+        disputed storage dp = disputes[disputedId];
 
         if (dp.dealId == 0) {
             revert inValidDealId();
@@ -369,14 +369,14 @@ contract Escrow {
         }
 
         if (dp.closed == true) {
-            revert disbuteIsClosed();
+            revert disputeIsClosed();
         }
 
         if (dp.votingEndTime < block.timestamp) {
             revert deadlineExeceed();
         }
 
-        if (hashvoted[disbutedId][msg.sender] == true) {
+        if (hashvoted[disputedId][msg.sender] == true) {
             revert AlReadyVoted();
         }
 
@@ -390,8 +390,8 @@ contract Escrow {
 
         currentlyLocked[msg.sender] += weight;
 
-        hashvoted[disbutedId][msg.sender] = supportYes;
-        usedWeight[disbutedId][msg.sender] += weight;
+        hashvoted[disputedId][msg.sender] = supportYes;
+        usedWeight[disputedId][msg.sender] += weight;
 
         if (supportYes == true) {
             // support seller
@@ -401,15 +401,15 @@ contract Escrow {
             dp.Novoting += weight;
         }
 
-        emit Voted(dp.disbutedId, dp.dealId, msg.sender, weight, supportYes);
+        emit Voted(dp.disputedId, dp.dealId, msg.sender, weight, supportYes);
     }
 
-    function closeDispute(uint256 disbutedId) external {
-        if (disbutedId > disputeCount || disbutedId <= 0) {
+    function closeDispute(uint256 disputedId) external {
+        if (disputedId > disputeCount || disputedId <= 0) {
             revert inValidDisputedId();
         }
 
-        disbuted storage dp = disbutes[disbutedId];
+        disputed storage dp = disputes[disputedId];
 
         if (dp.dealId == 0) {
             revert inValidDealId();
@@ -430,7 +430,7 @@ contract Escrow {
         }
 
         if (dp.closed == true) {
-            revert disbuteIsClosed();
+            revert disputeIsClosed();
         }
 
         if (dealed.status != dealstatus.Disputed) {
@@ -476,7 +476,7 @@ contract Escrow {
         dp.closed = true;
 
         emit DisputeClosed(
-            dp.disbutedId,
+            dp.disputedId,
             dp.dealId,
             dp.YesVoting,
             dp.Novoting,
@@ -487,6 +487,29 @@ contract Escrow {
         );
     }
 
+    function unlockstakefromdispute(uint256 disputedId) external {
+        if (disputedId > disputeCount || disputedId <= 0) {
+            revert inValidDisputedId();
+        }
+
+        disputed storage dp = disputes[disputedId];
+
+        if (dp.dealId == 0) {
+            revert inValidDealId();
+        }
+
+        if (dp.closed != true) {
+            revert diputeIsNotClosed();
+        }
+
+        if (usedWeight[disputedId][msg.sender] == 0) {
+            revert NotContibuteTheDispute();
+        }
+
+        currentlyLocked[msg.sender] -= usedWeight[disputedId][msg.sender];
+        usedWeight[disputedId][msg.sender] = 0;
+    }
+
     /////////////////////////  getter functions   /////////////////////////////
 
     function getDeal(uint256 dealId) public view returns (deal memory) {
@@ -495,8 +518,8 @@ contract Escrow {
 
     function getDispute(
         uint256 disputeId
-    ) public view returns (disbuted memory) {
-        return disbutes[disputeId];
+    ) public view returns (disputed memory) {
+        return disputes[disputeId];
     }
 
     function getdeposited(address user) public view returns (uint256) {
@@ -516,17 +539,17 @@ contract Escrow {
     }
 
     function getusedWeight(
-        uint256 disbutedId,
+        uint256 disputedId,
         address user
     ) public view returns (uint256) {
-        return usedWeight[disbutedId][user];
+        return usedWeight[disputedId][user];
     }
 
     function gethashvoted(
-        uint256 disbutedId,
+        uint256 disputedId,
         address user
     ) public view returns (bool) {
-        return hashvoted[disbutedId][user];
+        return hashvoted[disputedId][user];
     }
 
     function getcurrentlyLocked(address user) public view returns (uint256) {

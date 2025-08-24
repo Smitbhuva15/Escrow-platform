@@ -57,7 +57,7 @@ event Confirmation(
 );
 
 event Dispute(
-    uint256 disbutedId,
+    uint256 disputedId,
     uint256 votingEndTime,
     uint256 YesVoting,
     uint256 Novoting,
@@ -67,7 +67,7 @@ event Dispute(
 );
 
 event Voted(
-    uint256 disbutedId,
+    uint256 disputedId,
     uint256 dealId,
     address voterAddress,
     uint256 weight,
@@ -75,7 +75,7 @@ event Voted(
 );
 
 event DisputeClosed(
-    uint256 disbutedId,
+    uint256 disputedId,
     uint256 dealId,
     uint256 YesVoting,
     uint256 Novoting,
