@@ -66,6 +66,10 @@ contract Escrow is Dao{
             revert insufficientStakeamount();
         }
 
+        if(currentlyLocked[msg.sender] + amount > staked[msg.sender]){
+            revert AllstakeLockInVoting();
+        }
+
         if (msg.sender == address(0)) {
             revert invalidAddress();
         }

@@ -44,13 +44,13 @@ describe("Escrow", () => {
 
     })
 
-    describe("faliure",()=>{
+    describe("faliure", () => {
       it("handel only owner revert in set voting Day", async () => {
-      await expect(escrow.connect(buyer).setvotingDay(100)).to.be.reverted;
+        await expect(escrow.connect(buyer).setvotingDay(100)).to.be.reverted;
       })
 
       it("handel only owner revert in set minmum vote weight Percentage", async () => {
-      await expect(escrow.connect(buyer).setminmumvotedweightPercentage(100)).to.be.reverted;
+        await expect(escrow.connect(buyer).setminmumvotedweightPercentage(100)).to.be.reverted;
       })
     })
 
@@ -354,7 +354,7 @@ describe("Escrow", () => {
   describe("confirmation", async () => {
 
     describe("success", () => {
-      let deal,balanceBefore;
+      let deal, balanceBefore;
       beforeEach(async () => {
         transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
         result = await transaction.wait();
@@ -378,8 +378,8 @@ describe("Escrow", () => {
         expect(deal.amount).to.be.equal(0);
         expect(deal.status).to.be.equal(6);
 
-        const balanceafter=await ethers.provider.getBalance(seller.address)
-         expect(balanceafter.sub(balanceBefore)).to.be.equal(tokens(1));
+        const balanceafter = await ethers.provider.getBalance(seller.address)
+        expect(balanceafter.sub(balanceBefore)).to.be.equal(tokens(1));
 
 
       })
@@ -436,7 +436,7 @@ describe("Escrow", () => {
         })
       })
 
-       describe("amount funded but not deliverd", () => {
+      describe("amount funded but not deliverd", () => {
         it("handel amount funded and delivered faliure", async () => {
           //deal funded
           transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
@@ -548,7 +548,7 @@ describe("Escrow", () => {
         })
       })
 
-       describe("amount funded but not deliverd", () => {
+      describe("amount funded but not deliverd", () => {
         it("handel amount funded and delivered faliure", async () => {
           //deal funded
           transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
@@ -684,7 +684,7 @@ describe("Escrow", () => {
           await expect(escrow.connect(user).vote(1, true, tokens(0))).to.be.reverted;
         })
 
-         it("handel already use allstake", async () => {
+        it("handel already use allstake", async () => {
           transaction = await escrow.connect(user).stake({ value: tokens(1) });
           result = await transaction.wait();
 
@@ -812,14 +812,14 @@ describe("Escrow", () => {
         await expect(escrow.connect(buyer).closeDispute(1)).to.be.reverted;
       })
 
-       it("handel second time close dispute", async () => {
+      it("handel second time close dispute", async () => {
 
         // Fast forward time by 7 days
         await network.provider.send("evm_increaseTime", [7 * 24 * 60 * 60]);
         await network.provider.send("evm_mine");
 
         transaction = await escrow.connect(buyer).closeDispute(1)
-        result = await transaction.wait();     
+        result = await transaction.wait();
       })
 
     })
@@ -910,14 +910,14 @@ describe("Escrow", () => {
 
       it("handel unlock stake without deposit", async () => {
 
-           // Fast forward time by 7 days
+        // Fast forward time by 7 days
         await network.provider.send("evm_increaseTime", [7 * 24 * 60 * 60]);
         await network.provider.send("evm_mine");
 
         transaction = await escrow.connect(buyer).closeDispute(1)
-        result = await transaction.wait();     
+        result = await transaction.wait();
 
-        await expect( escrow.connect(buyer).unlockstakefromdispute(1)).to.be.reverted;
+        await expect(escrow.connect(buyer).unlockstakefromdispute(1)).to.be.reverted;
       })
 
     })

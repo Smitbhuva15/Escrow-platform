@@ -11,6 +11,7 @@ error insufficientStakeamount();
 error inValidDealId();
 error deadlineExeceed();
 error dealNotCreated();
+error AllstakeLockInVoting();
 error invalidBuyerAddress();
 error invalidSellerAddress();
 error dealNotFunded();
