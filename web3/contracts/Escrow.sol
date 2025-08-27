@@ -6,12 +6,10 @@ import "../libs/Structures.sol";
 import "../libs/errors.sol";
 import {Dao} from "./Dao.sol";
 
-contract Escrow is Dao{
+contract Escrow is Dao {
     uint256 public totalStake = 0;
     uint256 public totalAllTimeDeposit = 0;
     uint256 public totalAllTimeStake = 0;
-    address public owner;  
-
 
     constructor() {
         owner = msg.sender;
@@ -66,7 +64,7 @@ contract Escrow is Dao{
             revert insufficientStakeamount();
         }
 
-        if(currentlyLocked[msg.sender] + amount > staked[msg.sender]){
+        if (currentlyLocked[msg.sender] + amount > staked[msg.sender]) {
             revert AllstakeLockInVoting();
         }
 
@@ -241,7 +239,19 @@ contract Escrow is Dao{
             revert dealNotDeliveredOrFunded();
         }
 
-        (bool success, ) = payable(dealed.seller).call{value: dealed.amount}(
+        uint256 amount = dealed.amount;
+        uint256 ownerTakeAmount = (amount * ownerPercentage) / 100;
+        uint256 otherTransferamount = amount - ownerTakeAmount;
+
+        bool success;
+
+        (success, ) = payable(owner).call{value: ownerTakeAmount}("");
+
+        if (!success) {
+            revert inValidTransaction();
+        }
+
+        (success, ) = payable(dealed.seller).call{value: otherTransferamount}(
             ""
         );
 
@@ -251,7 +261,7 @@ contract Escrow is Dao{
 
         deposited[msg.sender] -= dealed.amount;
 
-        totalreciveAsSeller[dealed.seller] += dealed.amount;
+        totalreciveAsSeller[dealed.seller] += otherTransferamount;
 
         dealed.status = dealstatus.Resolved;
         dealed.amount = 0;
@@ -269,12 +279,9 @@ contract Escrow is Dao{
         );
     }
 
-      receive() external payable {
-       revert NotAllowedDirectETHtransfer();
-      }
-
-
-
+    receive() external payable {
+        revert NotAllowedDirectETHtransfer();
+    }
 
     /////////////////////////  getter functions   /////////////////////////////
 

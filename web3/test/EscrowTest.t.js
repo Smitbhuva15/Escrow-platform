@@ -354,7 +354,7 @@ describe("Escrow", () => {
   describe("confirmation", async () => {
 
     describe("success", () => {
-      let deal, balanceBefore;
+      let deal, balanceBefore,ownerbalanceBefore;
       beforeEach(async () => {
         transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
         result = await transaction.wait();
@@ -363,6 +363,7 @@ describe("Escrow", () => {
         result = await transaction.wait();
 
         balanceBefore = await ethers.provider.getBalance(seller.address);
+        ownerbalanceBefore = await ethers.provider.getBalance(deployer.address);
 
         transaction = await escrow.connect(buyer).confirmReceived(1);
         result = await transaction.wait();
@@ -374,12 +375,16 @@ describe("Escrow", () => {
       it("check changes in deal", async () => {
         const deposited = await escrow.connect(buyer).getdeposited(buyer.address);
         expect(deposited).to.be.equal(tokens(0));
-        expect(await escrow.connect(buyer).gettotalreciveAsSeller(seller.address)).to.be.equal(tokens(1));
+        expect(await escrow.connect(buyer).gettotalreciveAsSeller(seller.address)).to.be.equal(tokens(0.99));
         expect(deal.amount).to.be.equal(0);
         expect(deal.status).to.be.equal(6);
 
         const balanceafter = await ethers.provider.getBalance(seller.address)
-        expect(balanceafter.sub(balanceBefore)).to.be.equal(tokens(1));
+        const ownerbalanceafter = await ethers.provider.getBalance(deployer.address)
+
+        expect(balanceafter.sub(balanceBefore)).to.be.equal(tokens(0.99));
+        expect(ownerbalanceafter.sub(ownerbalanceBefore)).to.be.equal(tokens(0.01));
+
 
 
       })
@@ -701,7 +706,7 @@ describe("Escrow", () => {
   describe("close Dispute", () => {
     describe("success", () => {
 
-      let balanceBefore, dispute, deal;
+      let balanceBefore, dispute, deal, ownerbalanceBefore;
 
       beforeEach(async () => {
         transaction = await escrow.connect(buyer).deposit(1, { value: tokens(1) });
@@ -716,9 +721,10 @@ describe("Escrow", () => {
         transaction = await escrow.connect(buyer).openDispute(1);
         result = await transaction.wait();
 
-        balanceBefore = await ethers.provider.getBalance(seller.address);
+           balanceBefore = await ethers.provider.getBalance(seller.address);
+        ownerbalanceBefore = await ethers.provider.getBalance(deployer.address);
 
-        transaction = await escrow.connect(user).vote(1, false, tokens(0.5));
+        transaction = await escrow.connect(user).vote(1, true, tokens(0.5));
         result = await transaction.wait();
 
         expect(await escrow.connect(buyer).getdeposited(buyer.address)).to.be.equal(tokens(1));
@@ -740,10 +746,13 @@ describe("Escrow", () => {
 
       it("check voting", async () => {
 
-        const balanceafter = await ethers.provider.getBalance(seller.address);
+     const balanceafter = await ethers.provider.getBalance(seller.address)
+        const ownerbalanceafter = await ethers.provider.getBalance(deployer.address)
 
-        expect(balanceafter.sub(balanceBefore)).to.be.equal(0);
-        expect(await escrow.connect(buyer).gettotalreciveAsSeller(seller.address)).to.be.equal(0);
+      
+        expect(balanceafter.sub(balanceBefore)).to.be.equal(tokens(0.99));
+        expect(ownerbalanceafter.sub(ownerbalanceBefore)).to.be.equal(tokens(0.01));
+        expect(await escrow.connect(buyer).gettotalreciveAsSeller(seller.address)).to.be.equal(tokens(0.99));
         expect(await escrow.connect(buyer).getdeposited(buyer.address)).to.be.equal(0);
         expect(deal.amount).to.be.equal(0);
         expect(deal.isDisputed).to.be.equal(false);
@@ -759,11 +768,11 @@ describe("Escrow", () => {
 
         expect(event.event).to.be.equal("DisputeClosed");
         expect(args.disputedId).to.be.equal(1);
-        expect(args.YesVoting).to.be.equal(tokens(0));
-        expect(args.Novoting).to.be.equal(tokens(0.5));
+        expect(args.YesVoting).to.be.equal(tokens(0.5));
+        expect(args.Novoting).to.be.equal(tokens(0));
         expect(args.dealId).to.be.equal(1);
-        expect(args.winner).to.be.equal(1);
-        expect(args.winnerAddress).to.be.equal(buyer.address);
+        expect(args.winner).to.be.equal(2);
+        expect(args.winnerAddress).to.be.equal(seller.address);
 
       })
 

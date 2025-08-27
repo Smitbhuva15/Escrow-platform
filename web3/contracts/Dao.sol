@@ -10,6 +10,9 @@ contract Dao {
     uint256 public disputeCount = 0;
     uint256 public votingDays = 7 days;
     uint256 public minmumvotedweightPercentage = 10;
+    uint256 public ownerPercentage=1;
+    address public owner;
+
 
     /////////////////////////   mapping   /////////////////////////////
 
@@ -201,15 +204,30 @@ contract Dao {
             winnerAddress = dealed.seller;
         }
 
-        (bool success, ) = payable(winnerAddress).call{value: dealed.amount}(
+
+        uint256 amount = dealed.amount;
+        uint256 ownerTakeAmount = (amount * ownerPercentage) / 100;
+        uint256 otherTransferamount = amount - ownerTakeAmount;
+
+        bool success;
+
+        (success, ) = payable(owner).call{value: ownerTakeAmount}("");
+
+        if (!success) {
+            revert inValidTransaction();
+        }
+
+        (success, ) = payable(winnerAddress).call{value: otherTransferamount}(
             ""
         );
+
+
         if (!success) {
             revert inValidTransaction();
         }
 
         if (winner == 2) {
-            totalreciveAsSeller[dealed.seller] += dealed.amount;
+            totalreciveAsSeller[dealed.seller] += otherTransferamount;
         }
 
         deposited[dealed.buyer] -= dealed.amount;
