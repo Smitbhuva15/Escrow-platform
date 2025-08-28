@@ -5,6 +5,7 @@ import { ConnectButton } from "thirdweb/react";
 import { createThirdwebClient } from "thirdweb";
 import { sepolia } from "thirdweb/chains";
 import { createWallet } from "thirdweb/wallets";
+import Link from "next/link";
 
 const client = createThirdwebClient({
     clientId: process.env.NEXT_PUBLIC_CLIENT_ID as string,
@@ -31,18 +32,30 @@ const Navbar = () => {
             <div className="xl:max-w-6xl lg:max-w-5xl md:max-w-3xl sm:max-w-xl w-[90%] mx-auto py-5 flex justify-between items-center">
                 {/* Logo */}
                 <div className="text-4xl font-extrabold text-[#1d45fe] ml-2">
-                    Escrow
+                    <Link href={'/'}>Escrow</Link>
                 </div>
 
                 {/* Desktop Menu */}
                 <div className="hidden lg:flex items-center gap-14">
                     <ul className="flex text-zinc-300 font-semibold gap-6 xl:text-lg">
-                        <li>Docs</li>
-                        <li>Deals</li>
-                        <li>Disputes</li>
-                        <li>Stake</li>
-                        <li>Profile</li>
-                        <li>Admin</li>
+                        <Link href={'/escrows'}>
+                            <li className="hover:text-[#1d45fe]  transition duration-500">Escrows</li>
+                        </Link>
+                        <Link href={'/arbitration'}>
+                            <li className="hover:text-[#1d45fe]  transition duration-500">Arbitration</li>
+                        </Link>
+                        <Link href={'/stake'}>
+                            <li className="hover:text-[#1d45fe]  transition duration-500">Stake</li>
+                        </Link>
+                        <Link href={'/dashboard'}>
+                            <li className="hover:text-[#1d45fe]  transition duration-500">Dashboard</li>
+                        </Link>
+                        <Link href={'/admin'}>
+                            <li className="hover:text-[#1d45fe]  transition duration-500">Admin</li>
+                        </Link>
+                        <Link href={'/guides'}>
+                            <li className="hover:text-[#1d45fe]  transition duration-500">User Guides</li>
+                        </Link>
                     </ul>
                     <div>
                         <ConnectButton
@@ -78,7 +91,7 @@ const Navbar = () => {
                 </div>
 
 
-                <div className="flex flex-col items-center justify-center h-full ">
+                <div className="flex flex-col items-center justify-center  h-full ">
 
                     <ConnectButton
                         client={client}
@@ -91,18 +104,29 @@ const Navbar = () => {
                     />
 
 
-
-                    {/* Links with animation */}
                     <ul
-                        className={`flex flex-col sm:text-2xl text-xl font-semibold space-y-6 mt-10 ${display ? "animate-slideDown" : ""
+                        className={`flex flex-col sm:text-2xl text-xl items-center font-semibold space-y-6 mt-10 ${display ? "animate-slideDown" : ""
                             }`}
                     >
-                        <li className="transition">Docs</li>
-                        <li className="transition">Deals</li>
-                        <li className="transition">Disputes</li>
-                        <li className="transition">Stake</li>
-                        <li className="transition">Profile</li>
-                        <li className="transition">Admin</li>
+                        <Link href={'/escrows'} onClick={() => {setDisplay(false) }}>
+                            <li className="hover:text-[#1d45fe]  transition duration-500 ">Escrows</li>
+                        </Link>
+                        <Link href={'/arbitration'} onClick={() => setDisplay(false)}>
+                            <li className="hover:text-[#1d45fe]  transition duration-500">Arbitration</li>
+                        </Link>
+                        <Link href={'/stake'} onClick={() => setDisplay(false)}>
+                            <li className="hover:text-[#1d45fe]  transition duration-500">Stake</li>
+                        </Link>
+                        <Link href={'/dashboard'} onClick={() => setDisplay(false)}>
+                            <li className="hover:text-[#1d45fe]  transition duration-500">Dashboard</li>
+                        </Link>
+                        <Link href={'/admin'} onClick={() => setDisplay(false)}>
+                            <li className="hover:text-[#1d45fe]  transition duration-500">Admin</li>
+                        </Link>
+                        <Link href={'/guides'} onClick={() => setDisplay(false)}>
+                            <li className="hover:text-[#1d45fe]  transition duration-500">User Guides</li>
+                        </Link>
+
                     </ul>
                 </div>
             </div>
