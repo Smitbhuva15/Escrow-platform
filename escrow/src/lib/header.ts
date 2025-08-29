@@ -8,6 +8,10 @@ export const headers = [
             "link": "/arbitration"
         },
         {
+            "name": "Create Escrows",
+            "link": "/createEscrow"
+        },
+        {
             "name": "Stake",
             "link": "/stake"
         },
@@ -20,7 +24,7 @@ export const headers = [
             "link": "/admin"
         },
         {
-            "name": "User Guides",
+            "name": "Guides",
             "link": "/guides"
         },
 

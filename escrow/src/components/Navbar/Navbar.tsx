@@ -40,8 +40,8 @@ const Navbar = () => {
                 <div className="hidden lg:flex items-center gap-14">
                     <ul className="flex text-zinc-300 font-semibold gap-6 xl:text-lg">
                         {
-                            headers.map((header) => (
-                                <Link href={`${header.link}`}>
+                            headers.map((header,index) => (
+                                <Link href={`${header.link}`} key={index}>
                                     <li className="hover:text-[#1638d6]  transition duration-500"> {header.name}</li>
                                 </Link>
                             ))
@@ -96,8 +96,8 @@ const Navbar = () => {
 
                     <ul className={`flex flex-col sm:text-2xl text-xl items-center font-semibold space-y-6 mt-10 ${display ? "animate-slideDown" : ""}`} >
                         {
-                            headers.map((header) => (
-                                <Link href={`${header.link}`} onClick={() => setDisplay(false)}>
+                            headers.map((header,index) => (
+                                <Link href={`${header.link}`} onClick={() => setDisplay(false)} key={index}>
                                     <li className="hover:text-[#1638d6]  transition duration-500"> {header.name}</li>
                                 </Link>
                             ))

@@ -48,11 +48,11 @@ const Footer = () => {
 
                 <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-10 text-zinc-300 mb-6">
                     {
-                        headers.map((header) => (
+                        headers.map((header,index) => (
                             <Link
-                                href={`${header.link}`}
+                                href={`${header.link}` }
                                 className="hover:text-[#1638d6]  transition duration-500"
-                            >
+                            key={index}>
                                 {header.name}
                             </Link>
                         ))
