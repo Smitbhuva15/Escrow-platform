@@ -36,13 +36,13 @@ const HowItWorks = () => {
                     <Image src={'/lockcontract.png'} alt='Trust strangers' width={300} height={400} />
                 </div>
             </div>
-            <div className='my-36 text-white flex md:flex-row flex-col bg-[#24292e] p-10 rounded-xl w-full'>
+            <div className='my-36 text-white items-center flex md:flex-row flex-col bg-[#24292e] p-10 rounded-xl w-full'>
                 <div className='md:w-3/4'>
                     <h1 className='lg:text-6xl sm:text-4xl text-3xl font-extrabold pb-2 pl-3 '>For small/medium businesses and P2P trade</h1>
 
                     <p className='pl-3 md:w-[90%] lg:text-[19px] text-sm pt-5'>Decentralized escrow is meant primarily for cross-border trade between small/medium businesses but it also works for domestic trade or trading high-value items between individuals, such as domain names, vehicles, real estate, art, collectibles, game assets, freelance work, etc.</p>
                 </div>
-                <div className='md:w-1/4 md:justify-items-end justify-items-center md:mt-0 mt-8 '>
+                <div className='md:w-1/4  justify-items-center md:mt-0 mt-8 '>
                     <Image src={'/escrowearth.svg'} alt='escro wearth' width={300} height={200} className='h-56 w-64' />
                 </div>
             </div>

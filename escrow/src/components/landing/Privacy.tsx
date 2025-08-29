@@ -14,7 +14,7 @@ const Privacy = () => {
                         <p className='pb-6'>When you make a contract, only you and your conterpart know its content. Even the (title:arbstore) doesn't know what your contract is about. The contract text is exchanged between you and your counterpart using Obyte's end-to-end encrypted messaging.</p>
 
                         <p className='pb-6'>If your contract completes successfully, nobody else learns its content (unless you or your counterpart decide to disclose it).</p>
-                        <p className='pb-6'>If a dispute arises, the arbiter gets the unencrypted text of the contract from the claimant in order to be able to resolve the dispute. The arbiter is bound by their own privacy terms.</p>
+                        <p className='pb-6'>If a dispute arises, the arbiter gets the unencrypted text of the contract from the claimant in order to be able to resolve the dispute. The arbiter is bound by their <span className='text-[#1d45fe]'>own privacy terms</span>.</p>
                         <p className='pb-6'>
                             Only if the losing party decides to appeal the arbiter's decision, only in this case will they disclose the contract text to the (title:ArbStore). The (title:ArbStore) will never share it with any third parties unless required by law.</p>
                     </div>
@@ -33,7 +33,7 @@ const Privacy = () => {
                             <Image src={'/custody.svg'} alt='custody' width={300} height={400} className='sm:h-72 sm:w-72 h-52 w-52' />
                         </div>
                         <div className=' md:w-[90%] lg:text-[18px] text-sm pt-5 leading-6 text-gray-300'>
-                            <p className='pb-6'>Neither the title:ArbStore nor the arbiters custody the funds. The funds are escrowed by a smart contract deployed on a decentralized network, and no third party can touch them, even the (title:ArbStore).</p>
+                            <p className='pb-6'>Neither the title:ArbStore nor the arbiters custody the funds. The funds are escrowed by a smart contract deployed on a <span className='text-[#1d45fe]'>decentralized network</span>, and no third party can touch them, even the (title:ArbStore).</p>
 
 
                         </div>

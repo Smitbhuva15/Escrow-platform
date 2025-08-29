@@ -1,3 +1,4 @@
+import Features from "@/components/landing/Features";
 import HeadLine from "@/components/landing/HeadLine";
 import HowItWorks from "@/components/landing/HowItWorks";
 import Privacy from "@/components/landing/Privacy";
@@ -9,6 +10,7 @@ export default function Home() {
   <HeadLine />
   <HowItWorks />
   <Privacy />
+  <Features />
   </div>
   );
 }
