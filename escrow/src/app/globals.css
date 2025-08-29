@@ -1,9 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-*{
+/* *{
     background-color: black;
-}
+} */
 
 @keyframes slideDown {
   from {
