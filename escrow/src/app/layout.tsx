@@ -5,6 +5,7 @@ import "./globals.css";
 import ToolkitProvider from "@/provider/ToolkitProvider";
 import Thirdwebprovider from "@/provider/Thirdwebprovider";
 import Navbar from "@/components/Navbar/Navbar";
+import Footer from "@/components/footer/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,9 +31,10 @@ export default function RootLayout({
     <html lang="en">
       <Thirdwebprovider >
         <ToolkitProvider>
-          <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}>
+          <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#131519]`}>
             <Navbar/>
             {children}
+            <Footer />
           </body>
         </ToolkitProvider>
       </Thirdwebprovider>
