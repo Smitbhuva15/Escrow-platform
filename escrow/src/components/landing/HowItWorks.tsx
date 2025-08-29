@@ -49,7 +49,7 @@ const HowItWorks = () => {
 
             {/* How to start */}
             <div className='text-white my-36'>
-                <h1 className='md:text-5xl text-4xl font-extrabold lg:w-[50%] sm:w-[70%]  pb-10 leading-14'>How to start using decentralized escrow</h1>
+                <h1 className='md:text-5xl text-4xl font-extrabold lg:w-[50%] sm:w-[70%]  pb-10 md:leading-14'>How to start using decentralized escrow</h1>
                 <div className='lg:w-[65%] text-sm sm:text-lg text-zinc-300' >
                     <div className='flex items-center my-8 font-bold '>
                         <div className='bg-[#24292e] p-2 rounded '>
