@@ -26,7 +26,7 @@ const Escrows = () => {
     if (isReady) {
       LoadEscrow(escrowContract, provider, dispatch);
     }
-  }, [account, isReady])
+  }, [isReady])
 
   return (
     <div className=' xl:max-w-5xl lg:max-w-4xl md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-8'>

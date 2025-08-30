@@ -26,8 +26,38 @@ export const LoadContarct = async (dispatch: any) => {
 export const LoadEscrow = async (escrowcontract: any, provider: any, dispatch: any) => {
 
     let escrowDeals = await escrowcontract.queryFilter("Deal");
-    escrowDeals=escrowDeals.sort((a:any,b:any)=>b?.args?.createdAt-a?.args?.createdAt)
-    dispatch(getallDeals(escrowDeals));
+    let deals = await decorateDeals(escrowDeals, escrowcontract, provider);
+    deals = deals.sort((a: any, b: any) => b?.deal?.createdAt - a?.deal?.createdAt)
+    dispatch(getallDeals(deals));
+
+}
+
+const decorateDeals = async (escrowDeals: any, escrowContract: any, provider: any) => {
+
+    const signer = provider.getSigner();
+    const decoratedDeals = await Promise.all(escrowDeals.map(async (event: any) => {
+        const dealId = Number(event?.args?.dealId);
+        const updatedDeal = await escrowContract.connect(signer).getDeal(dealId);
+
+        return {
+            deal: {
+                buyer: updatedDeal?.buyer,
+                seller: updatedDeal?.seller,
+                dealId: Number(updatedDeal?.dealId),
+                title: updatedDeal?.title,
+                description: updatedDeal?.description,
+                amount: updatedDeal.amount.toString(),
+                status: Number(updatedDeal?.status),
+                createdAt: Number(updatedDeal?.createdAt),
+                deadline: Number(updatedDeal?.deadline),
+                isDisputed: updatedDeal?.isDisputed,
+                disputedId: Number(updatedDeal?.disputedId)
+            }
+        }
+    })
+
+    )
+    return decoratedDeals;
 
 }
 
