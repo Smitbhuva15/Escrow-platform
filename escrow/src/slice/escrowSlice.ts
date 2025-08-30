@@ -6,7 +6,8 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState: EscrowState = {
     EscrowContract: {},
     provider: {},
-    chainId:0
+    chainId:0,
+    deals:{}
 }
 
 export const escrowSlice = createSlice({
@@ -22,12 +23,15 @@ export const escrowSlice = createSlice({
          getchainId(state, action) {
             state.chainId = action.payload
         },
+        getallDeals(state,action){
+            state.deals=action.payload
+        }
 
     },
     
 })
 
 
-export const { getEscrowContract, getprovider ,getchainId } = escrowSlice.actions
+export const { getEscrowContract, getprovider ,getchainId, getallDeals } = escrowSlice.actions
 
 export default escrowSlice.reducer
