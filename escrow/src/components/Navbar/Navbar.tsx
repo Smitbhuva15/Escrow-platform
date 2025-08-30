@@ -7,6 +7,8 @@ import { sepolia } from "thirdweb/chains";
 import { createWallet } from "thirdweb/wallets";
 import Link from "next/link";
 import { headers } from "@/lib/header";
+import { useDispatch } from "react-redux";
+import { LoadContarct } from "@/lib/LoadData";
 
 const client = createThirdwebClient({
     clientId: process.env.NEXT_PUBLIC_CLIENT_ID as string,
@@ -16,6 +18,11 @@ const Navbar = () => {
     const [display, setDisplay] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
+    const dispatch = useDispatch();
+    
+    useEffect(() => {
+        LoadContarct(dispatch);
+    }, [])
 
     useEffect(() => {
         const handleScroll = () => {
@@ -40,7 +47,7 @@ const Navbar = () => {
                 <div className="hidden lg:flex items-center gap-14">
                     <ul className="flex text-zinc-300 font-semibold gap-6 xl:text-lg">
                         {
-                            headers.map((header,index) => (
+                            headers.map((header, index) => (
                                 <Link href={`${header.link}`} key={index}>
                                     <li className="hover:text-[#1638d6]  transition duration-500"> {header.name}</li>
                                 </Link>
@@ -96,7 +103,7 @@ const Navbar = () => {
 
                     <ul className={`flex flex-col sm:text-2xl text-xl items-center font-semibold space-y-6 mt-10 ${display ? "animate-slideDown" : ""}`} >
                         {
-                            headers.map((header,index) => (
+                            headers.map((header, index) => (
                                 <Link href={`${header.link}`} onClick={() => setDisplay(false)} key={index}>
                                     <li className="hover:text-[#1638d6]  transition duration-500"> {header.name}</li>
                                 </Link>

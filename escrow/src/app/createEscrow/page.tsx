@@ -1,11 +1,37 @@
 "use client"
-import { Inputs } from "@/lib/interface";
-import React from "react";
+import { Inputs } from "@/lib/types";
+import { RootState } from "@/store/store";
+import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form"
+import { useSelector } from "react-redux";
+import { useActiveAccount } from "thirdweb/react";
 
+import { ethers } from "ethers";
+import toast, { Toaster } from "react-hot-toast";
 
+const balanceget = async (address: string) => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const balance = await provider.getBalance(address);
+  return ethers.utils.formatEther(balance);
+};
 
 const CreateEscrow = () => {
+
+  const [balance, setBalance] = useState(-1);
+
+  const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
+  const provider = useSelector((state: RootState) => state?.escrow?.provider);
+
+  const account = useActiveAccount();
+
+  useEffect(() => {
+    if (account?.address) {
+      balanceget(account.address).then((balance) => {
+        setBalance(Number(balance));
+      })
+    }
+  }, [account]);
+
 
   const {
     register,
@@ -15,9 +41,52 @@ const CreateEscrow = () => {
     formState: { errors },
   } = useForm<Inputs>()
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-   console.log(data)
-  }
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (balance < Number(data?.amount)) {
+      toast.error("Insufficient balance. Please fund your wallet first.");
+      return;
+    }
+
+    toast.loading("Creating escrow deal... Please confirm the transaction in your wallet.", {
+      id: "escrowTx",
+    });
+
+    try {
+      const signer = await provider.getSigner();
+      const amount = ethers.utils.parseEther(data?.amount.toString());
+      const transaction = await escrowContract.connect(signer).dealCreation(data?.seller, data?.title, data?.description, amount, 0);
+
+      toast.loading("Transaction submitted. Waiting for confirmation...", {
+        id: "escrowTx",
+      });
+
+      const receipt = await transaction.wait();
+
+      if (receipt.status !== 1) {
+        toast.error("Escrow deal creation failed. Please try again.", {
+          id: "escrowTx",
+        });
+        return;
+      }
+
+      const event = receipt.events?.find((e: any) => e.event === "Deal");
+
+      if (event) {
+        toast.success("Escrow deal created successfully!", {
+          id: "escrowTx",
+        });
+      } else {
+        toast.error("Transaction confirmed but no Deal event found.", {
+          id: "escrowTx",
+        });
+      }
+    } catch (error: any) {
+      toast.error(`Transaction failed`, {
+        id: "escrowTx",
+      });
+    }
+  };
+
 
 
 
@@ -149,6 +218,10 @@ const CreateEscrow = () => {
           </div>
         </form>
       </div>
+      <Toaster
+        position="bottom-right"
+        reverseOrder={false}
+      />
     </div>
   );
 };

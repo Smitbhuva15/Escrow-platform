@@ -1,6 +1,7 @@
 export interface EscrowState {
  EscrowContract: any,
- provider:any
+ provider:any,
+ chainId:number
 }
 
 export interface Inputs  {
