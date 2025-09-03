@@ -44,8 +44,8 @@ const Navbar = () => {
                 </div>
 
                 {/* Desktop Menu */}
-                <div className="hidden lg:flex items-center gap-14">
-                    <ul className="flex text-zinc-300 font-semibold gap-6 xl:text-lg">
+                <div className="hidden lg:flex items-center xl:gap-14 gap-6">
+                    <ul className="flex text-zinc-300 font-semibold xl:gap-6 gap-5 text-sm xl:text-lg">
                         {
                             headers.map((header, index) => (
                                 <Link href={`${header.link}`} key={index}>

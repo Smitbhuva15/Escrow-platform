@@ -8,7 +8,7 @@ export const headers = [
             "link": "/arbitration"
         },
         {
-            "name": "Create Escrows",
+            "name": "Launch Escrow",
             "link": "/createEscrow"
         },
         {

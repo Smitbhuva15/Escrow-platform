@@ -39,6 +39,11 @@ const decorateDeals = async (escrowDeals: any, escrowContract: any, provider: an
         const dealId = Number(event?.args?.dealId);
         const updatedDeal = await escrowContract.connect(signer).getDeal(dealId);
 
+        const currenttime = Math.floor(Date.now() / 1000);
+        const remainingSeconds = Number(updatedDeal?.deadline) - currenttime;
+        const remainingDays = Math.floor(remainingSeconds / (24 * 60 * 60));
+
+
         return {
             deal: {
                 buyer: updatedDeal?.buyer,
@@ -51,7 +56,8 @@ const decorateDeals = async (escrowDeals: any, escrowContract: any, provider: an
                 createdAt: Number(updatedDeal?.createdAt),
                 deadline: Number(updatedDeal?.deadline),
                 isDisputed: updatedDeal?.isDisputed,
-                disputedId: Number(updatedDeal?.disputedId)
+                disputedId: Number(updatedDeal?.disputedId),
+                remainingDays:Number(remainingDays)
             }
         }
     })

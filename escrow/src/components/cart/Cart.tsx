@@ -2,16 +2,17 @@ import { Button } from "@/components/ui/button";
 import { LoadEscrow } from "@/lib/LoadData";
 import { RootState } from "@/store/store";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
-const Cart = () => {
+const Cart = ({ deals }: any) => {
 
   const [isLoading, setIsLoading] = useState(-1);
   const dispatch = useDispatch();
 
-  const deals = useSelector((state: RootState) => state?.escrow?.deals);
+
   const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
   const provider = useSelector((state: RootState) => state?.escrow?.provider);
 
@@ -65,16 +66,18 @@ const Cart = () => {
 
 
   }
-
+  console.log(deals)
   return (
 
-    deals && deals.length > 0 ? (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-        {deals.map((deal: any, index: number) => (
-          <div
-            key={index}
-            className="p-6 bg-[#24292e] rounded-2xl shadow-md hover:shadow-lg transition flex flex-col justify-between"
-          >
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+      {deals.map((deal: any, index: number) => (
+
+        <div
+          key={index}
+          className="p-6 bg-[#24292e] rounded-2xl shadow-md hover:shadow-lg transition flex flex-col justify-between"
+        >
+          <Link href={`escrows/${deal?.deal?.dealId.toString()}`}>
+
             {/* Title */}
             <h2 className="text-xl font-bold text-white mb-2 truncate">
               {deal?.deal?.title || "Untitled Deal"}
@@ -108,6 +111,8 @@ const Cart = () => {
                   {deal?.deal?.status == 1 ? "Created" : deal?.deal?.status == 2 ? "Funded" : deal?.deal?.status == 3 ? "Delivered" : deal?.deal?.status == 4 ? "confirmed" : deal?.deal?.status == 5 ? "Disputed" : "Resolved"}
                 </span>
               </p>
+              <p><span className="font-semibold text-zinc-200">Deposit deadline:</span>{" "}
+                {deal?.deal?.remainingDays} {deal?.deal?.remainingDays > 1 ? "days " : "day "}left</p>
             </div>
 
             {/* Fund Button */}
@@ -127,7 +132,7 @@ const Cart = () => {
                     className="w-full bg-gray-400 text-gray-800 rounded-xl cursor-not-allowed opacity-70"
                     disabled
                   >
-                    Already Funded
+                    Deposit Complete
                   </Button>
                 ) : (
                   <Button
@@ -143,20 +148,17 @@ const Cart = () => {
 
               )
             }
+          </Link>
+        </div>
 
-          </div>
-        ))}
-        <Toaster
-          position="bottom-right"
-          reverseOrder={false}
-        />
-      </div>
-    ) : (
-      <div>loading</div>
-    )
+      ))}
+      <Toaster
+        position="bottom-right"
+        reverseOrder={false}
+      />
+    </div>
+  )
 
-
-  );
 };
 
 export default Cart;

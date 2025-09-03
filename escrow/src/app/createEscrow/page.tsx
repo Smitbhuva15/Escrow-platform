@@ -110,7 +110,7 @@ const CreateEscrow = () => {
     <div className="xl:max-w-4xl lg:max-w-3xl md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-12">
       {
         account ? (<div><h1 className="md:text-5xl text-3xl font-bold mb-8 text-center text-[#1d45fe]">
-          Create Escrow
+          Launch Escrow
         </h1>
 
           {/* Card Container with custom blue shadow */}
@@ -239,7 +239,7 @@ const CreateEscrow = () => {
                     type="submit"
                     className="bg-[#1d45fe] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#1638d6] transition w-full flex items-center justify-center"
                   >
-                    Create Escrow
+                    Launch Escrow
                   </button>
                 )}
               </div>
