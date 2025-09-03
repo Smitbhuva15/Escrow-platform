@@ -74,7 +74,7 @@ const Cart = ({ deals }: any) => {
 
         <div
           key={index}
-          className="p-6 bg-[#24292e] rounded-2xl shadow-md hover:shadow-lg transition flex flex-col justify-between"
+          className="p-6 bg-[#1E1E24] rounded-2xl shadow-md hover:shadow-lg transition flex flex-col justify-between"
         >
           <Link href={`escrows/${deal?.deal?.dealId.toString()}`}>
 
