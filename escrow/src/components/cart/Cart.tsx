@@ -66,7 +66,7 @@ const Cart = ({ deals }: any) => {
 
 
   }
-  console.log(deals)
+
   return (
 
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
@@ -112,7 +112,7 @@ const Cart = ({ deals }: any) => {
                 </span>
               </p>
               <p><span className="font-semibold text-zinc-200">Deposit deadline:</span>{" "}
-                {deal?.deal?.remainingDays} {deal?.deal?.remainingDays > 1 ? "days " : "day "}left</p>
+               {deal?.deal?.remainingDays} {deal?.deal?.remainingDays > 1 ? "days " : "day "}left</p>
             </div>
 
             {/* Fund Button */}

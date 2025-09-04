@@ -1,5 +1,11 @@
 import React from 'react'
 import { useActiveAccount } from 'thirdweb/react';
+ const steps = [
+    { title: "Created", done: true },
+    { title: "Funded", done: true },
+    { title: "Delivered", done: false },
+    { title: "Completed / Disputed", done: false },
+  ]
 
 const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
 
@@ -14,38 +20,66 @@ const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
                     {deal?.amount ? deal.amount / 1e18 : "N/A"} ETH
                 </span>
             </div>
+            {
+                deal?.buyer != account?.address && deal?.seller != account?.address ? (<div className="bg-[#1E1E24] p-7 rounded-2xl flex flex-col items-center text-center">
+                    <h2 className="text-yellow-400 font-bold text-lg mb-2">No Actions Available</h2>
+                    <p className="text-gray-400 text-sm">
+                        You are not a participant in this deal. Only the buyer or seller can take actions.
+                    </p>
+                </div>) : (
+                    <>
+                        {
+                            deal?.buyer == account?.address ? (
 
-            {/* Confirm Delivery Section */}
-            <div className="bg-[#1E1E24] p-7 rounded-2xl flex flex-col space-y-2">
-                <h2 className="text-[#1d45fe] font-bold text-xl mb-3">Confirm Deliver</h2>
-                <p className="text-gray-300 text-[15px]">
-                    Confirm delivery once you receive the product or service. This will release the funds to the seller.
-                    Make sure everything matches your expectations before confirming.
-                    Once confirmed, the transaction is considered complete and cannot be reversed.
-                </p>
-                <button className="bg-[#1d45fe] hover:bg-[#1638d6] mt-3 text-white font-semibold py-2 px-4 rounded-lg  transition">
-                    Confirm
-                </button>
-            </div>
+                                <div className="bg-[#1E1E24] p-7 rounded-2xl flex flex-col space-y-2">
+                                    <h2 className="text-[#1d45fe] font-bold text-xl mb-3">Confirm Deliver</h2>
+                                    <p className="text-gray-300 text-[15px]">
+                                        Confirm delivery once you receive the product or service. This will release the funds to the seller.
+                                        Make sure everything matches your expectations before confirming.
+                                        Once confirmed, the transaction is considered complete and cannot be reversed.
+                                    </p>
+                                    <button className="bg-[#1d45fe] hover:bg-[#1638d6] mt-3 text-white font-semibold py-2 px-4 rounded-lg  transition">
+                                        Confirm
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="bg-[#1E1E24] p-7 rounded-2xl flex flex-col space-y-2">
+                                    <h2 className="text-[#1d45fe] font-bold text-xl mb-3">Mark as Delivered</h2>
+                                    <p className="text-gray-300 text-[15px]">
+                                        Mark the order as delivered once you have successfully provided the product
+                                        or service. This lets the buyer know that the delivery is complete. The buyer
+                                        will then be able to confirm and release the funds to you.
+                                    </p>
+                                    <button className="bg-[#1d45fe] hover:bg-[#1638d6] mt-3 text-white font-semibold py-2 px-4 rounded-lg  transition">
+                                        Delivered
+                                    </button>
+                                </div>
+                            )}
 
-            {/* Open Dispute Section */}
-            <div className="bg-[#1E1E24] p-7 rounded-2xl flex flex-col space-y-2">
-                <h2 className="text-[#1d45fe] font-bold text-xl mb-3">Raise Dispute</h2>
-                {
-                    deal.buyer == account?.address ? (
-                        <p className="text-gray-300 text-[15px]">
-                            If the product or service does not meet your expectations, or if there is any issue with the transaction, you can open a dispute. The platform will mediate fairly, ensuring your payment remains secure until the issue is resolved.
-                        </p>
-                    ) : (
-                        <p className="text-gray-300 text-[15px]">
-                            If a buyer has received the product or service but fails to confirm delivery, you may open a dispute. The platform will mediate fairly, ensuring your payment remains secure until the issue is resolved.
-                        </p>
-                    )
-                }
-                <button className="bg-[#1d45fe] hover:bg-[#1638d6] mt-3 text-white  font-semibold py-2 px-4 rounded-lg transition">
-                    Open Dispute
-                </button>
-            </div>
+
+                        {/* Open Dispute Section */}
+                        <div className="bg-[#1E1E24] p-7 rounded-2xl flex flex-col space-y-2">
+                            <h2 className="text-[#1d45fe] font-bold text-xl mb-3">Raise Dispute</h2>
+                            {
+                                deal.buyer == account?.address ? (
+                                    <p className="text-gray-300 text-[15px]">
+                                        If the product or service does not meet your expectations, or if there is any issue with the transaction, you can open a dispute. The platform will mediate fairly, ensuring your payment remains secure until the issue is resolved.
+                                    </p>
+                                ) : (
+                                    <p className="text-gray-300 text-[15px]">
+                                        If a buyer has received the product or service but fails to confirm delivery, you may open a dispute. The platform will mediate fairly, ensuring your payment remains secure until the issue is resolved.
+                                    </p>
+                                )
+                            }
+                            <button className="bg-[#1d45fe] hover:bg-[#1638d6] mt-3 text-white  font-semibold py-2 px-4 rounded-lg transition">
+                                Open Dispute
+                            </button>
+                        </div>
+                    </>
+                )
+            }
+
+
 
         </div>
     );

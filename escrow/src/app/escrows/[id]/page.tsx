@@ -2,13 +2,23 @@
 import Banner from '@/components/banner/Banner';
 import LeftSection from '@/components/escrowId/LeftSection';
 import RightSection from '@/components/escrowId/RightSection';
+import TimeLine from '@/components/escrowId/TimeLine';
 import { LoadEscrow } from '@/lib/LoadData';
 import { RootState } from '@/store/store';
-import { Loader2 } from 'lucide-react';
+import { Check, Circle, Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useActiveAccount } from 'thirdweb/react';
+
+
+const steps = [
+    { title: "Created", done: true },
+    { title: "Funded", done: true },
+    { title: "Delivered", done: false },
+    { title: "Completed / Disputed", done: false },
+    { title: "Completed / Disputed", done: false },
+]
 
 const page = () => {
 
@@ -28,7 +38,7 @@ const page = () => {
 
     useEffect(() => {
         if (Deals && Deals.length > 0) {
-            const Deal = Deals.filter((deal: any) => (deal?.deal?.dealId) == id );
+            const Deal = Deals.filter((deal: any) => (deal?.deal?.dealId) == id);
             setDeals(Deal[0].deal);
         }
     }, [Deals])
@@ -57,15 +67,21 @@ const page = () => {
                     <Loader2 className="h-10 w-10 animate-spin text-[white]" />
                 </div>
             )
-
-                : (<div className='xl:max-w-5xl lg:max-w-4xl md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-8 lg:flex lg:gap-16'>
-                    <div className='lg:w-[50%]'>
-                        <LeftSection deal={deal}/>
+                : (
+                    <div className='xl:max-w-5xl lg:max-w-4xl md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-8 '>
+                        <div className='lg:flex lg:gap-16'>
+                            <div className='lg:w-[50%]'>
+                                <LeftSection deal={deal} />
+                            </div>
+                            <div className='lg:w-[50%]'>
+                                <RightSection deal={deal} />
+                            </div>
+                        </div>
+                        <div>
+                            <TimeLine deal={deal}/>
+                        </div>
                     </div>
-                    <div className='lg:w-[50%]'>
-                        <RightSection deal={deal}/>
-                    </div>
-                </div>)
+                )
         ) : (
             <div className="h-[90vh] flex items-center justify-center">
                 <Banner
