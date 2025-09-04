@@ -105,7 +105,7 @@ const Cart = ({ deals }: any) => {
               <p>
                 <span className="font-semibold text-zinc-200">Status:</span>{" "}
                 <span
-                  className={`px-2 py-0.5 rounded-full text-xs  text-white font-medium ${deal?.deal?.status == 1 ? "bg-gray-600" : deal?.deal?.status == 2 ? "bg-indigo-500" : deal?.deal?.status == 3 ? "bg-slate-400" : deal?.deal?.status == 4 ? "bg-emerald-500" : deal?.deal?.status == 5 ? "bg-rose-500" : "bg-purple-600"
+                  className={`px-2 py-0.5 rounded-full text-xs  text-white font-medium ${deal?.deal?.status == 1 ? "bg-gray-600" : deal?.deal?.status == 2 ? "bg-indigo-500" : deal?.deal?.status == 3 ? "bg-slate-400" : deal?.deal?.status == 4 ? "bg-emerald-500" : deal?.deal?.status == 5 ? "bg-rose-500" : "bg-purple-800"
                     }`}
                 >
                   {deal?.deal?.status == 1 ? "Created" : deal?.deal?.status == 2 ? "Funded" : deal?.deal?.status == 3 ? "Delivered" : deal?.deal?.status == 4 ? "confirmed" : deal?.deal?.status == 5 ? "Disputed" : "Resolved"}

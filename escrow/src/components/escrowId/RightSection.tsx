@@ -6,13 +6,14 @@ import { useActiveAccount } from 'thirdweb/react';
 import { Button } from '../ui/button';
 import { Loader2 } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
+import ProcessingLoader from './ProcessingLoader';
 
 
 const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
 
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false)
-    const [loadingConfirmation,setLoadingConfirmation]=useState(false);
+    const [loadingConfirmation, setLoadingConfirmation] = useState(false);
 
     const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
     const provider = useSelector((state: RootState) => state?.escrow?.provider);
@@ -22,8 +23,8 @@ const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
         markdelivery({ dealId, dispatch, escrowContract, provider, setIsLoading })
     }
 
-     const markconfirm = (dealId: Number) => {
-        markconfirmationReceive({ dealId, dispatch, escrowContract, provider, setLoadingConfirmation})
+    const markconfirm = (dealId: Number) => {
+        markconfirmationReceive({ dealId, dispatch, escrowContract, provider, setLoadingConfirmation })
     }
 
     const account = useActiveAccount();
@@ -55,10 +56,25 @@ const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
                                         Make sure everything matches your expectations before confirming.
                                         Once confirmed, the transaction is considered complete and cannot be reversed.
                                     </p>
-                                    <button className="bg-[#1d45fe] hover:bg-[#1638d6] mt-3 text-white font-semibold py-2 px-4 rounded-lg  transition"  onClick={()=>markconfirm(deal?.dealId)}
-                                    >
-                                        Confirm
-                                    </button>
+                                    {
+                                        !loadingConfirmation ? (
+                                            deal?.status >= 4 ? (
+                                                <Button
+                                                    className="w-full bg-gray-400 text-gray-800 cursor-not-allowed opacity-70  mt-3  font-semibold py-5 px-4 rounded-lg  transition"
+                                                    disabled
+                                                >
+                                                    Receipt Confirmed
+                                                </Button>
+                                            ) :
+                                                (<button className="bg-[#1d45fe] hover:bg-[#1638d6] mt-3 text-white font-semibold py-2 px-4 rounded-lg  transition" onClick={() => markconfirm(deal?.dealId)}
+                                                >
+                                                    Confirm Receipt
+                                                </button>)
+                                        ) : (
+                                            <ProcessingLoader />
+                                        )
+                                    }
+
                                 </div>
                             ) : (
                                 <div className="bg-[#1E1E24] p-7 rounded-2xl flex flex-col space-y-2">
@@ -86,13 +102,7 @@ const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
                                                 </button>
                                             )
                                         ) : (
-                                            <Button
-                                                className=" bg-[#1d45fe] hover:bg-[#1638d6] mt-3 py-5 px-4 rounded-lg  transition text-white cursor-not-allowed opacity-80 "
-                                                disabled
-                                            >
-                                                <Loader2 className="h-5 w-5 animate-spin" />
-                                                Processing...
-                                            </Button>
+                                            <ProcessingLoader />
                                         )
                                     }
                                 </div>
