@@ -58,7 +58,7 @@ const CreateEscrow = () => {
     try {
       const signer = await provider.getSigner();
       const amount = ethers.utils.parseEther(data?.amount.toString());
-      const transaction = await escrowContract.connect(signer).dealCreation(data?.seller, data?.title, data?.description, amount, 10);
+      const transaction = await escrowContract.connect(signer).dealCreation(data?.seller, data?.title, data?.description, amount, data?.deadline);
 
       toast.loading("Transaction submitted. Waiting for confirmation...", {
         id: "escrowTx",
@@ -103,9 +103,6 @@ const CreateEscrow = () => {
   };
 
 
-
-
-
   return (
     <div className="xl:max-w-4xl lg:max-w-3xl md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-12">
       {
@@ -130,10 +127,6 @@ const CreateEscrow = () => {
                       value: 15,
                       message: "Minimum length is 15 characters",
                     }
-                    // maxLength: {
-                    //   value: 30,
-                    //   message: "Maximum length is 30 characters",
-                    // }
                   })}
                   className="border border-gray-500 bg-transparent rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition w-full"
                 />
@@ -223,6 +216,32 @@ const CreateEscrow = () => {
                 )}
               </div>
 
+              {/* deadline */}
+              <div className="flex flex-col">
+                <label htmlFor="amount" className="mb-2 font-medium">
+                  Deadline
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  max={90}
+                  placeholder="e.g. 30"
+                  {...register("deadline", {
+                    required: "Deadline is required",
+
+                  })}
+                  className="border border-gray-50 bg-transparent rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition w-full
+                appearance-none 
+                      [&::-webkit-outer-spin-button]:appearance-none 
+                      [&::-webkit-inner-spin-button]:appearance-none 
+                      [&::-moz-appearance]:textfield
+                      "
+                />
+                {errors.deadline && (
+                  <p className="text-red-500 text-sm mt-2">{errors.deadline.message}</p>
+                )}
+              </div>
+
               {/* Button */}
               <div className="pt-4 flex justify-center">
                 {isLoading ? (
@@ -257,10 +276,8 @@ const CreateEscrow = () => {
               subtitle={'Secure your transactions by linking a wallet before proceeding.'}
             />
           </div>
-
         )
       }
-
     </div>
   );
 };

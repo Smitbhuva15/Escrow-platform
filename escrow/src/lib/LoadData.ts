@@ -43,7 +43,7 @@ const decorateDeals = async (escrowDeals: any, escrowContract: any, provider: an
 
     const currenttime = Math.floor(Date.now() / 1000);
     const remainingSeconds = Number(updatedDeal?.deadline) - currenttime;
-    const remainingDays = Math.floor(remainingSeconds / (24 * 60 * 60));
+    const remainingDays = Math.ceil(remainingSeconds / (24 * 60 * 60));
 
 
     return {

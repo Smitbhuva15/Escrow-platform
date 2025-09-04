@@ -10,6 +10,7 @@ export interface Inputs {
   description: string
   seller: string
   amount: string
+  deadline:string
 }
 
 export interface markType {
