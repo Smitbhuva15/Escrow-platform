@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { LoadEscrow } from "@/lib/LoadData";
+import { handeldeposite, LoadEscrow } from "@/lib/LoadData";
 import { RootState } from "@/store/store";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -18,53 +18,7 @@ const Cart = ({ deals }: any) => {
 
 
   const handelDeposite = async (dealId: number, amount: number) => {
-
-    setIsLoading(dealId)
-    toast.loading("Preparing deposit... Please confirm the transaction in your wallet.", {
-      id: "escrowTx",
-    });
-
-    try {
-      const signer = await provider.getSigner();
-      const transaction = await escrowContract.connect(signer).deposit(dealId, { value: amount });
-
-      toast.loading("Transaction submitted. Waiting for confirmation on-chain...", {
-        id: "escrowTx",
-      });
-
-      const receipt = await transaction.wait();
-
-      if (receipt.status !== 1) {
-        toast.error("Deposit failed. Please try again.", {
-          id: "escrowTx",
-        });
-        setIsLoading(-1);
-        return;
-      }
-
-      const event = receipt.events?.find((e: any) => e.event === "Deposit");
-      LoadEscrow(escrowContract, provider, dispatch);
-
-      if (event) {
-        toast.success("Funds deposited successfully!!", {
-          id: "escrowTx",
-        });
-      } else {
-        toast.error("Transaction confirmed, but no Deposit event found.", {
-          id: "escrowTx",
-        });
-      }
-    } catch (error) {
-      toast.error("Deposit transaction failed.", {
-        id: "escrowTx",
-      });
-
-
-    } finally {
-      setIsLoading(-1);
-    }
-
-
+    handeldeposite({ dealId, amount, dispatch, provider, escrowContract, setIsLoading })
   }
 
   return (

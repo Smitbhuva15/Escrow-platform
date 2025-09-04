@@ -1,4 +1,4 @@
-import { markconfirmationReceive, markdelivery } from '@/lib/LoadData';
+import { markconfirmationReceive, markdelivery, markOpenDispute } from '@/lib/LoadData';
 import { RootState } from '@/store/store';
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,8 +12,11 @@ import ProcessingLoader from './ProcessingLoader';
 const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
 
     const dispatch = useDispatch();
+    const account = useActiveAccount();
     const [isLoading, setIsLoading] = useState(false)
     const [loadingConfirmation, setLoadingConfirmation] = useState(false);
+    const [loadingOpenDispute, setLoadingOpenDispute] = useState(false)
+
 
     const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
     const provider = useSelector((state: RootState) => state?.escrow?.provider);
@@ -27,11 +30,15 @@ const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
         markconfirmationReceive({ dealId, dispatch, escrowContract, provider, setLoadingConfirmation })
     }
 
-    const account = useActiveAccount();
+    const markOpendispute = (dealId: Number) => {
+        markOpenDispute({ dealId, dispatch, escrowContract, provider, setLoadingOpenDispute })
+    }
+
+
+
+
     return (
         <div className="lg:p-0 p-4 space-y-6 ">
-
-            {/* Amount Section */}
             <div className="bg-[#1E1E24] p-6 rounded-2xl flex flex-col space-y-1">
                 <span className="text-gray-400 font-semibold">Amount:</span>
                 <span className="text-indigo-400 font-medium break-all">
@@ -39,7 +46,7 @@ const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
                 </span>
             </div>
             {
-                deal?.buyer != account?.address && deal?.seller != account?.address ? (<div className="bg-[#1E1E24] p-7 rounded-2xl flex flex-col items-center text-center">
+                deal?.buyer != account?.address && deal?.seller != account?.address ? (<div className="bg-[#1E1E24] p-7 rounded-2xl flex flex-col items-center text-center ">
                     <h2 className="text-yellow-400 font-bold text-lg mb-2">No Actions Available</h2>
                     <p className="text-gray-400 text-sm">
                         You are not a participant in this deal. Only the buyer or seller can take actions.
@@ -92,7 +99,7 @@ const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
                                                     className="w-full bg-gray-400 text-gray-800 cursor-not-allowed opacity-70  mt-3  font-semibold py-5 px-4 rounded-lg  transition"
                                                     disabled
                                                 >
-                                                    Delivery Complete
+                                                    Marked as Delivered
                                                 </Button>
                                             ) : (
                                                 <button className="bg-[#1d45fe] hover:bg-[#1638d6] mt-3 text-white font-semibold py-2 px-4 rounded-lg  transition"
@@ -123,9 +130,25 @@ const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
                                     </p>
                                 )
                             }
-                            <button className="bg-[#1d45fe] hover:bg-[#1638d6] mt-3 text-white  font-semibold py-2 px-4 rounded-lg transition">
-                                Open Dispute
-                            </button>
+                            {
+                                !loadingOpenDispute ? (
+                                    deal?.status >= 5 ? (
+                                        <Button
+                                            className="w-full bg-gray-400 text-gray-800 cursor-not-allowed opacity-70  mt-3  font-semibold py-5 px-4 rounded-lg  transition"
+                                            disabled
+                                        >
+                                            Dispute Opened
+                                        </Button>
+                                    ) :
+                                        (<button className="bg-[#1d45fe] hover:bg-[#1638d6] mt-3 text-white  font-semibold py-2 px-4 rounded-lg transition" onClick={() => markOpendispute(deal?.dealId)}
+                                        >
+                                            Open Dispute
+                                        </button>)
+                                ) : (
+                                    <ProcessingLoader />
+                                )
+                            }
+
                         </div>
                     </>
                 )
