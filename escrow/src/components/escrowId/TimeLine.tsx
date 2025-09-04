@@ -1,20 +1,6 @@
+import { dealStatus } from '@/config/config'
 import React from 'react'
 
-
-const dealStatus = [
-    {
-        name: "Created",
-        rank: 1,
-    },
-    {
-        name: "Funded",
-        rank: 2,
-    },
-    {
-        name: "Delivered",
-        rank: 3,
-    }
-]
 
 const TimeLine: React.FC<{ deal: any }> = ({ deal }) => {
 

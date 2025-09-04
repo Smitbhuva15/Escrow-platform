@@ -11,22 +11,13 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useActiveAccount } from 'thirdweb/react';
 
-
-const steps = [
-    { title: "Created", done: true },
-    { title: "Funded", done: true },
-    { title: "Delivered", done: false },
-    { title: "Completed / Disputed", done: false },
-    { title: "Completed / Disputed", done: false },
-]
-
 const page = () => {
 
     const account = useActiveAccount();
     const dispatch = useDispatch();
     const { id } = useParams();
 
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const [deal, setDeals] = useState<any>();
 
     const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);

@@ -112,43 +112,43 @@ const Cart = ({ deals }: any) => {
                 </span>
               </p>
               <p><span className="font-semibold text-zinc-200">Deposit deadline:</span>{" "}
-               {deal?.deal?.remainingDays} {deal?.deal?.remainingDays > 1 ? "days " : "day "}left</p>
+                {deal?.deal?.remainingDays} {deal?.deal?.remainingDays > 1 ? "days " : "day "}left</p>
             </div>
+          </Link>
+          {/* Fund Button */}
+          {
+            isLoading === Number(deal?.deal?.dealId) ? (
+              <Button
+                className="w-full  flex items-center justify-center gap-2 bg-[#1d45fe] hover:bg-[#1638d6] text-white rounded-xl cursor-not-allowed opacity-80"
+                disabled
+              >
+                <Loader2 className="h-5 w-5 animate-spin" />
+                Processing...
+              </Button>
+            ) : (
 
-            {/* Fund Button */}
-            {
-              isLoading === Number(deal?.deal?.dealId) ? (
+              deal?.deal?.status > 1 ? (
                 <Button
-                  className="w-full  flex items-center justify-center gap-2 bg-[#1d45fe] hover:bg-[#1638d6] text-white rounded-xl cursor-not-allowed opacity-80"
+                  className="w-full bg-gray-400 text-gray-800 rounded-xl cursor-not-allowed opacity-70"
                   disabled
                 >
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  Processing...
+                  Deposit Complete
                 </Button>
               ) : (
-
-                deal?.deal?.status > 1 ? (
-                  <Button
-                    className="w-full bg-gray-400 text-gray-800 rounded-xl cursor-not-allowed opacity-70"
-                    disabled
-                  >
-                    Deposit Complete
-                  </Button>
-                ) : (
-                  <Button
-                    className="w-full bg-[#1d45fe] hover:bg-[#1638d6] text-white rounded-xl"
-                    onClick={() =>
-                      handelDeposite(Number(deal?.deal?.dealId), Number(deal?.deal?.amount))
-                    }
-                  >
-                    Deposit Funds
-                  </Button>
-                )
-
-
+                <Button
+                  className="w-full bg-[#1d45fe] hover:bg-[#1638d6] text-white rounded-xl"
+                  onClick={() =>
+                    handelDeposite(Number(deal?.deal?.dealId), Number(deal?.deal?.amount))
+                  }
+                >
+                  Deposit Funds
+                </Button>
               )
-            }
-          </Link>
+
+
+            )
+          }
+
         </div>
 
       ))}

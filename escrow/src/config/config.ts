@@ -11,3 +11,21 @@ export const config: ConfigType = {
     },
   },
 };
+
+
+
+
+export const dealStatus = [
+    {
+        name: "Created",
+        rank: 1,
+    },
+    {
+        name: "Funded",
+        rank: 2,
+    },
+    {
+        name: "Delivered",
+        rank: 3,
+    }
+]

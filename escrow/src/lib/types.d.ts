@@ -11,3 +11,19 @@ export interface Inputs  {
   seller:string
   amount:string
 }
+
+export interface markType{
+  dealId:Number,
+  dispatch:any,
+  escrowContract:any,
+  provider:any
+  setIsLoading:React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export interface markConfirmType{
+  dealId:Number,
+  dispatch:any,
+  escrowContract:any,
+  provider:any
+  setLoadingConfirmation:React.Dispatch<React.SetStateAction<boolean>>
+}
