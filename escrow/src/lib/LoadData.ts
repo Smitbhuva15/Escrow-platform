@@ -2,9 +2,9 @@ import { ethers } from 'ethers'
 import React from 'react'
 import escrowAbi from '@/abi/escrow.json'
 import { config } from '@/config/config';
-import { getallDeals, getchainId, getEscrowContract, getprovider } from '@/slice/escrowSlice';
+import { getallDeals, getchainId, getEscrowContract, getPersonalStakeBalance, getprovider } from '@/slice/escrowSlice';
 import toast from 'react-hot-toast';
-import { depositType, markConfirmType, markType, openDisputeType } from './types';
+import { depositType, markConfirmType, markType, openDisputeType, StakeBalanceType, stakeType } from './types';
 
 
 declare global {
@@ -250,7 +250,7 @@ export const markOpenDispute = async ({
 
 
 export const handeldeposite = async ({
-  dealId, amount, dispatch, provider, escrowContract,setIsLoading
+  dealId, amount, dispatch, provider, escrowContract, setIsLoading
 }: depositType) => {
 
   const isReady =
@@ -300,9 +300,79 @@ export const handeldeposite = async ({
 
 
     } finally {
-     await LoadEscrow(escrowContract, provider, dispatch);
+      await LoadEscrow(escrowContract, provider, dispatch);
       setIsLoading(-1);
     }
 
   }
 }
+
+export const loadstakebalance = async (
+  { dispatch, escrowContract, provider,address}: StakeBalanceType) => {
+      const signer = await provider.getSigner();
+      try {
+        const transaction=await escrowContract.connect(signer).getstaked(address);
+        dispatch(getPersonalStakeBalance((Number(transaction)/1e18)))
+      } catch (error) {
+        console.log("error :",error)
+      }
+}
+
+export const stakeEth = async ({
+  dispatch,
+  escrowContract,
+  provider,
+  stake,
+  setIsLoadingStake
+}: stakeType) => {
+  const isReady =
+    escrowContract && Object.keys(escrowContract).length > 0 &&
+    provider && Object.keys(provider).length > 0;
+
+  setIsLoadingStake(true);
+
+  if (isReady) {
+    toast.loading("Preparing your stake... Please confirm in your wallet.", {
+      id: "stakeTx",
+    });
+
+    const signer = await provider.getSigner();
+
+    try {
+      const transaction = await escrowContract.connect(signer).stake({ value: ethers.utils.parseEther(stake) });
+
+      toast.loading("Stake transaction submitted. Waiting for blockchain confirmation...", {
+        id: "stakeTx",
+      });
+
+      const receipt = await transaction.wait();
+
+      if (receipt.status !== 1) {
+        toast.error("Staking failed. Please try again.", {
+          id: "stakeTx",
+        });
+        setIsLoadingStake(false);
+        return;
+      }
+
+      const event = receipt.events?.find((e: any) => e.event === "Staked");
+
+      if (event) {
+        toast.success(`Successfully staked ${stake} ETH! Your voting power has increased.`, {
+          id: "stakeTx",
+        });
+      } else {
+        toast.error("Transaction confirmed, but no staking event found. Please check your balance.", {
+          id: "stakeTx",
+        });
+      }
+    } catch (error) {
+      toast.error("Stake transaction failed. Please try again.", {
+        id: "stakeTx",
+      });
+    } finally {
+      // await LoadEscrow(escrowContract, provider, dispatch);
+      setIsLoadingStake(false);
+    }
+  }
+};
