@@ -2,9 +2,9 @@ import { ethers } from 'ethers'
 import React from 'react'
 import escrowAbi from '@/abi/escrow.json'
 import { config } from '@/config/config';
-import { getallDeals, getchainId, getEscrowContract, getPersonalStakeBalance, getprovider } from '@/slice/escrowSlice';
+import { getallDeals, getchainId, getEscrowContract, getLockBalance, getPersonalStakeBalance, getprovider } from '@/slice/escrowSlice';
 import toast from 'react-hot-toast';
-import { depositType, markConfirmType, markType, openDisputeType, StakeBalanceType, stakeType } from './types';
+import { depositType, markConfirmType, markType, openDisputeType, StakeBalanceType, stakeType, unstakeType } from './types';
 
 
 declare global {
@@ -308,14 +308,17 @@ export const handeldeposite = async ({
 }
 
 export const loadstakebalance = async (
-  { dispatch, escrowContract, provider,address}: StakeBalanceType) => {
-      const signer = await provider.getSigner();
-      try {
-        const transaction=await escrowContract.connect(signer).getstaked(address);
-        dispatch(getPersonalStakeBalance((Number(transaction)/1e18)))
-      } catch (error) {
-        console.log("error :",error)
-      }
+  { dispatch, escrowContract, provider, address }: StakeBalanceType) => {
+  const signer = await provider.getSigner();
+  try {
+    let transaction = await escrowContract.connect(signer).getstaked(address);
+    dispatch(getPersonalStakeBalance((Number(transaction) / 1e18)))
+    transaction = await escrowContract.connect(signer).getcurrentlyLocked(address);
+    dispatch(getLockBalance((Number(transaction) / 1e18)))
+
+  } catch (error) {
+    console.log("error :", error)
+  }
 }
 
 export const stakeEth = async ({
@@ -323,7 +326,8 @@ export const stakeEth = async ({
   escrowContract,
   provider,
   stake,
-  setIsLoadingStake
+  setIsLoadingStake,
+  address
 }: stakeType) => {
   const isReady =
     escrowContract && Object.keys(escrowContract).length > 0 &&
@@ -371,8 +375,72 @@ export const stakeEth = async ({
         id: "stakeTx",
       });
     } finally {
-      // await LoadEscrow(escrowContract, provider, dispatch);
+      await loadstakebalance({dispatch, escrowContract, provider,address });
       setIsLoadingStake(false);
+    }
+  }
+};
+
+export const unstakeEth = async ({
+  dispatch,
+  escrowContract,
+  provider,
+  unstake,
+  setIsLoadingUnStake,
+  address,
+}: unstakeType) => {
+  const isReady =
+    escrowContract &&
+    Object.keys(escrowContract).length > 0 &&
+    provider &&
+    Object.keys(provider).length > 0;
+
+  setIsLoadingUnStake(true);
+
+  if (isReady) {
+    toast.loading("Preparing to unstake... Please confirm in your wallet.", {
+      id: "unstakeTx",
+    });
+
+    const signer = await provider.getSigner();
+
+    try {
+      const transaction = await escrowContract.connect(signer)
+        .unstake( ethers.utils.parseEther(unstake) );
+
+      toast.loading("Unstake transaction submitted. Waiting for confirmation...", {
+        id: "unstakeTx",
+      });
+
+      const receipt = await transaction.wait();
+
+      if (receipt.status !== 1) {
+        toast.error("Unstaking failed. Please try again.", {
+          id: "unstakeTx",
+        });
+        setIsLoadingUnStake(false);
+        return;
+      }
+
+      const event = receipt.events?.find((e: any) => e.event === "Unstaked");
+
+      if (event) {
+        toast.success(`Successfully unstaked ${unstake} ETH! Your balance has been updated.`, {
+          id: "unstakeTx",
+        });
+      } else {
+        toast.error("Transaction confirmed, but no unstake event found. Please check your balance.", {
+          id: "unstakeTx",
+        });
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error("Unstake transaction failed. Please try again.", {
+        id: "unstakeTx",
+      });
+    } finally {
+      await loadstakebalance({ dispatch, escrowContract, provider, address });
+      setIsLoadingUnStake(false);
     }
   }
 };

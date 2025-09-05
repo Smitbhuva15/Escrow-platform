@@ -3,7 +3,8 @@ export interface EscrowState {
   provider: any,
   chainId: number,
   deals: any,
-  personalstake:Number
+  personalstake:Number,
+  Lockstake:Number
 }
 
 export interface Inputs {
@@ -52,11 +53,24 @@ export interface  stakeType {
   escrowContract: any,
   provider: any,
   stake:string,
-  setIsLoadingStake: React.Dispatch<React.SetStateAction<boolean>>
+  setIsLoadingStake: React.Dispatch<React.SetStateAction<boolean>>,
+  address:`0x${string}`
+}
+
+export interface  unstakeType {
+  dispatch: any,
+  escrowContract: any,
+  provider: any,
+  unstake:string,
+  setIsLoadingUnStake: React.Dispatch<React.SetStateAction<boolean>>,
+  address:`0x${string}`
 }
 
 export interface stakeInputs {
   stake: string
+}
+export interface unstakeInputs {
+  unstake: string
 }
 
 export interface  StakeBalanceType {
@@ -64,5 +78,4 @@ export interface  StakeBalanceType {
   escrowContract: any,
   provider: any,
   address: `0x${string}`
- 
 }

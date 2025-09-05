@@ -8,7 +8,8 @@ const initialState: EscrowState = {
     provider: {},
     chainId:0,
     deals:{},
-    personalstake:0
+    personalstake:0,
+    Lockstake:0
 }
 
 export const escrowSlice = createSlice({
@@ -29,12 +30,15 @@ export const escrowSlice = createSlice({
         },
         getPersonalStakeBalance(stake,action){
           stake.personalstake=action.payload
+        },
+         getLockBalance(stake,action){
+          stake.Lockstake=action.payload
         }
     },
     
 })
 
 
-export const { getEscrowContract, getprovider ,getchainId, getallDeals,getPersonalStakeBalance } = escrowSlice.actions
+export const { getEscrowContract, getprovider ,getchainId, getallDeals,getPersonalStakeBalance,getLockBalance } = escrowSlice.actions
 
 export default escrowSlice.reducer

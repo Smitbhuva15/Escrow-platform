@@ -6,10 +6,11 @@ import { RootState } from '@/store/store';
 import { ArrowUpCircle, Loader2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
+import { useActiveAccount } from 'thirdweb/react';
 
 const StakeComponent = () => {
+    const account = useActiveAccount();
     const dispatch = useDispatch();
     const [isLoadingStake, setIsLoadingStake] = useState(false);
 
@@ -26,13 +27,17 @@ const StakeComponent = () => {
     } = useForm<stakeInputs>();
 
     const onSubmit: SubmitHandler<stakeInputs> = async (data) => {
-        await stakeEth({
-            dispatch,
-            escrowContract,
-            provider,
-            stake: String(data.stake),
-            setIsLoadingStake,
-        });
+        const address = account?.address;
+        if (address) {
+            await stakeEth({
+                dispatch,
+                escrowContract,
+                provider,
+                stake: String(data.stake),
+                setIsLoadingStake,
+                address
+            });
+        }
 
         reset();
     };
@@ -64,10 +69,10 @@ const StakeComponent = () => {
                     <input
                         id="stakeAmount"
                         type="number"
-                        step={0.001}
+                        step={0.0001}
                         {...register("stake", {
                             required: "Stake Amount is required",
-                            min: { value: 0.001, message: "Minimum stake is 0.001 ETH" },
+                            min: { value: 0.0001, message: "Minimum stake is 0.0001 ETH" },
                         })}
                         className="border border-gray-600 rounded-xl p-3 bg-[#121217] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition duration-200 appearance-none 
               [&::-webkit-outer-spin-button]:appearance-none 
@@ -100,7 +105,7 @@ const StakeComponent = () => {
                     </button>
                 )}
             </form>
-           
+
         </div>
     );
 };
