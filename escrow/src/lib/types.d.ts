@@ -3,8 +3,11 @@ export interface EscrowState {
   provider: any,
   chainId: number,
   deals: any,
-  personalstake:Number,
-  Lockstake:Number
+  personalstake: Number,
+  Lockstake: Number,
+  admin: `0x${string}`,
+  votingdays: Number,
+  Quorum: Number
 }
 
 export interface Inputs {
@@ -12,7 +15,7 @@ export interface Inputs {
   description: string
   seller: string
   amount: string
-  deadline:string
+  deadline: string
 }
 
 export interface markType {
@@ -48,22 +51,22 @@ export interface depositType {
   setIsLoading: React.Dispatch<React.SetStateAction<number>>
 }
 
-export interface  stakeType {
+export interface stakeType {
   dispatch: any,
   escrowContract: any,
   provider: any,
-  stake:string,
+  stake: string,
   setIsLoadingStake: React.Dispatch<React.SetStateAction<boolean>>,
-  address:`0x${string}`
+  address: `0x${string}`
 }
 
-export interface  unstakeType {
+export interface unstakeType {
   dispatch: any,
   escrowContract: any,
   provider: any,
-  unstake:string,
+  unstake: string,
   setIsLoadingUnStake: React.Dispatch<React.SetStateAction<boolean>>,
-  address:`0x${string}`
+  address: `0x${string}`
 }
 
 export interface stakeInputs {
@@ -72,10 +75,27 @@ export interface stakeInputs {
 export interface unstakeInputs {
   unstake: string
 }
+export interface votingInput {
+  days: string
+}
 
-export interface  StakeBalanceType {
+export interface StakeBalanceType {
   dispatch: any,
   escrowContract: any,
   provider: any,
   address: `0x${string}`
+}
+
+export interface AdminInfoType {
+  dispatch: any,
+  escrowContract: any,
+  provider: any
+}
+
+export interface VotingType {
+  dispatch: any,
+  escrowContract: any,
+  provider: any,
+  value: Number
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
 }

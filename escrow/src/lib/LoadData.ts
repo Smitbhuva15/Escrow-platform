@@ -2,9 +2,9 @@ import { ethers } from 'ethers'
 import React from 'react'
 import escrowAbi from '@/abi/escrow.json'
 import { config } from '@/config/config';
-import { getallDeals, getchainId, getEscrowContract, getLockBalance, getPersonalStakeBalance, getprovider } from '@/slice/escrowSlice';
+import { getAdmin, getallDeals, getchainId, getEscrowContract, getLockBalance, getPersonalStakeBalance, getprovider, getQuorumDay, getVotingDay } from '@/slice/escrowSlice';
 import toast from 'react-hot-toast';
-import { depositType, markConfirmType, markType, openDisputeType, StakeBalanceType, stakeType, unstakeType } from './types';
+import { AdminInfoType, depositType, markConfirmType, markType, openDisputeType, StakeBalanceType, stakeType, unstakeType, VotingType } from './types';
 
 
 declare global {
@@ -321,6 +321,23 @@ export const loadstakebalance = async (
   }
 }
 
+export const loadAdmininfo = async (
+  { dispatch, escrowContract, provider }: AdminInfoType) => {
+  const signer = await provider.getSigner();
+  try {
+    let transaction = await escrowContract.connect(signer).owner();
+    dispatch(getAdmin(transaction))
+    transaction = await escrowContract.connect(signer).votingDays();
+    dispatch(getVotingDay(Number(transaction) / (24 * 60 * 60)))
+    transaction = await escrowContract.connect(signer).minmumvotedweightPercentage();
+    dispatch(getQuorumDay(Number(transaction)))
+
+
+  } catch (error) {
+    console.log("error :", error)
+  }
+}
+
 export const stakeEth = async ({
   dispatch,
   escrowContract,
@@ -375,7 +392,7 @@ export const stakeEth = async ({
         id: "stakeTx",
       });
     } finally {
-      await loadstakebalance({dispatch, escrowContract, provider,address });
+      await loadstakebalance({ dispatch, escrowContract, provider, address });
       setIsLoadingStake(false);
     }
   }
@@ -406,7 +423,7 @@ export const unstakeEth = async ({
 
     try {
       const transaction = await escrowContract.connect(signer)
-        .unstake( ethers.utils.parseEther(unstake) );
+        .unstake(ethers.utils.parseEther(unstake));
 
       toast.loading("Unstake transaction submitted. Waiting for confirmation...", {
         id: "unstakeTx",
@@ -444,3 +461,56 @@ export const unstakeEth = async ({
     }
   }
 };
+
+export const updateVotingDays = async ({
+  dispatch,
+  escrowContract,
+  provider,
+  value,
+  setIsLoading,
+}: VotingType) => {
+  const isReady =
+    escrowContract && Object.keys(escrowContract).length > 0 &&
+    provider && Object.keys(provider).length > 0;
+
+  setIsLoading(true);
+
+  if (isReady) {
+    toast.loading("Preparing to update voting period... Please confirm in your wallet.", {
+      id: "votingDaysTx",
+    });
+
+    const signer = await provider.getSigner();
+
+    try {
+      const transaction = await escrowContract.connect(signer).setvotingDay(Number(value));
+
+      toast.loading("Transaction submitted. Waiting for blockchain confirmation...", {
+        id: "votingDaysTx",
+      });
+
+      const receipt = await transaction.wait();
+
+      if (receipt.status !== 1) {
+        toast.error("Failed to update voting period. Please try again.", {
+          id: "votingDaysTx",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      toast.success(`Voting period successfully updated to ${value} days.`, {
+        id: "votingDaysTx",
+      });
+    } catch (error) {
+      toast.error("Transaction failed. Please try again.", {
+        id: "votingDaysTx",
+      });
+    } finally {
+      await loadAdmininfo({dispatch,  escrowContract, provider });
+      setIsLoading(false);
+    }
+  }
+};
+
+

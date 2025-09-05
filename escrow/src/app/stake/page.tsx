@@ -55,7 +55,7 @@ const Stake = () => {
     };
 
     fetchStakeBalance();
-  }, [isReady, account, dispatch, escrowContract, provider]);
+  }, [isReady, account]);
 
   return account ? (
     isLoading ? (
