@@ -74,7 +74,7 @@ const Admin = () => {
                   Voting Period
                 </span>
                 <span className="text-white font-semibold text-lg md:text-xl">
-                    {votingdays?Number(votingdays):0} Days
+                    {votingdays? `${Number(votingdays)>1?`${Number(votingdays)} Days`:`${Number(votingdays)} Day`}`:'0 Day'} 
                 </span>
               </div>
             </div>
