@@ -64,7 +64,7 @@ const Escrows = () => {
     account ? (
 
 
-      <div className={` ${deals.length < 4 && "h-screen"} xl:max-w-5xl lg:max-w-4xl md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-8`}>
+      <div className={` ${deals.length < 4 && "mb-52"} xl:max-w-5xl lg:max-w-4xl md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-8`}>
 
         <div className="text-4xl md:text-5xl font-extrabold mb-6">
           Deals
@@ -107,8 +107,8 @@ const Escrows = () => {
               </div>)
               :
               (
-                <div className="h-[55vh] flex flex-col justify-center  text-wrap text-center items-center text-zinc-200">
-                  <h1 className="text-lg md:text-xl font-medium">You don’t have any deals yet</h1>
+                <div className="h-[65vh] flex flex-col justify-center  text-wrap text-center items-center text-zinc-200">
+                  <h1 className="text-lg md:text-xl font-medium">No Deals Available</h1>
                   <p className="text-sm md:text-base text-zinc-300 mt-2">
                     Create your first escrow deal to get started.
                   </p>

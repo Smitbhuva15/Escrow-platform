@@ -2,9 +2,9 @@ import { ethers } from 'ethers'
 import React from 'react'
 import escrowAbi from '@/abi/escrow.json'
 import { config } from '@/config/config';
-import { getAdmin, getallDeals, getchainId, getEscrowContract, getLockBalance, getPersonalStakeBalance, getprovider, getQuorumDay, getVotingDay } from '@/slice/escrowSlice';
+import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getPersonalStakeBalance, getprovider, getQuorumDay, getVotingDay } from '@/slice/escrowSlice';
 import toast from 'react-hot-toast';
-import { AdminInfoType, depositType, markConfirmType, markType, openDisputeType, StakeBalanceType, stakeType, unstakeType, VotingType } from './types';
+import { AdminInfoType, decoratedisputeType, depositType, DisputeType, markConfirmType, markType, openDisputeType, StakeBalanceType, stakeType, unstakeType, VotingType } from './types';
 
 
 declare global {
@@ -507,7 +507,7 @@ export const updateVotingDays = async ({
         id: "votingDaysTx",
       });
     } finally {
-      await loadAdmininfo({dispatch,  escrowContract, provider });
+      await loadAdmininfo({ dispatch, escrowContract, provider });
       setIsLoading(false);
     }
   }
@@ -565,3 +565,56 @@ export const updateQuorum = async ({
     }
   }
 };
+
+
+export const loadDispute = async ({ dispatch, escrowContract, provider, setIsLoading }: DisputeType) => {
+  const isReady =
+    escrowContract && Object.keys(escrowContract).length > 0 &&
+    provider && Object.keys(provider).length > 0;
+
+  setIsLoading(true);
+  let disputeevent;
+  if (isReady) {
+    disputeevent = await escrowContract.queryFilter("Dispute");
+    const dispute=await decoratedispute({ dispatch, escrowContract, provider, disputeevent });
+   dispatch(getDispute(dispute));
+  }
+}
+
+const decoratedispute = async ({ dispatch, escrowContract, provider, disputeevent }: decoratedisputeType) => {
+  const signer = await provider.getSigner();
+  if (disputeevent && disputeevent.length > 0) {
+    const decoratedDispute = await Promise.all(disputeevent.map(async (event: any) => {
+      const dealId = Number(event?.args?.dealId);
+      const updatedDeal = await escrowContract.connect(signer).getDeal(dealId);
+
+      const currenttime = Math.floor(Date.now() / 1000);
+      const remainingSeconds = Number(event?.args?.votingEndTime) - currenttime;
+      const votingremainingDays = Math.ceil(remainingSeconds / (24 * 60 * 60));
+
+      return {
+        dispute: {
+          buyer: updatedDeal?.buyer,
+          seller: updatedDeal?.seller,
+          dealId: Number(updatedDeal?.dealId),
+          title: updatedDeal?.title,
+          description: updatedDeal?.description,
+          amount: updatedDeal.amount.toString(),
+          status: Number(updatedDeal?.status),
+          createdAt: Number(updatedDeal?.createdAt),
+          dealdeadline: Number(updatedDeal?.deadline),
+          isDisputed: updatedDeal?.isDisputed,
+          disputedId: Number(updatedDeal?.disputedId),
+          votingEndTime: Number(event?.args?.votingEndTime),
+          YesVoting: Number(event?.args?.YesVoting),
+          Novoting: Number(event?.args?.Novoting),
+          quorumTarget: Number(event?.args?.quorumTarget),
+          closed: Number(event?.args?.closed),
+          votingremainingDays:votingremainingDays
+        }
+      }
+    }))
+    return decoratedDispute;
+  }
+
+}

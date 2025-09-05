@@ -7,7 +7,8 @@ export interface EscrowState {
   Lockstake: Number,
   admin: `0x${string}`,
   votingdays: Number,
-  Quorum: Number
+  Quorum: Number,
+  disputes:[]
 }
 
 export interface Inputs {
@@ -101,4 +102,18 @@ export interface VotingType {
   provider: any,
   value: Number
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+}
+
+export interface DisputeType {
+  dispatch: any,
+  escrowContract: any,
+  provider: any
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+}
+
+export interface decoratedisputeType {
+  dispatch: any,
+  escrowContract: any,
+  provider: any
+  disputeevent: any
 }
