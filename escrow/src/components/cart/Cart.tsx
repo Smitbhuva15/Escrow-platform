@@ -27,8 +27,8 @@ const Cart = ({ deals }: any) => {
       {deals.map((deal: any, index: number) => (
 
         <div
-          key={index}
-          className="p-6 bg-[#1E1E24] rounded-2xl shadow-md hover:shadow-lg transition flex flex-col justify-between"
+          key={deal?.deal?.dealId.toString()}
+          className="p-6 bg-[#1E1E24] rounded-2xl shadow-md hover:shadow-lg  flex flex-col justify-between sm:hover:scale-105 transition-all duration-300"
         >
           <Link href={`escrows/${deal?.deal?.dealId.toString()}`}>
 

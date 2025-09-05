@@ -78,6 +78,9 @@ export interface unstakeInputs {
 export interface votingInput {
   days: string
 }
+export interface QuorumInput {
+  Quorum: string
+}
 
 export interface StakeBalanceType {
   dispatch: any,

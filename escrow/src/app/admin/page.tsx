@@ -9,6 +9,7 @@ import { RootState } from '@/store/store';
 import { loadAdmininfo } from '@/lib/LoadData';
 import Link from 'next/link';
 import VotingCard from '@/components/admin/VotingCard';
+import QuorumCard from '@/components/admin/QuorumCard';
 
 
 const Admin = () => {
@@ -95,6 +96,7 @@ const Admin = () => {
           {/* Admin Controls  */}
           <div className="flex flex-col gap-12">
             <VotingCard />
+            <QuorumCard />
           </div>
 
 

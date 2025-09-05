@@ -41,7 +41,7 @@ const VotingCard = () => {
 
             {/* Description */}
             <p className="text-gray-400 mb-6 text-sm md:text-base leading-relaxed">
-                Define how long each governance proposal will remain open for voting.
+                Decide how long community members have to cast their votes on a proposal. 
                 Choose a duration between <span className="text-white font-semibold">1 to 30 days</span>.
                 Once set, proposals will follow this voting period by default.
             </p>
