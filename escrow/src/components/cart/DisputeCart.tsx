@@ -54,8 +54,11 @@ const DisputeCart = ({ disputes }: any) => {
                             <span className="absolute -left-2 top-28 w-3 h-3 bg-amber-500 rounded-full"></span>
                             <p className="text-sm text-white font-medium">Voting Deadline</p>
                             <p className="text-xs text-gray-400">
-                                {dispute?.dispute?.votingremainingDays}{" "}
-                                {dispute?.dispute?.votingremainingDays > 1 ? "days" : "day"} left
+                                {
+                                    dispute?.dispute?.votingremainingDays==0 ?"Expired":` ${dispute?.dispute?.votingremainingDays}${" "}
+                                ${dispute?.dispute?.votingremainingDays > 1 ? "days" : "day"} left`
+                                }
+                               
                             </p>
                         </div>
                     </div>

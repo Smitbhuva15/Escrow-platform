@@ -62,7 +62,7 @@ const page = () => {
                     <div className='xl:max-w-5xl lg:max-w-4xl md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-8 '>
                         <div className='lg:flex lg:gap-16'>
                             <div className='lg:w-[50%]'>
-                                <LeftSection deal={deal} />
+                                <LeftSection deal={deal} section='deal'/>
                             </div>
                             <div className='lg:w-[50%]'>
                                 <RightSection deal={deal} />

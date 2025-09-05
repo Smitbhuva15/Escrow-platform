@@ -61,16 +61,16 @@ const Cart = ({ deals }: any) => {
               </div>
               <span
                 className={`px-3 py-1 rounded-full text-xs font-medium ${deal?.deal?.status == 1
-                    ? "bg-gray-600 text-white"
-                    : deal?.deal?.status == 2
-                      ? "bg-indigo-500 text-white"
-                      : deal?.deal?.status == 3
-                        ? "bg-slate-400 text-black"
-                        : deal?.deal?.status == 4
-                          ? "bg-emerald-500 text-white"
-                          : deal?.deal?.status == 5
-                            ? "bg-rose-500 text-white"
-                            : "bg-purple-800 text-white"
+                  ? "bg-gray-600 text-white"
+                  : deal?.deal?.status == 2
+                    ? "bg-indigo-500 text-white"
+                    : deal?.deal?.status == 3
+                      ? "bg-slate-400 text-black"
+                      : deal?.deal?.status == 4
+                        ? "bg-emerald-500 text-white"
+                        : deal?.deal?.status == 5
+                          ? "bg-rose-500 text-white"
+                          : "bg-purple-800 text-white"
                   }`}
               >
                 {deal?.deal?.status == 1
@@ -88,13 +88,18 @@ const Cart = ({ deals }: any) => {
             </div>
 
             {/* Deadline */}
-            <p className="text-xs text-zinc-400">
-              Deposit deadline:{" "}
-              <span className="text-white font-medium">
-                {deal?.deal?.remainingDays}{" "}
-                {deal?.deal?.remainingDays > 1 ? "days" : "day"} left
+            <p className="text-xs md:text-sm text-zinc-400">
+              Deposit Deadline:{" "}
+              <span
+                className={`font-medium px-3 py-1 rounded-full text-xs ${deal?.deal?.remainingDays === 0
+                  && "bg-rose-700 text-white"  }`}
+              >
+                {deal?.deal?.remainingDays === 0
+                  ? "Expired"
+                  : `${deal?.deal?.remainingDays} ${deal?.deal?.remainingDays > 1 ? "days" : "day"} left`}
               </span>
             </p>
+
           </Link>
 
           {/* Fund Button */}
