@@ -4,7 +4,7 @@ import escrowAbi from '@/abi/escrow.json'
 import { config } from '@/config/config';
 import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getPersonalStakeBalance, getprovider, getQuorumDay, getvotes, getVotingDay } from '@/slice/escrowSlice';
 import toast from 'react-hot-toast';
-import { AdminInfoType, decoratedisputeType, depositType, DisputeType, markConfirmType, markType, openDisputeType, StakeBalanceType, stakeType, totalvotingtype, unstakeType, votingType, VotingType } from './types';
+import { AdminInfoType, decoratedisputeType, depositType, DisputeType, markConfirmType, markType, openDisputeType, resolveType, StakeBalanceType, stakeType, totalvotingtype, unstakeType, votingType, VotingType } from './types';
 
 
 declare global {
@@ -719,3 +719,66 @@ export const handelvoting = async ({
     }
   }
 };
+
+export const handelResolve = async ({
+  dispatch,
+  escrowContract,
+  provider,
+  disputeId,
+  setIsCloseLoading
+}: resolveType) => {
+  const isReady =
+    escrowContract &&
+    Object.keys(escrowContract).length > 0 &&
+    provider &&
+    Object.keys(provider).length > 0;
+
+  setIsCloseLoading(true);
+
+  if (isReady) {
+    toast.loading("Preparing to resolve dispute... Please confirm in your wallet.", {
+      id: "resolveTx",
+    });
+
+    const signer = await provider.getSigner();
+
+    try {
+      const transaction = await escrowContract.connect(signer).closeDispute(Number(disputeId));
+
+      toast.loading("Resolution submitted. Waiting for on-chain confirmation...", {
+        id: "resolveTx",
+      });
+
+      const receipt = await transaction.wait();
+
+      if (receipt.status !== 1) {
+        toast.error("Dispute resolution failed. Please try again.", {
+          id: "resolveTx",
+        });
+        setIsCloseLoading(false);
+        return;
+      }
+
+      const event = receipt.events?.find((e: any) => e.event === "DisputeClosed");
+
+      if (event) {
+        toast.success("Dispute successfully resolved! Funds will be distributed accordingly.", {
+          id: "resolveTx",
+        });
+      } else {
+        toast.error("Transaction confirmed, but no dispute resolution event found.", {
+          id: "resolveTx",
+        });
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error("Dispute resolution failed. Please try again.", {
+        id: "resolveTx",
+      });
+    } finally {
+      await loadDispute({ dispatch, escrowContract, provider });
+      setIsCloseLoading(false);
+    }
+  }
+};
+

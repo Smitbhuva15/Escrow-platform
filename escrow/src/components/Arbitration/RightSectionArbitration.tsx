@@ -1,12 +1,13 @@
-import { handelvoting } from '@/lib/LoadData';
-import { Inputs, VoteInputs } from '@/lib/types';
+import { handelResolve, handelvoting } from '@/lib/LoadData';
+import { VoteInputs } from '@/lib/types';
 import { RootState } from '@/store/store';
 import { Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActiveAccount } from 'thirdweb/react';
+import ProcessingLoader from '../escrowId/ProcessingLoader';
 
 const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
 
@@ -15,8 +16,9 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
 
     const [isLoading, setIsLoading] = useState("")
     const [totalVotes, setTotalVotes] = useState<any>();
-      const [buyerVotePercent, setBuyerVotePercent] = useState(0);
+    const [buyerVotePercent, setBuyerVotePercent] = useState(0);
     const [sellerVotePercent, setSellerVotePercent] = useState(0);
+    const [isCloseLoading, setIsCloseLoading] = useState(false);
 
     const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
     const provider = useSelector((state: RootState) => state?.escrow?.provider);
@@ -59,6 +61,15 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
         }
     }, [votes])
 
+    const ResolveDispute = async () => {
+        await handelResolve({
+            dispatch,
+            escrowContract,
+            provider,
+            disputeId: Number(dispute.dispute.disputedId),
+            setIsCloseLoading
+        })
+    }
 
     return (
 
@@ -84,13 +95,34 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
             {/* Voting Section */}
             {
                 dispute?.dispute?.buyer === account?.address || dispute?.dispute?.seller === account?.address ? (
-                    <div className="bg-[#1E1E24] p-8 rounded-2xl shadow-lg border border-[#2F2F3A] text-center">
-                        <h2 className="text-yellow-400 font-bold text-lg mb-2">
-                            No Actions Available
+
+                    <div className="bg-[#1E1E24] p-8 rounded-2xl shadow-lg border border-[#2F2F3A] space-y-3">
+                        <h2 className="text-[#1d45fe] font-bold text-xl">
+                            Finalize Dispute Case
                         </h2>
-                        <p className="text-gray-400 text-sm">
-                            You are a participant in this deal, voting is restricted.
+                        <p className="text-gray-300 text-sm leading-relaxed">
+                            Ending this dispute marks the case as resolved. Funds are automatically transferred based on the outcome, and no future actions can reopen this issue.
                         </p>
+                        {!isCloseLoading ? (
+                            dispute?.dispute?.closed == true ? (
+                                <button
+                                    className="w-full bg-gray-500/70 text-gray-800 font-semibold py-3 rounded-xl cursor-not-allowed"
+                                    disabled
+                                >
+                                    Dispute Resolved
+                                </button>
+                            ) : (
+                                <button
+                                    className="w-full bg-[#1d45fe] hover:bg-[#1638d6] text-white font-semibold py-3 rounded-xl transition"
+                                    onClick={() => ResolveDispute()}
+                                >
+                                    Resolve Dispute
+                                </button>
+                            )
+                        ) : (
+                            <ProcessingLoader />
+                        )}
+
                     </div>
 
                 ) : (
@@ -110,7 +142,7 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
                         <div>
                             <div className="flex justify-between mb-2">
                                 <span className="text-gray-400 text-sm font-medium">Buyer</span>
-                                <span className="text-gray-200 text-sm font-semibold">{buyerVotePercent?buyerVotePercent.toFixed(3):0}%</span>
+                                <span className="text-gray-200 text-sm font-semibold">{buyerVotePercent ? buyerVotePercent.toFixed(3) : 0}%</span>
                             </div>
                             <div className="relative w-full h-[6px] bg-[#1E1F25] rounded-full overflow-hidden">
                                 <div
@@ -129,7 +161,7 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
                         <div>
                             <div className="flex justify-between mb-2">
                                 <span className="text-gray-400 text-sm font-medium">Seller</span>
-                                <span className="text-gray-200 text-sm font-semibold">{sellerVotePercent?sellerVotePercent.toFixed(3) : 0}%</span>
+                                <span className="text-gray-200 text-sm font-semibold">{sellerVotePercent ? sellerVotePercent.toFixed(3) : 0}%</span>
                             </div>
                             <div className="relative w-full h-[6px] bg-[#1E1F25] rounded-full overflow-hidden">
                                 <div

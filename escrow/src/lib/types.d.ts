@@ -9,7 +9,7 @@ export interface EscrowState {
   votingdays: Number,
   Quorum: Number,
   disputes: [],
-  votes:[]
+  votes: []
 }
 
 export interface Inputs {
@@ -21,7 +21,7 @@ export interface Inputs {
 }
 
 export interface VoteInputs {
-weight:string
+  weight: string
 }
 
 
@@ -114,7 +114,7 @@ export interface DisputeType {
   dispatch: any,
   escrowContract: any,
   provider: any,
-  
+
 }
 export interface totalvotingtype {
   dispatch: any,
@@ -140,3 +140,11 @@ export interface votingType {
   setIsLoading: React.Dispatch<React.SetStateAction<string>>,
 }
 
+
+export interface resolveType {
+    dispatch: any,
+  escrowContract: any,
+  provider: any,
+  disputeId: Number,
+  setIsCloseLoading: React.Dispatch<React.SetStateAction<boolean>>,
+}
