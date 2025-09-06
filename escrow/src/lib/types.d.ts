@@ -113,8 +113,14 @@ export interface VotingType {
 export interface DisputeType {
   dispatch: any,
   escrowContract: any,
+  provider: any,
+  
+}
+export interface totalvotingtype {
+  dispatch: any,
+  escrowContract: any,
   provider: any
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+
 }
 
 export interface decoratedisputeType {

@@ -4,7 +4,7 @@ import escrowAbi from '@/abi/escrow.json'
 import { config } from '@/config/config';
 import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getPersonalStakeBalance, getprovider, getQuorumDay, getvotes, getVotingDay } from '@/slice/escrowSlice';
 import toast from 'react-hot-toast';
-import { AdminInfoType, decoratedisputeType, depositType, DisputeType, markConfirmType, markType, openDisputeType, StakeBalanceType, stakeType, unstakeType, votingType, VotingType } from './types';
+import { AdminInfoType, decoratedisputeType, depositType, DisputeType, markConfirmType, markType, openDisputeType, StakeBalanceType, stakeType, totalvotingtype, unstakeType, votingType, VotingType } from './types';
 
 
 declare global {
@@ -567,12 +567,11 @@ export const updateQuorum = async ({
 };
 
 
-export const loadDispute = async ({ dispatch, escrowContract, provider, setIsLoading }: DisputeType) => {
+export const loadDispute = async ({ dispatch, escrowContract, provider }: DisputeType) => {
   const isReady =
     escrowContract && Object.keys(escrowContract).length > 0 &&
     provider && Object.keys(provider).length > 0;
 
-  setIsLoading(true);
   let disputeevent;
   if (isReady) {
     disputeevent = await escrowContract.queryFilter("Dispute");
@@ -608,7 +607,7 @@ const decoratedispute = async ({ dispatch, escrowContract, provider, disputeeven
           isDisputed: updatedDeal?.isDisputed,
           disputedId: Number(updatedDeal?.disputedId),
           votingEndTime: Number(updatedDispute?.votingEndTime),
-          YesVoting: Number(updatedDispute?.YesVoting),
+          Yesvoting: Number(updatedDispute?.YesVoting),
           Novoting: Number(updatedDispute?.Novoting),
           quorumTarget: Number(updatedDispute?.quorumTarget),
           closed: Number(updatedDispute?.closed),
@@ -621,12 +620,11 @@ const decoratedispute = async ({ dispatch, escrowContract, provider, disputeeven
 
 }
 
-export const loadTotalVotings = async ({ dispatch, escrowContract, provider, setIsLoading }: DisputeType) => {
+export const loadTotalVotings = async ({ dispatch, escrowContract, provider }: totalvotingtype) => {
   const isReady =
     escrowContract && Object.keys(escrowContract).length > 0 &&
     provider && Object.keys(provider).length > 0;
 
-setIsLoading(true)
   let voteEvent;
   let decoratedVote;
 
@@ -715,7 +713,8 @@ export const handelvoting = async ({
       });
       console.log(error)
     } finally {
-      // await LoadEscrow(escrowContract, provider, dispatch);
+      await loadTotalVotings({ dispatch, escrowContract, provider })
+      await loadDispute({ dispatch, escrowContract, provider });
       setIsLoading("");
     }
   }

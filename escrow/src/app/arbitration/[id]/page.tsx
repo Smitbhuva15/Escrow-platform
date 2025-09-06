@@ -30,8 +30,8 @@ const page = () => {
       try {
         setIsLoading(true);
         if (isReady) {
-          await loadDispute({ dispatch, escrowContract, provider, setIsLoading });
-          await loadTotalVotings({ dispatch, escrowContract, provider, setIsLoading })
+          await loadDispute({ dispatch, escrowContract, provider });
+          await loadTotalVotings({ dispatch, escrowContract, provider})
         }
       } catch (err) {
         console.log("Failed to load escrow:", err);

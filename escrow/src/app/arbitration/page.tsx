@@ -50,7 +50,7 @@ const Arbitration = () => {
       try {
         setIsLoading(true);
         if (isReady) {
-          await loadDispute({ dispatch, escrowContract, provider, setIsLoading });
+          await loadDispute({ dispatch, escrowContract, provider });
         }
       } catch (err) {
         console.error("Failed to load stake balance:", err);
