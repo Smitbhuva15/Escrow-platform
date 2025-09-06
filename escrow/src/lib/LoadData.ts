@@ -2,9 +2,9 @@ import { ethers } from 'ethers'
 import React from 'react'
 import escrowAbi from '@/abi/escrow.json'
 import { config } from '@/config/config';
-import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getPersonalStakeBalance, getprovider, getQuorumDay, getVotingDay } from '@/slice/escrowSlice';
+import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getPersonalStakeBalance, getprovider, getQuorumDay, getvotes, getVotingDay } from '@/slice/escrowSlice';
 import toast from 'react-hot-toast';
-import { AdminInfoType, decoratedisputeType, depositType, DisputeType, markConfirmType, markType, openDisputeType, StakeBalanceType, stakeType, unstakeType, VotingType } from './types';
+import { AdminInfoType, decoratedisputeType, depositType, DisputeType, markConfirmType, markType, openDisputeType, StakeBalanceType, stakeType, unstakeType, votingType, VotingType } from './types';
 
 
 declare global {
@@ -576,8 +576,8 @@ export const loadDispute = async ({ dispatch, escrowContract, provider, setIsLoa
   let disputeevent;
   if (isReady) {
     disputeevent = await escrowContract.queryFilter("Dispute");
-    const dispute=await decoratedispute({ dispatch, escrowContract, provider, disputeevent });
-   dispatch(getDispute(dispute));
+    const dispute = await decoratedispute({ dispatch, escrowContract, provider, disputeevent });
+    dispatch(getDispute(dispute));
   }
 }
 
@@ -588,8 +588,10 @@ const decoratedispute = async ({ dispatch, escrowContract, provider, disputeeven
       const dealId = Number(event?.args?.dealId);
       const updatedDeal = await escrowContract.connect(signer).getDeal(dealId);
 
+      const updatedDispute = await escrowContract.connect(signer).getDispute(updatedDeal?.disputedId);
+
       const currenttime = Math.floor(Date.now() / 1000);
-      const remainingSeconds = Number(event?.args?.votingEndTime) - currenttime;
+      const remainingSeconds = Number(updatedDispute?.votingEndTime) - currenttime;
       const votingremainingDays = Math.ceil(remainingSeconds / (24 * 60 * 60));
 
       return {
@@ -605,12 +607,12 @@ const decoratedispute = async ({ dispatch, escrowContract, provider, disputeeven
           dealdeadline: Number(updatedDeal?.deadline),
           isDisputed: updatedDeal?.isDisputed,
           disputedId: Number(updatedDeal?.disputedId),
-          votingEndTime: Number(event?.args?.votingEndTime),
-          YesVoting: Number(event?.args?.YesVoting),
-          Novoting: Number(event?.args?.Novoting),
-          quorumTarget: Number(event?.args?.quorumTarget),
-          closed: Number(event?.args?.closed),
-          votingremainingDays:votingremainingDays
+          votingEndTime: Number(updatedDispute?.votingEndTime),
+          YesVoting: Number(updatedDispute?.YesVoting),
+          Novoting: Number(updatedDispute?.Novoting),
+          quorumTarget: Number(updatedDispute?.quorumTarget),
+          closed: Number(updatedDispute?.closed),
+          votingremainingDays: votingremainingDays
         }
       }
     }))
@@ -618,3 +620,103 @@ const decoratedispute = async ({ dispatch, escrowContract, provider, disputeeven
   }
 
 }
+
+export const loadTotalVotings = async ({ dispatch, escrowContract, provider, setIsLoading }: DisputeType) => {
+  const isReady =
+    escrowContract && Object.keys(escrowContract).length > 0 &&
+    provider && Object.keys(provider).length > 0;
+
+setIsLoading(true)
+  let voteEvent;
+  let decoratedVote;
+
+  if (isReady) {
+    voteEvent = await escrowContract.queryFilter("Voted");
+
+    decoratedVote = voteEvent.map((event: any) => {
+      return ({
+        disputedId: Number(event?.args?.disputedId),
+        dealId: Number(event?.args?.dealId),
+        voterAddress: event?.args?.voterAddress,
+        weight: Number(event?.args?.weight),
+        support: event?.args?.support
+      })
+    })
+  }
+  dispatch(getvotes(decoratedVote))
+}
+
+export const handelvoting = async ({
+  disputedId,
+  supportYes,
+  weight,
+  dispatch,
+  escrowContract,
+  provider,
+  setIsLoading,
+}: votingType) => {
+
+  const isReady =
+    escrowContract && Object.keys(escrowContract).length > 0 &&
+    provider && Object.keys(provider).length > 0;
+  if (supportYes == true) {
+    setIsLoading("seller");
+  }
+  else {
+    setIsLoading("buyer")
+  }
+
+  if (isReady) {
+    toast.loading("Preparing vote... Please confirm the transaction in your wallet.", {
+      id: "escrowTx",
+    });
+
+    const signer = await provider.getSigner();
+
+    try {
+      const transaction = await escrowContract.connect(signer)
+        .vote(
+          disputedId,
+          supportYes,
+          ethers.utils.parseEther(weight.toString())
+        );
+
+      toast.loading("Vote submitted. Waiting for on-chain confirmation...", {
+        id: "escrowTx",
+      });
+
+      const receipt = await transaction.wait();
+
+      if (receipt.status !== 1) {
+        toast.error("Voting failed. Please try again.", {
+          id: "escrowTx",
+        });
+        setIsLoading("");
+        return;
+      }
+
+      const event = receipt.events?.find((e: any) => e.event === "Voted");
+
+      if (event) {
+        toast.success(
+          supportYes
+            ? "Your vote has been cast in favor of the Seller!"
+            : "Your vote has been cast in favor of the Buyer!",
+          { id: "escrowTx" }
+        );
+      } else {
+        toast.error("Transaction confirmed, but no vote event found. Please check the deal status.", {
+          id: "escrowTx",
+        });
+      }
+    } catch (error) {
+      toast.error("Voting transaction failed.", {
+        id: "escrowTx",
+      });
+      console.log(error)
+    } finally {
+      // await LoadEscrow(escrowContract, provider, dispatch);
+      setIsLoading("");
+    }
+  }
+};

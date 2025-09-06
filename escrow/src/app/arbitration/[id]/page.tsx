@@ -2,7 +2,7 @@
 import RightSectionArbitration from '@/components/Arbitration/RightSectionArbitration';
 import Banner from '@/components/banner/Banner';
 import LeftSection from '@/components/escrowId/LeftSection';
-import { loadDispute } from '@/lib/LoadData';
+import { loadDispute, loadTotalVotings } from '@/lib/LoadData';
 import { RootState } from '@/store/store';
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
@@ -16,7 +16,7 @@ const page = () => {
   const { id } = useParams();
 
   const [isLoading, setIsLoading] = useState(true)
- const [dispute, setDispute] = useState<any>();
+  const [dispute, setDispute] = useState<any>();
 
   const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
   const provider = useSelector((state: RootState) => state?.escrow?.provider);
@@ -31,6 +31,7 @@ const page = () => {
         setIsLoading(true);
         if (isReady) {
           await loadDispute({ dispatch, escrowContract, provider, setIsLoading });
+          await loadTotalVotings({ dispatch, escrowContract, provider, setIsLoading })
         }
       } catch (err) {
         console.log("Failed to load escrow:", err);
@@ -42,12 +43,12 @@ const page = () => {
     fetchdispute();
   }, [isReady]);
 
-useEffect(() => {
-  if (Disputes && Disputes.length > 0) {
-    const filtered = Disputes.filter((item: any) => item?.dispute?.disputedId == id)
-    setDispute(filtered[0]);
-  }
-}, [Disputes, id]);
+  useEffect(() => {
+    if (Disputes && Disputes.length > 0) {
+      const filtered = Disputes.filter((item: any) => item?.dispute?.disputedId == id)
+      setDispute(filtered[0]);
+    }
+  }, [Disputes, id]);
 
   return (
     account ? (
@@ -59,7 +60,7 @@ useEffect(() => {
         <div className='xl:max-w-5xl lg:max-w-4xl md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-8 mb-24'>
           <div className='lg:flex lg:gap-16'>
             <div className='lg:w-[50%]'>
-              <LeftSection deal={dispute} section='dispute'/>
+              <LeftSection deal={dispute} section='dispute' />
             </div>
             <div className='lg:w-[50%]'>
               <RightSectionArbitration dispute={dispute} />

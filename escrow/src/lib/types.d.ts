@@ -8,7 +8,8 @@ export interface EscrowState {
   admin: `0x${string}`,
   votingdays: Number,
   Quorum: Number,
-  disputes:[]
+  disputes: [],
+  votes:[]
 }
 
 export interface Inputs {
@@ -18,6 +19,11 @@ export interface Inputs {
   amount: string
   deadline: string
 }
+
+export interface VoteInputs {
+weight:string
+}
+
 
 export interface markType {
   dealId: Number,
@@ -117,3 +123,14 @@ export interface decoratedisputeType {
   provider: any
   disputeevent: any
 }
+
+export interface votingType {
+  disputedId: Number,
+  supportYes: boolean,
+  weight: Number,
+  dispatch: any,
+  escrowContract: any,
+  provider: any
+  setIsLoading: React.Dispatch<React.SetStateAction<string>>,
+}
+
