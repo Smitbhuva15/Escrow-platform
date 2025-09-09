@@ -85,7 +85,7 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
             <div className="bg-gradient-to-r from-[#1E1E24] to-[#2A2A33] p-6 rounded-2xl shadow-xl border border-[#2F2F3A]  transition-all duration-300">
                 <h2 className="text-gray-400 font-semibold text-sm mb-1 uppercase tracking-wide">Voting Deadline</h2>
                 <p className="text-3xl font-extrabold text-[#1d45fe]/70"> {
-                    dispute?.dispute?.votingremainingDays == 0
+                    dispute?.dispute?.votingremainingDays <= 0
                         ? "Expired"
                         : ` ${dispute?.dispute?.votingremainingDays}${" "}
                                 ${dispute?.dispute?.votingremainingDays > 1 ? "days" : "day"} left`

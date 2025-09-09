@@ -4,7 +4,7 @@ import { RootState } from '@/store/store';
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useActiveAccount } from 'thirdweb/react';
-import DashboradTab from '@/components/dashboard/DashboradTab'
+import DashboradTab from '@/components/dashboard/DashboardTab'
 
 const Dashboard = () => {
   const account = useActiveAccount();

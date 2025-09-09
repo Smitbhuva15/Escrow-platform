@@ -91,10 +91,10 @@ const Cart = ({ deals }: any) => {
             <p className="text-xs md:text-sm text-zinc-400">
               Deposit Deadline:{" "}
               <span
-                className={`font-medium px-3 py-1 rounded-full text-xs ${deal?.deal?.remainingDays === 0
+                className={`font-medium px-3 py-1 rounded-full text-xs ${deal?.deal?.remainingDays <= 0
                   && "bg-rose-700 text-white"  }`}
               >
-                {deal?.deal?.remainingDays === 0
+                {deal?.deal?.remainingDays <= 0
                   ? "Expired"
                   : `${deal?.deal?.remainingDays} ${deal?.deal?.remainingDays > 1 ? "days" : "day"} left`}
               </span>
