@@ -78,20 +78,6 @@ export default function DashboardTab() {
       setTotalVotes(updatevotes)
     }
   }, [votes, account])
- 
-
-  // const renderStatusBadge = (status: string) => {
-  //   switch (status) {
-  //     case "Paid":
-  //       return <Badge className="bg-green-500/90 text-white px-3 py-1 rounded-full">Paid</Badge>
-  //     case "Pending":
-  //       return <Badge className="bg-yellow-500/90 text-white px-3 py-1 rounded-full">Pending</Badge>
-  //     case "Failed":
-  //       return <Badge className="bg-red-500/90 text-white px-3 py-1 rounded-full">Failed</Badge>
-  //     default:
-  //       return <Badge>{status}</Badge>
-  //   }
-  // }
 
   return (
     <div className="p-6 space-y-6">
@@ -130,14 +116,40 @@ export default function DashboardTab() {
           </div>
         ) : (
           <>
-            <TabsContent value="My Deals" className="sm:mt-6 mt-32 mb-72" >
-               <MyDeal deals={deals}/>
-            </TabsContent>
+            {
+              deals && deals.length > 0 ? (
+                <TabsContent value="My Deals" className="sm:mt-6 mt-32 mb-72" >
+                  <MyDeal deals={deals} />
+                </TabsContent>
+
+              ) : (
+                <div className={`h-[55vh] flex flex-col justify-center  text-wrap text-center items-center text-zinc-200 ${activeTab == "My Deals" ? "" : "hidden"}`}>
+                  <h1 className="text-lg md:text-xl font-medium">No Deals Available</h1>
+                  <p className="text-sm md:text-base text-zinc-300 mt-2">
+                    Create your first escrow deal to get started.
+                  </p>
+                </div>
+              )
+            }
 
 
-            <TabsContent value="My Votes" className="sm:mt-6 mt-32 mb-72">
-              <MyVotes totalVotes={totalVotes}/>
-            </TabsContent>
+            {
+              totalVotes && totalVotes.length > 0 ? (
+
+                <TabsContent value="My Votes" className="sm:mt-6 mt-32 mb-72">
+                  <MyVotes totalVotes={totalVotes} />
+                </TabsContent>
+
+              ) : (
+                <div className={`h-[55vh] flex flex-col justify-center  text-wrap text-center items-center text-zinc-200 ${activeTab == "My Votes" ? "" : "hidden"}`}>
+                  <h1 className="text-lg md:text-xl font-medium">Cast Your First Vote</h1>
+                  <p className="text-sm md:text-base text-zinc-300 mt-2">
+                    Join the decision-making process by voting on a proposal to get started.
+                  </p>
+                </div>
+              )
+            }
+
 
             <TabsContent value="Stake History" className="sm:mt-6 mt-32 mb-72">
               <Card className="p-4 shadow-md rounded-2xl">
