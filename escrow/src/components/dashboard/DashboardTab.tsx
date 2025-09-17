@@ -21,7 +21,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/store/store"
-import { LoadEscrow, loadTotalVotings } from "@/lib/LoadData"
+import { loadDispute, LoadEscrow, loadTotalVotings } from "@/lib/LoadData"
 import { useActiveAccount } from 'thirdweb/react'
 import { Loader2, TableCellsMerge } from 'lucide-react'
 import MyDeal from './MyDeal'
@@ -43,6 +43,8 @@ export default function DashboardTab() {
   const provider = useSelector((state: RootState) => state?.escrow?.provider);
   const Deals = useSelector((state: RootState) => state?.escrow?.deals);
   const votes = useSelector((state: RootState) => state?.escrow?.votes);
+  const disputes = useSelector((state: RootState) => state?.escrow?.disputes);
+
 
   const isReady = escrowContract && Object.keys(escrowContract).length > 0 &&
     provider && Object.keys(provider).length > 0;
@@ -54,6 +56,7 @@ export default function DashboardTab() {
         if (isReady) {
           await LoadEscrow(escrowContract, provider, dispatch);
           await loadTotalVotings({ dispatch, escrowContract, provider });
+          await loadDispute({ dispatch, escrowContract, provider })
         }
       } catch (err) {
         console.log("Failed to load escrow:", err);
@@ -73,11 +76,23 @@ export default function DashboardTab() {
   }, [Deals, account])
 
   useEffect(() => {
-    if (votes && votes.length > 0) {
-      const updatevotes = votes.filter((deal: any) => deal?.voterAddress == account?.address)
+    if (votes && votes.length > 0 && disputes && disputes.length > 0) {
+      const updatedVoting = votes.map((vote: any) => {
+        const dispute = disputes.filter((dispute: any) => dispute?.dispute?.disputedId == vote.disputedId);
+    
+        return {
+          "dealId": vote?.dealId,
+          "disputedId": vote?.disputedId,
+          "support": vote?.dealId,
+          "voterAddress": vote?.voterAddress,
+          "weight": vote?.weight,
+          dispute:dispute[0]
+        }
+      })
+      const updatevotes = updatedVoting.filter((deal: any) => deal?.voterAddress == account?.address)
       setTotalVotes(updatevotes)
     }
-  }, [votes, account])
+  }, [votes, account, disputes])
 
   return (
     <div className="p-6 space-y-6">

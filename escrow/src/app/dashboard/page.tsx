@@ -8,9 +8,7 @@ import DashboradTab from '@/components/dashboard/DashboardTab'
 
 const Dashboard = () => {
   const account = useActiveAccount();
-  const dispatch = useDispatch();
-  const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
-  const provider = useSelector((state: RootState) => state?.escrow?.provider);
+ 
   return (
     account ? (
       <div className={` xl:max-w-5xl lg:max-w-4xl md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-8`}>
