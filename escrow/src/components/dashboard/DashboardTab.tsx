@@ -83,7 +83,7 @@ export default function DashboardTab() {
         return {
           "dealId": vote?.dealId,
           "disputedId": vote?.disputedId,
-          "support": vote?.dealId,
+          "support": vote?.support,
           "voterAddress": vote?.voterAddress,
           "weight": vote?.weight,
           dispute:dispute[0]
@@ -94,6 +94,7 @@ export default function DashboardTab() {
     }
   }, [votes, account, disputes])
 
+  
   return (
     <div className="p-6 space-y-6">
       {/* Tabs */}

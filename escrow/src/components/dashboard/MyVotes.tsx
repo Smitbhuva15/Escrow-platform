@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Card } from "@/components/ui/card"
 import {
   Table,
@@ -10,13 +10,31 @@ import {
   TableCell,
   TableFooter,
 } from "@/components/ui/table"
+import { handelUnlockStake } from '@/lib/LoadData'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@/store/store'
+import { Loader2 } from 'lucide-react'
+import { Toaster } from 'react-hot-toast'
 
-const handelUnstake = (disputedId: string) => {
-  console.log(disputedId)
-}
 
 const MyVotes = ({ totalVotes }: any) => {
-  console.log(totalVotes)
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(-1)
+
+  const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
+  const provider = useSelector((state: RootState) => state?.escrow?.provider);
+
+  const handelUnstake = async (disputedId: string, index: Number) => {
+    console.log(index)
+    await handelUnlockStake({
+      dispatch,
+      escrowContract,
+      provider,
+      disputeId: Number(disputedId),
+      setIsLoading,
+      index
+    })
+  }
   return (
     <Card className="p-4 shadow-md rounded-2xl">
       <Table>
@@ -49,12 +67,9 @@ const MyVotes = ({ totalVotes }: any) => {
               </TableCell>
 
               <TableCell className=" font-semibold">
-                {`${vote.weight / 1e18 }  ETH`}   
+                {`${vote.weight / 1e18}  ETH`}
               </TableCell>
 
-              {/* <TableCell className=" font-semibold">
-              {vote?.dispute?.dispute?.closed==1 ?}
-              </TableCell> */}
               <TableCell className='' >  <span
                 className={`px-3 py-1 rounded-full text-right text-xs font-medium ${vote?.dispute?.dispute?.closed == 1 ? "bg-rose-500 text-white"
                   : "bg-emerald-500 text-white"
@@ -62,15 +77,28 @@ const MyVotes = ({ totalVotes }: any) => {
               >
                 {vote?.dispute?.dispute?.closed == 1
                   ? "Closed" : "Open"}
-              </span></TableCell>
+              </span>
+              </TableCell>
 
-              <TableCell className="text-right">
-                <button
-                  className="px-3 py-1 text-sm font-medium rounded-lg bg-[#1d45fe] hover:bg-[#1638d6] text-white transition-colors"
-                  onClick={() => { handelUnstake(vote?.disputedId) }}
-                >
-                  Unlock Stake
-                </button>
+              <TableCell>
+                <div className="flex justify-end items-center gap-2">
+                  {isLoading == index ? (
+                    <>
+                      <div className='flex text-white bg-[#1d45fe] hover:bg-[#1638d6] font-semibold py-1 px-3 cursor-not-allowed opacity-80 gap-2 text-sm rounded-lg disabled shadow-md transition-all'>
+                        <Loader2 className="h-5 w-5 animate-spin " />
+                        <span className='flex'>Processing...</span>
+                      </div>
+
+                    </>
+                  ) : (
+                    <button
+                      className="px-3 py-1 text-sm font-medium rounded-lg bg-[#1d45fe] hover:bg-[#1638d6] text-white transition-colors"
+                      onClick={() => handelUnstake(vote?.disputedId, index)}
+                    >
+                      Unlock Stake
+                    </button>
+                  )}
+                </div>
               </TableCell>
             </TableRow>
           ))}
@@ -80,6 +108,7 @@ const MyVotes = ({ totalVotes }: any) => {
           <TableRow className="bg-muted/30 font-medium" />
         </TableFooter>
       </Table>
+      <Toaster position="bottom-right" reverseOrder={false} />
     </Card>
 
   )

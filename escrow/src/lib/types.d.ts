@@ -148,3 +148,12 @@ export interface resolveType {
   disputeId: Number,
   setIsCloseLoading: React.Dispatch<React.SetStateAction<boolean>>,
 }
+
+export interface unlockstakeType {
+    dispatch: any,
+  escrowContract: any,
+  provider: any,
+  disputeId: Number,
+  setIsLoading: React.Dispatch<React.SetStateAction<number>>,
+    index:Number
+}
