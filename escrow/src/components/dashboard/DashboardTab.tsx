@@ -7,25 +7,14 @@ import {
   TabsTrigger,
   TabsContent,
 } from "@/components/ui/tabs"
-import {
-  Table,
-  TableCaption,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-  TableFooter,
-} from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Card } from "@/components/ui/card"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/store/store"
-import { loadDispute, LoadEscrow, loadTotalVotings } from "@/lib/LoadData"
+import { loadDispute, LoadEscrow, loadStakeAndUnStakeHistory, loadTotalVotings } from "@/lib/LoadData"
 import { useActiveAccount } from 'thirdweb/react'
 import { Loader2, TableCellsMerge } from 'lucide-react'
 import MyDeal from './MyDeal'
 import MyVotes from './MyVotes'
+import MyStake from './MyStake'
 
 
 
@@ -34,6 +23,7 @@ export default function DashboardTab() {
 
   const [activeTab, setActiveTab] = useState("My Deals")
   const [deals, setDeals] = useState([]);
+    const [stakeHistory,setStakeHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
   const [totalVotes, setTotalVotes] = useState<any>([]);
   const dispatch = useDispatch();
@@ -44,6 +34,8 @@ export default function DashboardTab() {
   const Deals = useSelector((state: RootState) => state?.escrow?.deals);
   const votes = useSelector((state: RootState) => state?.escrow?.votes);
   const disputes = useSelector((state: RootState) => state?.escrow?.disputes);
+   const StakeHistory = useSelector((state: RootState) => state?.escrow?.StakeHistory);
+
 
 
   const isReady = escrowContract && Object.keys(escrowContract).length > 0 &&
@@ -57,6 +49,7 @@ export default function DashboardTab() {
           await LoadEscrow(escrowContract, provider, dispatch);
           await loadTotalVotings({ dispatch, escrowContract, provider });
           await loadDispute({ dispatch, escrowContract, provider })
+          await loadStakeAndUnStakeHistory({ dispatch, escrowContract, provider })
         }
       } catch (err) {
         console.log("Failed to load escrow:", err);
@@ -94,7 +87,14 @@ export default function DashboardTab() {
     }
   }, [votes, account, disputes])
 
-  
+   useEffect(() => {
+    if (StakeHistory && StakeHistory.length>0) {
+      const updateStakeHistory  = StakeHistory.filter((deal: any) => deal?.address == account?.address)
+      setStakeHistory(updateStakeHistory)  
+    }
+  }, [StakeHistory, account])
+
+
   return (
     <div className="p-6 space-y-6">
       {/* Tabs */}
@@ -103,23 +103,23 @@ export default function DashboardTab() {
         value={activeTab} onValueChange={setActiveTab}
         className="w-full"
       >
-        <TabsList className="flex-col gap-3 bg-muted/40 p-2 mt-10  sm:mt-0 sm:flex-row rounded-xl w-fit">
+        <TabsList className="flex-col gap-3 bg-muted/40 p-2 mt-10  sm:mt-0 sm:flex-row rounded-xl w-fit sm:m-0 mx-auto">
           <TabsTrigger
             value="My Deals"
-            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "My Deals" && "bg-[#1d45fe]"} p-4  transition`}
+            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "My Deals" ? "bg-[#1d45fe]" : "border shadow-xs shadow-amber-50"} p-4  transition`}
 
           >
             My Deals
           </TabsTrigger>
           <TabsTrigger
             value="My Votes"
-            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "My Votes" && "bg-[#1d45fe]"} p-4  transition`}
+            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "My Votes" ? "bg-[#1d45fe]": "border shadow-xs shadow-amber-50"} p-4   transition`}
           >
             My Votes
           </TabsTrigger>
           <TabsTrigger
             value="Stake History"
-            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "Stake History" && "bg-[#1d45fe]"} p-4  transition`}
+            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "Stake History" ? "bg-[#1d45fe]":"border shadow-xs shadow-amber-50"} p-4  transition`}
           >
             Stake History
           </TabsTrigger>
@@ -167,39 +167,24 @@ export default function DashboardTab() {
             }
 
 
-            <TabsContent value="Stake History" className="sm:mt-6 mt-32 mb-72">
-              <Card className="p-4 shadow-md rounded-2xl">
-                <Table>
-                  <TableCaption className="text-muted-foreground mb-5">
-                    A list of placeholder invoices.
-                  </TableCaption>
-                  <TableHeader>
-                    <TableRow className="bg-muted/30">
-                      <TableHead className="w-[120px] font-semibold">#</TableHead>
-                      <TableHead className="font-semibold">title</TableHead>
-                      <TableHead className="font-semibold">Seller</TableHead>
-                      <TableHead className="font-semibold">Amount</TableHead>
-                      <TableHead className="text-right font-semibold">Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow className="hover:bg-muted/20 transition">
-                      <TableCell className="w-[120px] font-semibold"> 1</TableCell>
-                      <TableCell className="font-semibold"></TableCell>
-                      <TableCell className="font-semibold">0x2D105F67EB276145f839153Dec67E46554a32Ea6 </TableCell>
-                      <TableCell className="font-semibold">50 </TableCell>
-                      <TableCell className="text-right font-semibold">completed </TableCell>
-                    </TableRow>
 
-                  </TableBody>
-                  <TableFooter>
-                    <TableRow className="bg-muted/30 font-medium">
+            {
+              stakeHistory && stakeHistory.length > 0 ? (
 
-                    </TableRow>
-                  </TableFooter>
-                </Table>
-              </Card>
-            </TabsContent>
+                <TabsContent value="Stake History" className="sm:mt-6 mt-32 mb-72">
+                 <MyStake stakeHistory={stakeHistory}/>
+                </TabsContent>
+
+              ) : (
+                <div className={`h-[55vh] flex flex-col justify-center  text-wrap text-center items-center text-zinc-200 ${activeTab == "Stake History" ? "" : "hidden"}`}>
+                  <h1 className="text-lg md:text-xl font-medium">Your Staking Journey Awaits</h1>
+                  <p className="text-sm md:text-base text-zinc-300 mt-2">
+                   Stake ETH now to begin your voting history.
+                  </p>
+                </div>
+              )
+            }
+            
           </>
         )
         }

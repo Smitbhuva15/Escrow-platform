@@ -9,7 +9,8 @@ export interface EscrowState {
   votingdays: Number,
   Quorum: Number,
   disputes: [],
-  votes: []
+  votes: [],
+  StakeHistory:[]
 }
 
 export interface Inputs {

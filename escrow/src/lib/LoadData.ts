@@ -2,7 +2,7 @@ import { ethers } from 'ethers'
 import React from 'react'
 import escrowAbi from '@/abi/escrow.json'
 import { config } from '@/config/config';
-import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getPersonalStakeBalance, getprovider, getQuorumDay, getvotes, getVotingDay } from '@/slice/escrowSlice';
+import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getPersonalStakeBalance, getprovider, getQuorumDay, getStakeHistory, getvotes, getVotingDay } from '@/slice/escrowSlice';
 import toast from 'react-hot-toast';
 import { AdminInfoType, decoratedisputeType, depositType, DisputeType, markConfirmType, markType, openDisputeType, resolveType, StakeBalanceType, stakeType, totalvotingtype, unlockstakeType, unstakeType, votingType, VotingType } from './types';
 
@@ -644,6 +644,40 @@ export const loadTotalVotings = async ({ dispatch, escrowContract, provider }: t
   dispatch(getvotes(decoratedVote))
 }
 
+export const loadStakeAndUnStakeHistory = async ({ dispatch, escrowContract, provider }: totalvotingtype) => {
+  const isReady =
+    escrowContract && Object.keys(escrowContract).length > 0 &&
+    provider && Object.keys(provider).length > 0;
+
+  let stakeEvent;
+  let unstakeEvent;
+  let decoratedEvent;
+
+  if (isReady) {
+    stakeEvent = await escrowContract.queryFilter("Staked");
+    unstakeEvent = await escrowContract.queryFilter("Unstaked");
+
+    stakeEvent = stakeEvent.map((event: any) => {
+      return ({
+        amount: Number(event?.args?.amount),
+        address: event?.args?.depositer,
+        method:"Staked"
+      })
+    })
+
+    unstakeEvent = unstakeEvent.map((event: any) => {
+      return ({
+        amount: Number(event?.args?.amount),
+        address: event?.args?.withdrawer,
+         method:"Unstaked"
+      })
+    })
+  }
+
+  decoratedEvent = [...stakeEvent, ...unstakeEvent]
+  dispatch(getStakeHistory(decoratedEvent))
+}
+
 export const handelvoting = async ({
   disputedId,
   supportYes,
@@ -787,16 +821,16 @@ export const handelUnlockStake = async ({
   escrowContract,
   provider,
   disputeId,
- setIsLoading,
- index
-}: unlockstakeType ) => {
+  setIsLoading,
+  index
+}: unlockstakeType) => {
   const isReady =
     escrowContract &&
     Object.keys(escrowContract).length > 0 &&
     provider &&
     Object.keys(provider).length > 0;
 
-setIsLoading(Number(index));
+  setIsLoading(Number(index));
 
   if (isReady) {
     // Preparing toast
@@ -819,7 +853,7 @@ setIsLoading(Number(index));
         toast.error("Stake unlock failed. Please try again or check the transaction details.", {
           id: "unlockStakeTx",
         });
-      setIsLoading(Number(index));
+        setIsLoading(Number(index));
         return;
       }
 
@@ -829,12 +863,12 @@ setIsLoading(Number(index));
     } catch (error) {
       console.log(error);
 
-      toast.error("Transaction unsuccessful. Your stake remains locked—please retry.", {
+      toast.error("Transaction unsuccessful. Your stake remains locked-please retry.", {
         id: "unlockStakeTx",
       });
     } finally {
 
-   setIsLoading(-1);
+      setIsLoading(-1);
     }
   }
 };

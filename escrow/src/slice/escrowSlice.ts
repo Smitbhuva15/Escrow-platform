@@ -14,7 +14,8 @@ const initialState: EscrowState = {
     votingdays: 0,
     Quorum: 0,
     disputes:[],
-    votes:[]
+    votes:[],
+    StakeHistory:[]
 }
 
 export const escrowSlice = createSlice({
@@ -54,11 +55,14 @@ export const escrowSlice = createSlice({
         getvotes(stake, action) {
             stake.votes = action.payload
         },
+        getStakeHistory(stake, action) {
+            stake.StakeHistory = action.payload
+        },
     },
 
 })
 
 
-export const { getEscrowContract, getprovider, getchainId, getallDeals, getPersonalStakeBalance, getLockBalance, getAdmin,getQuorumDay ,  getVotingDay,getDispute,getvotes} = escrowSlice.actions
+export const { getEscrowContract, getprovider, getchainId, getallDeals, getPersonalStakeBalance, getLockBalance, getAdmin,getQuorumDay ,  getVotingDay,getDispute,getvotes, getStakeHistory} = escrowSlice.actions
 
 export default escrowSlice.reducer

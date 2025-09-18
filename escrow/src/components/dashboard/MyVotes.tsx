@@ -24,8 +24,8 @@ const MyVotes = ({ totalVotes }: any) => {
   const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
   const provider = useSelector((state: RootState) => state?.escrow?.provider);
 
+
   const handelUnstake = async (disputedId: string, index: Number) => {
-    console.log(index)
     await handelUnlockStake({
       dispatch,
       escrowContract,
@@ -46,7 +46,8 @@ const MyVotes = ({ totalVotes }: any) => {
           <TableRow className="bg-muted/30">
             <TableHead className="w-[80px] font-semibold">#</TableHead>
             <TableHead className="font-semibold">Voted For</TableHead>
-            <TableHead className=" font-semibold">Staked Amount</TableHead>
+            <TableHead className=" font-semibold">Vote Weight</TableHead>
+            <TableHead className=" font-semibold"> Quorum Target</TableHead>
             <TableHead className=" font-semibold">Dispute Status</TableHead>
             <TableHead className=" font-semibold text-right" >Action</TableHead>
           </TableRow>
@@ -54,6 +55,7 @@ const MyVotes = ({ totalVotes }: any) => {
 
         <TableBody>
           {totalVotes.map((vote: any, index: number) => (
+            
             <TableRow
               key={index}
               className="hover:bg-muted/20 transition"
@@ -66,10 +68,12 @@ const MyVotes = ({ totalVotes }: any) => {
                 {vote.support === true ? "Seller" : "Buyer"}
               </TableCell>
 
-              <TableCell className=" font-semibold">
+              <TableCell className=" font-semibold py-3">
                 {`${vote.weight / 1e18}  ETH`}
               </TableCell>
-
+              <TableCell className=" font-semibold">
+                {`${vote?.dispute?.dispute?.quorumTarget / 1e18}  ETH`}
+              </TableCell>
               <TableCell className='' >  <span
                 className={`px-3 py-1 rounded-full text-right text-xs font-medium ${vote?.dispute?.dispute?.closed == 1 ? "bg-rose-500 text-white"
                   : "bg-emerald-500 text-white"
