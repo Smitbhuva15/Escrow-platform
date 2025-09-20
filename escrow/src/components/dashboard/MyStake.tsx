@@ -16,7 +16,7 @@ const MyStake = ({ stakeHistory }: any) => {
         <Card className="p-4 shadow-md rounded-2xl max-w-2xl mx-auto">
             <Table>
                 <TableCaption className="text-muted-foreground pb-2">
-                    A list of Stake History
+                    A list of your Stake History
                 </TableCaption>
                 <TableHeader>
                     <TableRow className="bg-muted/30">
