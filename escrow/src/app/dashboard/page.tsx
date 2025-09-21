@@ -4,7 +4,7 @@ import { RootState } from '@/store/store';
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useActiveAccount } from 'thirdweb/react';
-import DashboradTab from '@/components/dashboard/DashboardTab'
+import DashboardTab from '@/components/dashboard/DashboardTab'
 
 const Dashboard = () => {
   const account = useActiveAccount();
@@ -14,11 +14,11 @@ const Dashboard = () => {
       <div className={` xl:max-w-5xl lg:max-w-4xl md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-8`}>
         {/* Page Heading */}
         <div className="text-4xl md:text-5xl font-extrabold mb-6">
-         Dashborad
+         Dashboard
         </div>
 
         <div className='text-zinc-300'>
-           <DashboradTab />
+           <DashboardTab />
         </div>
       </div>
     ) : (
