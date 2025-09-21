@@ -12,7 +12,7 @@ const Guides = () => {
       </div>
       <div>
         <GuidSection1 />
-         <div className='border my-7 border-e-white'></div>
+         <div className='border my-18 border-e-white'></div>
         <GuildLineSection />
       </div>
     </div>
