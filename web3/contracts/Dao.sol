@@ -10,9 +10,8 @@ contract Dao {
     uint256 public disputeCount = 0;
     uint256 public votingDays = 7 days;
     uint256 public minmumvotedweightPercentage = 10;
-    uint256 public ownerPercentage=1;
+    uint256 public ownerPercentage = 1;
     address public owner;
-
 
     /////////////////////////   mapping   /////////////////////////////
 
@@ -44,11 +43,21 @@ contract Dao {
             revert invalidBuyerOrSellerAddress();
         }
 
-        if (
-            dealed.status != dealstatus.Delivered &&
-            dealed.status != dealstatus.Funded
-        ) {
-            revert dealNotDeliveredOrFunded();
+        if (msg.sender == dealed.seller) {
+            if (dealed.status == dealstatus.Funded) {
+                revert dealIsNotDelivered();
+            }
+
+            if (dealed.status != dealstatus.Delivered) {
+                revert dealIsNoFunded();
+            }
+        } else {
+            if (
+                dealed.status != dealstatus.Delivered &&
+                dealed.status != dealstatus.Funded
+            ) {
+                revert dealNotDeliveredOrFunded();
+            }
         }
 
         if (dealed.disputedId != 0) {
@@ -137,7 +146,7 @@ contract Dao {
 
         currentlyLocked[msg.sender] += weight;
 
-        hasvoted[disputedId][msg.sender] = supportYes;
+        hasvoted[disputedId][msg.sender] = true;
         usedWeight[disputedId][msg.sender] += weight;
 
         if (supportYes == true) {
@@ -204,7 +213,6 @@ contract Dao {
             winnerAddress = dealed.seller;
         }
 
-
         uint256 amount = dealed.amount;
         uint256 ownerTakeAmount = (amount * ownerPercentage) / 100;
         uint256 otherTransferamount = amount - ownerTakeAmount;
@@ -220,7 +228,6 @@ contract Dao {
         (success, ) = payable(winnerAddress).call{value: otherTransferamount}(
             ""
         );
-
 
         if (!success) {
             revert inValidTransaction();

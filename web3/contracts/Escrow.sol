@@ -25,15 +25,21 @@ contract Escrow is Dao {
     }
 
     /////////////////////////  Owner Access functions   /////////////////////////////
-    function setvotingDay(uint256 newvotingday) public onlyowner(msg.sender) {
-        newvotingday = newvotingday * 24 * 60 * 60;
-        votingDays = newvotingday;
+    function setownerPercentage(
+        uint256 newownerPercentage
+    ) public onlyowner(msg.sender) {
+        ownerPercentage = newownerPercentage;
     }
 
     function setminmumvotedweightPercentage(
         uint256 newpercentage
     ) public onlyowner(msg.sender) {
         minmumvotedweightPercentage = newpercentage;
+    }
+
+    function setvotingDay(uint256 newvotingday) public onlyowner(msg.sender) {
+        newvotingday = newvotingday * 24 * 60 * 60;
+        votingDays = newvotingday;
     }
 
     /////////////////////////  Deal functions   /////////////////////////////
@@ -93,6 +99,9 @@ contract Escrow is Dao {
     ) external {
         if (seller == address(0) || msg.sender == address(0)) {
             revert invalidAddress();
+        }
+        if (seller == msg.sender) {
+            revert SellerAndBuyerBothSameNotAllowed();
         }
 
         if (amount <= 0) {
@@ -159,7 +168,7 @@ contract Escrow is Dao {
         }
 
         if (dealed.status != dealstatus.Created) {
-            revert dealNotCreated();
+            revert dealAlReadyDeposited();
         }
 
         deposited[msg.sender] += msg.value;
@@ -232,11 +241,12 @@ contract Escrow is Dao {
             revert invalidBuyerAddress();
         }
 
-        if (
-            dealed.status != dealstatus.Delivered &&
-            dealed.status != dealstatus.Funded
-        ) {
-            revert dealNotDeliveredOrFunded();
+        if (dealed.status == dealstatus.Funded) {
+            revert dealIsNotDelivered();
+        }
+
+        if (dealed.status != dealstatus.Delivered) {
+            revert dealIsNoFunded();
         }
 
         uint256 amount = dealed.amount;
@@ -263,7 +273,7 @@ contract Escrow is Dao {
 
         totalreciveAsSeller[dealed.seller] += otherTransferamount;
 
-        dealed.status = dealstatus.Resolved;
+        dealed.status = dealstatus.Confirmation;
         dealed.amount = 0;
 
         emit Confirmation(
@@ -271,7 +281,7 @@ contract Escrow is Dao {
             dealed.buyer,
             dealed.seller,
             dealed.amount,
-            "Resolved",
+            "Confirmation",
             dealed.title,
             dealed.description,
             dealed.isDisputed,

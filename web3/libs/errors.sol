@@ -31,3 +31,7 @@ error dealIsNotDispute();
 error NotContibuteTheDispute();
 error diputeIsNotClosed();
 error NotAllowedDirectETHtransfer();
+error SellerAndBuyerBothSameNotAllowed();
+error dealAlReadyDeposited();
+error dealIsNotDelivered();
+error dealIsNoFunded();
