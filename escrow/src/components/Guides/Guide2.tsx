@@ -8,7 +8,7 @@ const Guide2 = () => {
             <div >
                 <span className='pr-2'>6.</span>
                 Stake your ETH
-                <Link href={'/stake'} className='text-[#1d45fe] hover:cursor-pointer'> here</Link>   to gain voting power, participate in decision-making, support the buyer or seller, help shape dispute outcomes, and unstake your ETH directly from the Escrow platform
+                <Link href={'/stake'} className='text-[#1d45fe] hover:cursor-pointer'> here</Link>   to gain voting power, participate in decision-making, support the client or specialist, help shape dispute outcomes, and unstake your ETH directly from the Escrow platform
                 <Image src={'/stake.png'} alt='stakeETH' width={3000} height={3000} className='my-5 hover:scale-105 duration-700 ' />
             </div>
             <div >

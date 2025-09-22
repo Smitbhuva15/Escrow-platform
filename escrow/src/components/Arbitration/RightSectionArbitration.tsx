@@ -16,8 +16,8 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
 
     const [isLoading, setIsLoading] = useState("")
     const [totalVotes, setTotalVotes] = useState<any>();
-    const [buyerVotePercent, setBuyerVotePercent] = useState(0);
-    const [sellerVotePercent, setSellerVotePercent] = useState(0);
+    const [clientVotePercent, setClientVotePercent] = useState(0);
+    const [specialistVotePercent, setSpecialistVotePercent] = useState(0);
     const [isCloseLoading, setIsCloseLoading] = useState(false);
 
     const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
@@ -25,8 +25,8 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
     const votes = useSelector((state: RootState) => state?.escrow?.votes);
 
     useEffect(() => {
-        setBuyerVotePercent(((dispute?.dispute?.Novoting) / (dispute?.dispute?.Yesvoting + dispute?.dispute?.Novoting)) * 100);
-        setSellerVotePercent(((dispute?.dispute?.Yesvoting) / (dispute?.dispute?.Yesvoting + dispute?.dispute?.Novoting)) * 100);
+        setClientVotePercent(((dispute?.dispute?.Novoting) / (dispute?.dispute?.Yesvoting + dispute?.dispute?.Novoting)) * 100);
+        setSpecialistVotePercent(((dispute?.dispute?.Yesvoting) / (dispute?.dispute?.Yesvoting + dispute?.dispute?.Novoting)) * 100);
     }, [dispute])
 
     const {
@@ -37,12 +37,12 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
         formState: { errors },
     } = useForm<VoteInputs>()
 
-    const onSubmit = async (data: VoteInputs, role: "buyer" | "seller") => {
+    const onSubmit = async (data: VoteInputs, role: "client" | "specialist") => {
 
 
         await handelvoting({
             disputedId: dispute?.dispute?.disputedId,
-            supportYes: role == "seller" ? true : false,
+            supportYes: role == "specialist" ? true : false,
             weight: Number(data?.weight),
             dispatch,
             escrowContract,
@@ -94,7 +94,7 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
 
             {/* Voting Section */}
             {
-                dispute?.dispute?.buyer === account?.address || dispute?.dispute?.seller === account?.address ? (
+                dispute?.dispute?.client === account?.address || dispute?.dispute?.specialist === account?.address ? (
 
                     <div className="bg-[#1E1E24] p-8 rounded-2xl shadow-lg border border-[#2F2F3A] space-y-3">
                         <h2 className="text-[#1d45fe] font-bold text-xl">
@@ -134,44 +134,44 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
                                 Vote on Dispute
                             </h2>
                             <p className="text-gray-400 text-sm md:text-base mt-2">
-                                Assign ETH weight to support Buyer or Seller. Your vote determines the outcome.
+                                Assign ETH weight to support Client or Specialist. Your vote determines the outcome.
                             </p>
                         </div>
 
-                        {/* Buyer Progress */}
+                        {/* client Progress */}
                         <div>
                             <div className="flex justify-between mb-2">
-                                <span className="text-gray-400 text-sm font-medium">Buyer</span>
-                                <span className="text-gray-200 text-sm font-semibold">{buyerVotePercent ? buyerVotePercent.toFixed(3) : 0}%</span>
+                                <span className="text-gray-400 text-sm font-medium">Client</span>
+                                <span className="text-gray-200 text-sm font-semibold">{clientVotePercent ? clientVotePercent.toFixed(3) : 0}%</span>
                             </div>
                             <div className="relative w-full h-[6px] bg-[#1E1F25] rounded-full overflow-hidden">
                                 <div
                                     className="absolute top-0 left-0 h-[6px] rounded-full bg-[#1d45fe]/70 transition-all duration-700"
-                                    style={{ width: `${buyerVotePercent}%` }}
+                                    style={{ width: `${clientVotePercent}%` }}
                                 />
 
                                 <div
                                     className="absolute top-1/2 -translate-y-1/2 h-3 w-3 rounded-full bg-white shadow-md"
-                                    style={{ left: `${buyerVotePercent}%` }}
+                                    style={{ left: `${clientVotePercent}%` }}
                                 />
                             </div>
                         </div>
 
-                        {/* Seller Progress */}
+                        {/* specialist Progress */}
                         <div>
                             <div className="flex justify-between mb-2">
-                                <span className="text-gray-400 text-sm font-medium">Seller</span>
-                                <span className="text-gray-200 text-sm font-semibold">{sellerVotePercent ? sellerVotePercent.toFixed(3) : 0}%</span>
+                                <span className="text-gray-400 text-sm font-medium">Specialist</span>
+                                <span className="text-gray-200 text-sm font-semibold">{specialistVotePercent ? specialistVotePercent.toFixed(3) : 0}%</span>
                             </div>
                             <div className="relative w-full h-[6px] bg-[#1E1F25] rounded-full overflow-hidden">
                                 <div
                                     className="absolute top-0 left-0 h-[6px] rounded-full bg-emerald-500/70 transition-all duration-700"
-                                    style={{ width: `${sellerVotePercent}%` }}
+                                    style={{ width: `${specialistVotePercent}%` }}
                                 />
 
                                 <div
                                     className="absolute top-1/2 -translate-y-1/2 h-3 w-3 rounded-full bg-white shadow-md"
-                                    style={{ left: `${sellerVotePercent}%` }}
+                                    style={{ left: `${specialistVotePercent}%` }}
                                 />
                             </div>
                         </div>
@@ -200,7 +200,7 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
 
                             {/* Voting Buttons */}
                             <div className="flex gap-4">
-                                {isLoading == "buyer"
+                                {isLoading == "client"
                                     ? (
                                         <button className="w-1/2 bg-[#1d45fe] hover:bg-[#1638d6] text-white font-semibold py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-not-allowed opacity-80"
 
@@ -210,14 +210,14 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
                                         </button>
                                     ) : (
                                         <button className="w-1/2 bg-[#1d45fe] hover:bg-[#1638d6] text-white font-semibold py-3 rounded-xl shadow-md transition-all"
-                                            onClick={handleSubmit((data) => onSubmit(data, "buyer"))}
+                                            onClick={handleSubmit((data) => onSubmit(data, "client"))}
                                         >
-                                            Vote Buyer
+                                            Vote Client
                                         </button>
                                     )
                                 }
 
-                                {isLoading == "seller"
+                                {isLoading == "specialist"
                                     ? (
                                         <button className="w-1/2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-not-allowed opacity-80"
 
@@ -227,9 +227,9 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
                                         </button>
                                     ) : (
                                         <button className="w-1/2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-xl shadow-md transition-all"
-                                            onClick={handleSubmit((data) => onSubmit(data, "seller"))}
+                                            onClick={handleSubmit((data) => onSubmit(data, "specialist"))}
                                         >
-                                            Vote Seller
+                                            Vote Specialist
                                         </button>
                                     )
 

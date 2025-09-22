@@ -45,7 +45,7 @@ const QuorumCard = () => {
           
                 ⚠️ <span className="text-red-400 font-medium">Important:</span> If the quorum is
                 <span className="text-white font-semibold"> not met</span>, then by default the
-                <span className="text-[#1d45fe] font-semibold"> buyer automatically wins </span>
+                <span className="text-[#1d45fe] font-semibold"> client automatically wins </span>
                 and the total deposited funds are released to them.  Choose a value between <span className="text-white font-semibold">1% and 70%</span>.
             </p>
 

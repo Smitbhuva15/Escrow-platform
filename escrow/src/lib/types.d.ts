@@ -16,7 +16,7 @@ export interface EscrowState {
 export interface Inputs {
   title: string
   description: string
-  seller: string
+  specialist: string
   amount: string
   deadline: string
 }

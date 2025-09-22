@@ -27,7 +27,7 @@ const HowItWorks = () => {
 
                         </p>
                         <p>
-                            Smart contracts are the solution. They provide a decentralized escrow where the funds are locked by the buyer for the full duration of the contract, and the buyer releases the funds to the seller only once they have received what they had paid for. If a dispute arises, the parties can invoke an arbriter who will study the evidence like a judge and release the funds to the winning party.
+                            Smart contracts are the solution. They provide a decentralized escrow where the funds are locked by the client for the full duration of the contract, and the client releases the funds to the specialist only once they have received what they had paid for. If a dispute arises, the parties can invoke an arbriter who will study the evidence like a judge and release the funds to the winning party.
                         </p>
                     </div>
 
@@ -64,7 +64,7 @@ const HowItWorks = () => {
                             <UserLock />
                         </div>
                         <div className='pl-4 '>
-                            Buyer deposits funds into the  smart contract, funds are locked securely.
+                            Client deposits funds into the  smart contract, funds are locked securely.
                         </div>
                     </div>
                      <div className='flex items-center my-8 font-bold '>
@@ -72,7 +72,7 @@ const HowItWorks = () => {
                               <Snail />
                         </div>
                         <div className='pl-4 '>
-                          Seller delivers goods or services as per the agreement.
+                          Specialist delivers goods or services as per the agreement.
                         </div>
                     </div>
                     <div className='flex items-center my-8 font-bold '>
@@ -80,7 +80,7 @@ const HowItWorks = () => {
                         <ShieldCheck />
                         </div>
                         <div className='pl-4 '>
-                            Success story: both parties are satisfied with the outcome, the buyer releases the funds locked on the contract to the seller.
+                            Success story: both parties are satisfied with the outcome, the client releases the funds locked on the contract to the specialist.
                         </div>
                     </div>
                     <div className='flex items-center my-8 font-bold'>

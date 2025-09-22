@@ -45,12 +45,12 @@ const Cart = ({ deals }: any) => {
             {/* Info Section */}
             <div className="text-sm text-zinc-300 space-y-2 mb-4">
               <p>
-                <span className="font-semibold text-zinc-200">Buyer:</span>{" "}
-                {deal?.deal?.buyer?.slice(0, 6)}...{deal?.deal?.buyer?.slice(-4)}
+                <span className="font-semibold text-zinc-200">Client:</span>{" "}
+                {deal?.deal?.client?.slice(0, 6)}...{deal?.deal?.client?.slice(-4)}
               </p>
               <p>
-                <span className="font-semibold text-zinc-200">Seller:</span>{" "}
-                {deal?.deal?.seller?.slice(0, 6)}...{deal?.deal?.seller?.slice(-4)}
+                <span className="font-semibold text-zinc-200">Specialist:</span>{" "}
+                {deal?.deal?.specialist?.slice(0, 6)}...{deal?.deal?.specialist?.slice(-4)}
               </p>
             </div>
 

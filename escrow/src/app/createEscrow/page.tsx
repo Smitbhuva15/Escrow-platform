@@ -58,7 +58,7 @@ const CreateEscrow = () => {
     try {
       const signer = await provider.getSigner();
       const amount = ethers.utils.parseEther(data?.amount.toString());
-      const transaction = await escrowContract.connect(signer).dealCreation(data?.seller, data?.title, data?.description, amount, data?.deadline);
+      const transaction = await escrowContract.connect(signer).dealCreation(data?.specialist, data?.title, data?.description, amount, data?.deadline);
 
       toast.loading("Transaction submitted. Waiting for confirmation...", {
         id: "escrowTx",
@@ -89,7 +89,7 @@ const CreateEscrow = () => {
 
 
       }
-    } catch (error: any) {
+    } catch (error) {
       toast.error(`Transaction failed`, {
         id: "escrowTx",
       });
@@ -160,16 +160,16 @@ const CreateEscrow = () => {
                 )}
               </div>
 
-              {/* Seller Address */}
+              {/* specialist Address */}
               <div className="flex flex-col">
-                <label htmlFor="seller" className="mb-2 font-medium">
-                  Seller Address
+                <label htmlFor="specialist" className="mb-2 font-medium">
+                  Specialist Address
                 </label>
                 <input
                   type="text"
                   placeholder="0x1234...abcd"
-                  {...register("seller", {
-                    required: "Seller address is required",
+                  {...register("specialist", {
+                    required: "specialist address is required",
                     minLength: {
                       value: 42,
                       message: "Address must be exactly 42 characters",
@@ -186,8 +186,8 @@ const CreateEscrow = () => {
                   className="border border-gray-500 bg-transparent rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition w-full"
                 />
 
-                {errors.seller && (
-                  <p className="text-red-500 text-sm mt-2">{errors.seller.message}</p>
+                {errors.specialist && (
+                  <p className="text-red-500 text-sm mt-2">{errors.specialist.message}</p>
                 )}
               </div>
 
@@ -223,8 +223,7 @@ const CreateEscrow = () => {
                 </label>
                 <input
                   type="number"
-                  min={1}
-                  max={90}
+                
                   placeholder="e.g. 30"
                   {...register("deadline", {
                     required: "Deadline is required",

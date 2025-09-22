@@ -5,7 +5,7 @@ import { config } from '@/config/config';
 import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getPersonalStakeBalance, getprovider, getQuorumDay, getStakeHistory, getvotes, getVotingDay } from '@/slice/escrowSlice';
 import toast from 'react-hot-toast';
 import { AdminInfoType, decoratedisputeType, depositType, DisputeType, markConfirmType, markType, openDisputeType, resolveType, StakeBalanceType, stakeType, totalvotingtype, unlockstakeType, unstakeType, votingType, VotingType } from './types';
-
+import { HandelError } from './HandelError';
 
 declare global {
   interface Window {
@@ -23,7 +23,6 @@ export const LoadContarct = async (dispatch: any) => {
   const escrowContract = new ethers.Contract(config[chainId]?.escrow?.address, escrowAbi, provider);
   dispatch(getEscrowContract(escrowContract))
 }
-
 
 export const LoadEscrow = async (escrowcontract: any, provider: any, dispatch: any) => {
 
@@ -48,8 +47,8 @@ const decorateDeals = async (escrowDeals: any, escrowContract: any, provider: an
 
     return {
       deal: {
-        buyer: updatedDeal?.buyer,
-        seller: updatedDeal?.seller,
+        client: updatedDeal?.buyer,
+        specialist: updatedDeal?.seller,
         dealId: Number(updatedDeal?.dealId),
         title: updatedDeal?.title,
         description: updatedDeal?.description,
@@ -118,16 +117,13 @@ export const markdelivery = async ({
         });
       }
     } catch (error) {
-      toast.error("Delivery transaction failed.", {
-        id: "escrowTx",
-      });
+      HandelError(error, "escrowTx", "Delivery transaction failed.")
     } finally {
       await LoadEscrow(escrowContract, provider, dispatch);
       setIsLoading(false);
     }
   }
 };
-
 
 export const markconfirmationReceive = async ({
   dealId,
@@ -169,7 +165,7 @@ export const markconfirmationReceive = async ({
       const event = receipt.events?.find((e: any) => e.event === "Confirmation");
 
       if (event) {
-        toast.success("Receipt confirmed successfully! Funds have been released to the seller.", {
+        toast.success("Receipt confirmed successfully! Funds have been released to the specialist.", {
           id: "escrowTx",
         });
       } else {
@@ -178,16 +174,13 @@ export const markconfirmationReceive = async ({
         });
       }
     } catch (error) {
-      toast.error("Receipt confirmation transaction failed.", {
-        id: "escrowTx",
-      });
+      HandelError(error, "escrowTx", "Receipt confirmation transaction failed.")
     } finally {
       await LoadEscrow(escrowContract, provider, dispatch);
       setLoadingConfirmation(false);
     }
   }
 };
-
 
 export const markOpenDispute = async ({
   dealId,
@@ -238,16 +231,13 @@ export const markOpenDispute = async ({
         });
       }
     } catch (error) {
-      toast.error("Dispute transaction failed. Please try again.", {
-        id: "escrowTx",
-      });
+      HandelError(error, "escrowTx", "Dispute transaction failed. Please try again.")
     } finally {
       await LoadEscrow(escrowContract, provider, dispatch);
       setLoadingOpenDispute(false);
     }
   }
 };
-
 
 export const handeldeposite = async ({
   dealId, amount, dispatch, provider, escrowContract, setIsLoading
@@ -294,11 +284,7 @@ export const handeldeposite = async ({
         });
       }
     } catch (error) {
-      toast.error("Deposit transaction failed.", {
-        id: "escrowTx",
-      });
-
-
+      HandelError(error, "escrowTx", "Deposit transaction failed.")
     } finally {
       await LoadEscrow(escrowContract, provider, dispatch);
       setIsLoading(-1);
@@ -388,9 +374,7 @@ export const stakeEth = async ({
         });
       }
     } catch (error) {
-      toast.error("Stake transaction failed. Please try again.", {
-        id: "stakeTx",
-      });
+      HandelError(error, "stakeTx", "Stake transaction failed. Please try again")
     } finally {
       await loadstakebalance({ dispatch, escrowContract, provider, address });
       setIsLoadingStake(false);
@@ -451,10 +435,7 @@ export const unstakeEth = async ({
         });
       }
     } catch (error) {
-      console.log(error)
-      toast.error("Unstake transaction failed. Please try again.", {
-        id: "unstakeTx",
-      });
+      HandelError(error, "unstakeTx", "Unstake transaction failed. Please try again.")
     } finally {
       await loadstakebalance({ dispatch, escrowContract, provider, address });
       setIsLoadingUnStake(false);
@@ -503,9 +484,7 @@ export const updateVotingDays = async ({
         id: "votingDaysTx",
       });
     } catch (error) {
-      toast.error("Transaction failed. Please try again.", {
-        id: "votingDaysTx",
-      });
+      HandelError(error, "votingDaysTx", "Transaction failed. Please try again.")
     } finally {
       await loadAdmininfo({ dispatch, escrowContract, provider });
       setIsLoading(false);
@@ -556,9 +535,7 @@ export const updateQuorum = async ({
         id: "quorumTx",
       });
     } catch (error) {
-      toast.error("Quorum update transaction failed. Please try again.", {
-        id: "quorumTx",
-      });
+      HandelError(error, "quorumTx", "Quorum update transaction failed. Please try again.")
     } finally {
       await loadAdmininfo({ dispatch, escrowContract, provider });
       setIsLoading(false);
@@ -575,6 +552,7 @@ export const loadDispute = async ({ dispatch, escrowContract, provider }: Disput
   let disputeevent;
   if (isReady) {
     disputeevent = await escrowContract.queryFilter("Dispute");
+    console.log(disputeevent)
     const dispute = await decoratedispute({ dispatch, escrowContract, provider, disputeevent });
     dispatch(getDispute(dispute));
   }
@@ -595,8 +573,8 @@ const decoratedispute = async ({ dispatch, escrowContract, provider, disputeeven
 
       return {
         dispute: {
-          buyer: updatedDeal?.buyer,
-          seller: updatedDeal?.seller,
+          client: updatedDeal?.buyer,
+          specialist: updatedDeal?.seller,
           dealId: Number(updatedDeal?.dealId),
           title: updatedDeal?.title,
           description: updatedDeal?.description,
@@ -661,7 +639,7 @@ export const loadStakeAndUnStakeHistory = async ({ dispatch, escrowContract, pro
       return ({
         amount: Number(event?.args?.amount),
         address: event?.args?.depositer,
-        method:"Staked"
+        method: "Staked"
       })
     })
 
@@ -669,7 +647,7 @@ export const loadStakeAndUnStakeHistory = async ({ dispatch, escrowContract, pro
       return ({
         amount: Number(event?.args?.amount),
         address: event?.args?.withdrawer,
-         method:"Unstaked"
+        method: "Unstaked"
       })
     })
   }
@@ -692,10 +670,10 @@ export const handelvoting = async ({
     escrowContract && Object.keys(escrowContract).length > 0 &&
     provider && Object.keys(provider).length > 0;
   if (supportYes == true) {
-    setIsLoading("seller");
+    setIsLoading("specialist");
   }
   else {
-    setIsLoading("buyer")
+    setIsLoading("client")
   }
 
   if (isReady) {
@@ -732,8 +710,8 @@ export const handelvoting = async ({
       if (event) {
         toast.success(
           supportYes
-            ? "Your vote has been cast in favor of the Seller!"
-            : "Your vote has been cast in favor of the Buyer!",
+            ? "Your vote has been cast in favor of the Specialist!"
+            : "Your vote has been cast in favor of the Client!",
           { id: "escrowTx" }
         );
       } else {
@@ -742,9 +720,7 @@ export const handelvoting = async ({
         });
       }
     } catch (error) {
-      toast.error("Voting transaction failed.", {
-        id: "escrowTx",
-      });
+      HandelError(error, "escrowTx", "Voting transaction failed.")
       console.log(error)
     } finally {
       await loadTotalVotings({ dispatch, escrowContract, provider })
@@ -805,10 +781,7 @@ export const handelResolve = async ({
         });
       }
     } catch (error) {
-      console.log(error)
-      toast.error("Dispute resolution failed. Please try again.", {
-        id: "resolveTx",
-      });
+      HandelError(error, "resolveTx", "Dispute resolution failed. Please try again.")
     } finally {
       await loadDispute({ dispatch, escrowContract, provider });
       setIsCloseLoading(false);
@@ -861,11 +834,7 @@ export const handelUnlockStake = async ({
         id: "unlockStakeTx",
       });
     } catch (error) {
-      console.log(error);
-
-      toast.error("Transaction unsuccessful. Your stake remains locked-please retry.", {
-        id: "unlockStakeTx",
-      });
+      HandelError(error, "unlockStakeTx", "Transaction unsuccessful. Your stake remains locked-please retry.")
     } finally {
 
       setIsLoading(-1);

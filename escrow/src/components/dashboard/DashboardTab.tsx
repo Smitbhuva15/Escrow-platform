@@ -63,7 +63,7 @@ export default function DashboardTab() {
 
   useEffect(() => {
     if (Deals && Deals.length > 0) {
-      const updateDeal = Deals.filter((deal: any) => deal?.deal?.buyer == account?.address)
+      const updateDeal = Deals.filter((deal: any) => deal?.deal?.client == account?.address)
       setDeals(updateDeal)
     }
   }, [Deals, account])

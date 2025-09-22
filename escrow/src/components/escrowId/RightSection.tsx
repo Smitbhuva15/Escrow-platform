@@ -42,25 +42,25 @@ const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
       </div>
 
       {/* Role Validation */}
-      {deal?.buyer != account?.address && deal?.seller != account?.address ? (
+      {deal?.client != account?.address && deal?.specialist != account?.address ? (
         <div className="bg-[#1E1E24] p-8 rounded-2xl shadow-lg border border-[#2F2F3A] text-center">
           <h2 className="text-yellow-400 font-bold text-lg mb-2">
             No Actions Available
           </h2>
           <p className="text-gray-400 text-sm">
-            You are not a participant in this deal. Only the buyer or seller can take actions.
+            You are not a participant in this deal. Only the client or specialist can take actions.
           </p>
         </div>
       ) : (
         <>
-          {/* Buyer Actions */}
-          {deal?.buyer == account?.address ? (
+          {/* client Actions */}
+          {deal?.client == account?.address ? (
             <div className="bg-[#1E1E24] p-8 rounded-2xl shadow-lg border border-[#2F2F3A] space-y-3">
               <h2 className="text-[#1d45fe] font-bold text-xl">
                 Confirm Receipt
               </h2>
               <p className="text-gray-300 text-sm leading-relaxed">
-                Confirm delivery once you receive the product or service. This will release the funds to the seller. Make sure everything matches your expectations before confirming. Once confirmed, the transaction is considered complete and cannot be reversed.
+                Confirm delivery once you receive the product or service. This will release the funds to the specialist. Make sure everything matches your expectations before confirming. Once confirmed, the transaction is considered complete and cannot be reversed.
               </p>
               {!loadingConfirmation ? (
                 deal?.status >= 4 ? (
@@ -83,13 +83,13 @@ const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
               )}
             </div>
           ) : (
-            /* Seller Actions */
+            /* specialist Actions */
             <div className="bg-[#1E1E24] p-8 rounded-2xl shadow-lg border border-[#2F2F3A] space-y-3">
               <h2 className="text-[#1d45fe] font-bold text-xl">
                 Mark as Delivered
               </h2>
               <p className="text-gray-300 text-sm leading-relaxed">
-                Mark the order as delivered once you have provided the product or service. The buyer will then be able to confirm and release the funds to you.
+                Mark the order as delivered once you have provided the product or service. The client will then be able to confirm and release the funds to you.
               </p>
               {!isLoading ? (
                 deal?.status >= 3 ? (
@@ -119,9 +119,9 @@ const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
               Raise a Dispute
             </h2>
             <p className="text-gray-300 text-sm leading-relaxed">
-              {deal.buyer == account?.address
+              {deal.client == account?.address
                 ? "If the product or service does not meet your expectations, or if there is any issue with the transaction, you can open a dispute. The platform will mediate fairly."
-                : "If a buyer has received the product or service but fails to confirm delivery, you may open a dispute. The platform will mediate fairly."}
+                : "If a client has received the product or service but fails to confirm delivery, you may open a dispute. The platform will mediate fairly."}
             </p>
             {!loadingOpenDispute ? (
               deal?.status >= 5 ? (

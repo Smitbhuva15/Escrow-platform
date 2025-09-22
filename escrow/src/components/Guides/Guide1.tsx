@@ -18,7 +18,7 @@ const Guide1 = () => {
             </div>
             <div >
                 <span className='pr-2'>3.</span>
-                Securely deposit your funds into Escrow, wait for the seller to deliver the product or service, confirm receipt once satisfied, and open a dispute if any issue arises
+                Securely deposit your funds into Escrow, wait for the specialist to deliver the product or service, confirm receipt once satisfied, and open a dispute if any issue arises
                 <Image src={'/escrowdetail.png'} alt='deal' width={3000} height={3000} className='my-5 hover:scale-105  duration-700' />
             </div>
             <div >
@@ -31,7 +31,7 @@ const Guide1 = () => {
             </div>
             <div >
                 <span className='pr-2'>5.</span>
-                Participate in the DAO and cast your vote for the buyer or seller, assigning a specific weight to your decision.
+                Participate in the DAO and cast your vote for the client or specialist, assigning a specific weight to your decision.
                 <Image src={'/disputedetail.png'} alt='disputre' width={3000} height={3000} className='my-5 hover:scale-105  duration-700' />
             </div>
         </div>

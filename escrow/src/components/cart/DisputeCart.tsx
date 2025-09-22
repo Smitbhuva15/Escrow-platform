@@ -36,18 +36,18 @@ const DisputeCart = ({ disputes }: any) => {
                     <div className="space-y-4 relative border-l border-zinc-700 pl-4 mb-6">
                         <div>
                             <span className="absolute -left-2 top-1.5 w-3 h-3 bg-[#1d45fe] rounded-full"></span>
-                            <p className="text-sm text-white font-medium">Buyer</p>
+                            <p className="text-sm text-white font-medium">Client</p>
                             <p className="text-xs text-gray-400">
-                                {dispute?.dispute?.buyer?.slice(0, 6)}...
-                                {dispute?.dispute?.buyer?.slice(-4)}
+                                {dispute?.dispute?.client?.slice(0, 6)}...
+                                {dispute?.dispute?.client?.slice(-4)}
                             </p>
                         </div>
                         <div>
                             <span className="absolute -left-2 top-14 w-3 h-3 bg-green-500 rounded-full"></span>
-                            <p className="text-sm text-white font-medium">Seller</p>
+                            <p className="text-sm text-white font-medium">Specialist</p>
                             <p className="text-xs text-gray-400">
-                                {dispute?.dispute?.seller?.slice(0, 6)}...
-                                {dispute?.dispute?.seller?.slice(-4)}
+                                {dispute?.dispute?.specialist?.slice(0, 6)}...
+                                {dispute?.dispute?.specialist?.slice(-4)}
                             </p>
                         </div>
                         <div>

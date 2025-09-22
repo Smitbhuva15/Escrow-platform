@@ -30,7 +30,7 @@ const Escrows = () => {
         setDeals(Deals);
       }
       else {
-        const updateDeal = Deals.filter((deal: any) => deal?.deal?.buyer == account?.address)
+        const updateDeal = Deals.filter((deal: any) => deal?.deal?.client == account?.address)
         setDeals(updateDeal)
       }
     }

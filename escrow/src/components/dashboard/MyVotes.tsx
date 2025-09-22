@@ -65,7 +65,7 @@ const MyVotes = ({ totalVotes }: any) => {
               </TableCell>
 
               <TableCell className="font-semibold">
-                {vote.support === true ? "Seller" : "Buyer"}
+                {vote.support === true ? "Specialist" : "Client"}
               </TableCell>
 
               <TableCell className=" font-semibold py-3">
