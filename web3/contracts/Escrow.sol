@@ -6,17 +6,41 @@ import "../libs/Structures.sol";
 import "../libs/errors.sol";
 import {Dao} from "./Dao.sol";
 
+/**
+ * @title Escrow
+ * @author Smit Bhuva
+ * @notice Handles deal creation, fund deposits, delivery confirmation, dispute management, and staking for DAO-based voting.
+ * @dev Extends Dao for voting functionality and integrates events for tracking actions like stake, unstake, deal creation, and dispute resolution.
+ */
+
 contract Escrow is Dao {
+    /////////////////////////  State Variables /////////////////////////
+
+    /// @notice Total ETH currently staked by all users for voting.
     uint256 public totalStake = 0;
+
+    /// @notice Cumulative ETH deposited by buyers (all-time).
     uint256 public totalAllTimeDeposit = 0;
+
+    /// @notice Cumulative ETH staked by all users (historical).
     uint256 public totalAllTimeStake = 0;
 
+    /////////////////////////  Constructor /////////////////////////
+
+    /**
+     * @notice Sets the contract deployer as the owner.
+     */
     constructor() {
         owner = msg.sender;
     }
 
-    /////////////////////////   modifier   /////////////////////////////
+    /////////////////////////  Modifiers /////////////////////////
 
+    /**
+     * @notice Ensures only the contract owner can call a function.
+     * @param user Address attempting to call the function.
+     * @dev Reverts with `onlyOwnerAccess()` if the user is not the owner.
+     */
     modifier onlyowner(address user) {
         if (user != owner) {
             revert onlyOwnerAccess();
@@ -24,27 +48,48 @@ contract Escrow is Dao {
         _;
     }
 
-    /////////////////////////  Owner Access functions   /////////////////////////////
+    /////////////////////////  Owner-Only Functions /////////////////////////
+
+    /**
+     * @notice Sets the percentage of deal amount reserved for the owner.
+     * @param newownerPercentage Percentage value to set (0-100).
+     * @dev Only callable by the owner.
+     */
+
     function setownerPercentage(
         uint256 newownerPercentage
     ) public onlyowner(msg.sender) {
         ownerPercentage = newownerPercentage;
     }
 
+    /**
+     * @notice Sets the minimum voting weight percentage required for disputes.
+     * @param newpercentage Minimum voting weight percentage (0-100).
+     * @dev Only callable by the owner.
+     */
     function setminmumvotedweightPercentage(
         uint256 newpercentage
     ) public onlyowner(msg.sender) {
         minmumvotedweightPercentage = newpercentage;
     }
 
+    /**
+     * @notice Sets the number of voting days for disputes.
+     * @param newvotingday Voting duration in days.
+     * @dev Converts days to seconds. Only callable by the owner.
+     */
     function setvotingDay(uint256 newvotingday) public onlyowner(msg.sender) {
         newvotingday = newvotingday * 24 * 60 * 60;
         votingDays = newvotingday;
     }
 
-    /////////////////////////  Deal functions   /////////////////////////////
+    /////////////////////////  Staking Functions /////////////////////////
 
-    // give voting power
+    /**
+     * @notice Stake ETH to gain voting power.
+     * @dev Updates totalStake, totalAllTimeStake, and the caller's staked balance. Emits {Staked}.
+     *      Reverts if msg.value is 0 or caller is zero address.
+     */
     function stake() external payable {
         if (msg.value <= 0) {
             revert invalidAmount();
@@ -58,9 +103,14 @@ contract Escrow is Dao {
         totalStake += msg.value;
         staked[msg.sender] += msg.value;
 
-        emit Staked(msg.sender, msg.value);
+        emit Staked(msg.sender, msg.value, block.timestamp);
     }
 
+    /**
+     * @notice Unstake previously staked ETH.
+     * @param amount Amount of ETH to unstake.
+     * @dev Checks if user has enough available stake and that none is locked in voting. Emits {Unstaked}.
+     */
     function unstake(uint256 amount) external {
         if (amount <= 0) {
             revert invalidAmount();
@@ -87,8 +137,20 @@ contract Escrow is Dao {
         totalStake -= amount;
         staked[msg.sender] -= amount;
 
-        emit Unstaked(msg.sender, amount);
+        emit Unstaked(msg.sender, amount, block.timestamp);
     }
+
+    /////////////////////////  Deal Functions /////////////////////////
+
+    /**
+     * @notice Creates a new deal between a buyer and a seller.
+     * @param seller Address of the seller.
+     * @param title Title of the deal.
+     * @param description Description of the deal.
+     * @param amount Deal amount in ETH.
+     * @param deadline Deadline in days from now.
+     * @dev Emits {Deal}. Reverts if addresses are invalid, seller equals buyer, amount <= 0, or deadline <= 0.
+     */
 
     function dealCreation(
         address seller,
@@ -145,6 +207,12 @@ contract Escrow is Dao {
         );
     }
 
+    /**
+     * @notice Buyer deposits funds for a specific deal.
+     * @param dealId ID of the deal.
+     * @dev Emits {Deposit}. Reverts if dealId is invalid, sender is not buyer, amount mismatch, or deadline exceeded.
+     */
+
     function deposit(uint256 dealId) external payable {
         if (dealId > dealCount || dealId <= 0) {
             revert inValidDealId();
@@ -164,7 +232,7 @@ contract Escrow is Dao {
             revert invalidAmount();
         }
         if (dealed.deadline < block.timestamp) {
-            revert deadlineExeceed();
+            revert depositDeadlineExeceed();
         }
 
         if (dealed.status != dealstatus.Created) {
@@ -188,10 +256,16 @@ contract Escrow is Dao {
             dealed.title,
             dealed.description,
             dealed.isDisputed,
-            dealed.disputedId
+            dealed.disputedId,
+            block.timestamp
         );
     }
 
+    /**
+     * @notice Marks a deal as delivered by the seller.
+     * @param dealId ID of the deal.
+     * @dev Emits {Delivered}. Reverts if dealId is invalid or sender is not seller.
+     */
     function markDelivered(uint256 dealId) external {
         if (dealId > dealCount || dealId <= 0) {
             revert inValidDealId();
@@ -222,10 +296,16 @@ contract Escrow is Dao {
             dealed.title,
             dealed.description,
             dealed.isDisputed,
-            dealed.disputedId
+            dealed.disputedId,
+            block.timestamp
         );
     }
 
+    /**
+     * @notice Confirms receipt of a deal and releases funds.
+     * @param dealId ID of the deal.
+     * @dev Transfers ETH to seller and owner. Emits {Confirmation}. Reverts if deal not funded or delivered.
+     */
     function confirmReceived(uint256 dealId) external {
         if (dealId > dealCount || dealId <= 0) {
             revert inValidDealId();
@@ -285,60 +365,81 @@ contract Escrow is Dao {
             dealed.title,
             dealed.description,
             dealed.isDisputed,
-            dealed.disputedId
+            dealed.disputedId,
+            block.timestamp
         );
     }
 
+
+ /**
+     * @notice Prevents direct ETH transfers to contract.
+     * @dev Reverts any plain ETH transfers.
+     */
     receive() external payable {
         revert NotAllowedDirectETHtransfer();
     }
 
-    /////////////////////////  getter functions   /////////////////////////////
+    /////////////////////////  Getter Functions /////////////////////////
 
+    /**
+     * @notice Returns deal struct by ID.
+     */
     function getDeal(uint256 dealId) public view returns (deal memory) {
         return deals[dealId];
     }
 
-    function getDispute(
-        uint256 disputeId
-    ) public view returns (disputed memory) {
+    /**
+     * @notice Returns dispute struct by ID.
+     */
+    function getDispute(uint256 disputeId) public view returns (disputed memory) {
         return disputes[disputeId];
     }
 
+    /**
+     * @notice Returns the amount deposited by a user.
+     */
     function getdeposited(address user) public view returns (uint256) {
         return deposited[user];
     }
 
-    function gettotalDepositAsBuyer(
-        address user
-    ) public view returns (uint256) {
+    /**
+     * @notice Returns total deposits made by a buyer.
+     */
+    function gettotalDepositAsBuyer(address user) public view returns (uint256) {
         return totalDepositAsBuyer[user];
     }
 
-    function gettotalreciveAsSeller(
-        address user
-    ) public view returns (uint256) {
+    /**
+     * @notice Returns total amount received by a seller.
+     */
+    function gettotalreciveAsSeller(address user) public view returns (uint256) {
         return totalreciveAsSeller[user];
     }
 
-    function getusedWeight(
-        uint256 disputedId,
-        address user
-    ) public view returns (uint256) {
+    /**
+     * @notice Returns how much stake has been used by a voter in a dispute.
+     */
+    function getusedWeight(uint256 disputedId, address user) public view returns (uint256) {
         return usedWeight[disputedId][user];
     }
 
-    function gethasvoted(
-        uint256 disputedId,
-        address user
-    ) public view returns (bool) {
+    /**
+     * @notice Checks if a user has already voted in a dispute.
+     */
+    function gethasvoted(uint256 disputedId, address user) public view returns (bool) {
         return hasvoted[disputedId][user];
     }
 
+    /**
+     * @notice Returns the currently locked stake of a user.
+     */
     function getcurrentlyLocked(address user) public view returns (uint256) {
         return currentlyLocked[user];
     }
 
+    /**
+     * @notice Returns total staked ETH of a user.
+     */
     function getstaked(address user) public view returns (uint256) {
         return staked[user];
     }
