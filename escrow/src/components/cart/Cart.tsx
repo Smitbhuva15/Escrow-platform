@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { handeldeposite, LoadEscrow } from "@/lib/LoadData";
+import { handeldeposit } from "@/lib/hooks/handeldeposit";
+import {  LoadEscrow } from "@/lib/LoadData";
 import { RootState } from "@/store/store";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -17,8 +18,8 @@ const Cart = ({ deals }: any) => {
   const provider = useSelector((state: RootState) => state?.escrow?.provider);
 
 
-  const handelDeposite = async (dealId: number, amount: number) => {
-    handeldeposite({ dealId, amount, dispatch, provider, escrowContract, setIsLoading })
+  const handelDeposit = async (dealId: number, amount: number) => {
+    handeldeposit({ dealId, amount, dispatch, provider, escrowContract, setIsLoading })
   }
 
   return (
@@ -123,7 +124,7 @@ const Cart = ({ deals }: any) => {
               <Button
                 className="w-full bg-gradient-to-r from-[#1d45fe] to-indigo-600 hover:from-[#1638d6] hover:to-indigo-700 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all"
                 onClick={() =>
-                  handelDeposite(
+                  handelDeposit(
                     Number(deal?.deal?.dealId),
                     Number(deal?.deal?.amount)
                   )

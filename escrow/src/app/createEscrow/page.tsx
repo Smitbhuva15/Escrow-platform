@@ -10,6 +10,7 @@ import { ethers } from "ethers";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import Banner from "@/components/banner/Banner";
+import { HandelError } from "@/lib/HandelError";
 
 const balanceget = async (address: string) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -90,11 +91,7 @@ const CreateEscrow = () => {
 
       }
     } catch (error) {
-      toast.error(`Transaction failed`, {
-        id: "escrowTx",
-      });
-
-
+      HandelError(error, "escrowTx", "Transaction failed. Please try again")
     }
     finally {
       reset();
@@ -202,7 +199,7 @@ const CreateEscrow = () => {
                   placeholder="Enter amount in ETH"
                   {...register("amount", {
                     required: "ETH Amount is required",
-
+                    min: { value: 0.001, message: "Amount must be at least 0.001ETH" },
                   })}
                   className="border border-gray-50 bg-transparent rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition w-full
                 appearance-none 
@@ -223,10 +220,14 @@ const CreateEscrow = () => {
                 </label>
                 <input
                   type="number"
-                
+                  min={1}
+                  max={90}
                   placeholder="e.g. 30"
                   {...register("deadline", {
                     required: "Deadline is required",
+                    min: { value: 1, message: "Deadline must be at least 1 day." },
+                    max: { value: 90, message: "Deadline cannot exceed 90 days." },
+
 
                   })}
                   className="border border-gray-50 bg-transparent rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition w-full

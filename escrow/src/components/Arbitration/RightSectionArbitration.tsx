@@ -1,4 +1,3 @@
-import { handelResolve, handelvoting } from '@/lib/LoadData';
 import { VoteInputs } from '@/lib/types';
 import { RootState } from '@/store/store';
 import { Loader2 } from 'lucide-react';
@@ -8,6 +7,9 @@ import { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActiveAccount } from 'thirdweb/react';
 import ProcessingLoader from '../escrowId/ProcessingLoader';
+import { handelvoting } from '@/lib/hooks/handelvoting';
+import { handelResolve } from '@/lib/hooks/handelResolve';
+
 
 const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
 

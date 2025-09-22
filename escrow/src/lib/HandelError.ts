@@ -7,7 +7,7 @@ export const HandelError = (error: any, transactionName: string,defaultmessage:s
   message = errorconfig[data]?.message
 
   if (!message) {
-    toast.error("Transaction failed: Something went wrong", {
+    toast.error(`Transaction failed: ${defaultmessage}`, {
       id: transactionName,
     });
   } else {

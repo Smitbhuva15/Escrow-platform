@@ -36,6 +36,11 @@
     },
     {
       "inputs": [],
+      "name": "SellerAndBuyerBothSameNotAllowed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
       "name": "ZeroWeight",
       "type": "error"
     },
@@ -51,12 +56,27 @@
     },
     {
       "inputs": [],
-      "name": "dealIsNotDispute",
+      "name": "dealAlReadyDeposited",
       "type": "error"
     },
     {
       "inputs": [],
-      "name": "dealNotCreated",
+      "name": "dealIsAlReadyConfirm",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "dealIsNoFunded",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "dealIsNotDelivered",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "dealIsNotDispute",
       "type": "error"
     },
     {
@@ -67,6 +87,11 @@
     {
       "inputs": [],
       "name": "dealNotFunded",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "depositDeadlineExeceed",
       "type": "error"
     },
     {
@@ -194,6 +219,12 @@
           "indexed": false,
           "internalType": "uint256",
           "name": "disputedId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "createdAt",
           "type": "uint256"
         }
       ],
@@ -329,6 +360,12 @@
           "internalType": "uint256",
           "name": "disputedId",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "createdAt",
+          "type": "uint256"
         }
       ],
       "name": "Delivered",
@@ -390,6 +427,12 @@
           "internalType": "uint256",
           "name": "disputedId",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "createdAt",
+          "type": "uint256"
         }
       ],
       "name": "Deposit",
@@ -438,6 +481,12 @@
           "indexed": false,
           "internalType": "uint256",
           "name": "dealId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "createdAt",
           "type": "uint256"
         }
       ],
@@ -494,6 +543,12 @@
           "internalType": "string",
           "name": "status",
           "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "createdAt",
+          "type": "uint256"
         }
       ],
       "name": "DisputeClosed",
@@ -513,9 +568,46 @@
           "internalType": "uint256",
           "name": "amount",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "createdAt",
+          "type": "uint256"
         }
       ],
       "name": "Staked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "disputedId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "dealId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "unlockstatus",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "createdAt",
+          "type": "uint256"
+        }
+      ],
+      "name": "UnlockStake",
       "type": "event"
     },
     {
@@ -531,6 +623,12 @@
           "indexed": false,
           "internalType": "uint256",
           "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "createdAt",
           "type": "uint256"
         }
       ],
@@ -569,6 +667,12 @@
           "internalType": "bool",
           "name": "support",
           "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "createdAt",
+          "type": "uint256"
         }
       ],
       "name": "Voted",
@@ -1180,6 +1284,19 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "ownerPercentage",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -1188,6 +1305,19 @@
         }
       ],
       "name": "setminmumvotedweightPercentage",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newownerPercentage",
+          "type": "uint256"
+        }
+      ],
+      "name": "setownerPercentage",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

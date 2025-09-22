@@ -1,6 +1,7 @@
 "use client";
 
-import { stakeEth } from '@/lib/LoadData';
+
+import { stakeEth } from '@/lib/hooks/stakeEth';
 import { stakeInputs } from '@/lib/types';
 import { RootState } from '@/store/store';
 import { ArrowUpCircle, Loader2 } from 'lucide-react';
@@ -72,7 +73,7 @@ const StakeComponent = () => {
                         step={0.001}
                         {...register("stake", {
                             required: "Stake Amount is required",
-                            min: { value: 0.001, message: "Minimum stake is 0.001 ETH" },
+                            min: { value: 0.001, message: "Stake Amount must be at least 0.001ETH" },
                         })}
                         className="border border-gray-600 rounded-xl p-3 bg-[#121217] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition duration-200 appearance-none 
               [&::-webkit-outer-spin-button]:appearance-none 

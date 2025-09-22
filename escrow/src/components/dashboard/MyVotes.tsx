@@ -10,11 +10,11 @@ import {
   TableCell,
   TableFooter,
 } from "@/components/ui/table"
-import { handelUnlockStake } from '@/lib/LoadData'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/store/store'
 import { Loader2 } from 'lucide-react'
 import { Toaster } from 'react-hot-toast'
+import { handelUnlockStake } from '@/lib/hooks/handelUnlockStake'
 
 
 const MyVotes = ({ totalVotes }: any) => {

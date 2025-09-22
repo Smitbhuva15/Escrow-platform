@@ -1,4 +1,4 @@
-import { updateQuorum } from '@/lib/LoadData';
+import { updateQuorum } from '@/lib/hooks/updateQuorum';
 import { QuorumInput, votingInput } from '@/lib/types';
 import { RootState } from '@/store/store';
 import {  Loader2, Users } from 'lucide-react';

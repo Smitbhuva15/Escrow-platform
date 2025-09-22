@@ -1,10 +1,12 @@
-import { markconfirmationReceive, markdelivery, markOpenDispute } from '@/lib/LoadData';
 import { RootState } from '@/store/store';
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useActiveAccount } from 'thirdweb/react';
 import { Toaster } from 'react-hot-toast';
 import ProcessingLoader from './ProcessingLoader';
+import { markdelivery } from '@/lib/hooks/markdelivery';
+import { markconfirmationReceive } from '@/lib/hooks/markconfirmationReceive';
+import { markOpenDispute } from '@/lib/hooks/markOpenDispute';
 
 
 const RightSection: React.FC<{ deal: any }> = ({ deal }) => {

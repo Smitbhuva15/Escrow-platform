@@ -1,4 +1,4 @@
-import { unstakeEth } from '@/lib/LoadData';
+import { unstakeEth } from '@/lib/hooks/unstakeEth';
 import { unstakeInputs } from '@/lib/types';
 import { RootState } from '@/store/store';
 import { ArrowDownCircle, Loader2 } from 'lucide-react';
@@ -64,7 +64,7 @@ const UnstakeComponent = () => {
                         step={0.0001}
                         {...register("unstake", {
                             required: "Unstake Amount is required",
-                            min: { value: 0.0001, message: "Minimum stake is 0.0001 ETH" },
+                            min: { value: 0.0001, message: "Unstake Amount must be at least 0.0001ETH" },
                         })}
 
                         className="border border-gray-600 rounded-xl p-3 bg-[#121217] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition duration-200 appearance-none 

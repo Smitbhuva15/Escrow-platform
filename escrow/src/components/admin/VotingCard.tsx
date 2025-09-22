@@ -1,4 +1,4 @@
-import { updateVotingDays } from '@/lib/LoadData';
+import { updateVotingDays } from '@/lib/hooks/updateVotingDays';
 import { votingInput } from '@/lib/types';
 import { RootState } from '@/store/store';
 import { ArrowUpCircle, Clock, Loader2 } from 'lucide-react';
