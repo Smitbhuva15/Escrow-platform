@@ -89,8 +89,8 @@ const MyVotes = ({ totalVotes }: any) => {
                   {isLoading == index ? (
                     <>
                       <div className='flex text-white bg-[#1d45fe] hover:bg-[#1638d6] font-semibold py-1 px-3 cursor-not-allowed opacity-80 gap-2 text-sm rounded-lg disabled shadow-md transition-all'>
-                        <Loader2 className="h-5 w-5 animate-spin " />
-                        <span className='flex'>Processing...</span>
+                        <Loader2 className="h-4 w-4 animate-spin " />
+                        <span className='flex text-[12.1px]'>Processing</span>
                       </div>
 
                     </>
@@ -99,7 +99,7 @@ const MyVotes = ({ totalVotes }: any) => {
                       className="px-3 py-1 text-sm font-medium rounded-lg bg-[#1d45fe] hover:bg-[#1638d6] text-white transition-colors"
                       onClick={() => handelUnstake(vote?.disputedId, index)}
                     >
-                      Unlock Stake
+                      Release Fund
                     </button>
                   )}
                 </div>

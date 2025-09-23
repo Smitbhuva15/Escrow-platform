@@ -17,7 +17,7 @@ const MyDeal = ({deals}:any ) => {
         <Card className="p-4 shadow-md rounded-2xl" >
             <Table>
                 <TableCaption className="text-muted-foreground pb-2">
-                    A list of your deals.
+                    A list of my deals.
                 </TableCaption>
                 <TableHeader>
                     <TableRow className="bg-muted/30">

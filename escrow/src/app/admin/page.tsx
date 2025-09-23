@@ -63,7 +63,7 @@ const Admin = () => {
       ) :
         admin == account?.address ? (<div className="max-w-3xl w-[90%] mx-auto text-white my-16">
           {/* Page Title */}
-          <h1 className="sm:text-4xl text-3xl md:text-5xl font-bold mb-8 text-center text-[#1d45fe]">
+          <h1 className="sm:text-4xl text-3xl md:text-5xl font-bold mb-8 text-center ">
             Admin Controls
           </h1>
 

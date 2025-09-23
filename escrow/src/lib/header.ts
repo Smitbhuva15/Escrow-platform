@@ -12,7 +12,7 @@ export const headers = [
             "link": "/createEscrow"
         },
         {
-            "name": "Stake",
+            "name": "Funds",
             "link": "/stake"
         },
         {

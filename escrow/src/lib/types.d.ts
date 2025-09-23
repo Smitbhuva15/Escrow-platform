@@ -11,7 +11,8 @@ export interface EscrowState {
   disputes: [],
   votes: [],
   ownerPercentage:0,
-  StakeHistory:[]
+  StakeHistory:[],
+   totalstake:Number
 }
 
 export interface Inputs {

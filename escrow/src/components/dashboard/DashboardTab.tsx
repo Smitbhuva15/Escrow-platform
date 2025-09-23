@@ -121,7 +121,7 @@ export default function DashboardTab() {
             value="Stake History"
             className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "Stake History" ? "bg-[#1d45fe]":"border shadow-xs shadow-amber-50"} p-4  transition`}
           >
-            Stake History
+            Funds History
           </TabsTrigger>
         </TabsList>
 

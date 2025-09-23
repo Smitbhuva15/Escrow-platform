@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import escrowAbi from '@/abi/escrow.json'
 import { config } from '@/config/config';
-import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getownerPercentage, getPersonalStakeBalance, getprovider, getQuorumDay, getStakeHistory, getvotes, getVotingDay } from '@/slice/escrowSlice';
+import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getownerPercentage, getPersonalStakeBalance, getprovider, getQuorumDay, getStakeHistory, gettotalstake, getvotes, getVotingDay } from '@/slice/escrowSlice';
 import { AdminInfoType, decoratedisputeType, DisputeType, StakeBalanceType, totalvotingtype } from './types';
 
 declare global {
@@ -73,6 +73,8 @@ export const loadstakebalance = async (
     dispatch(getPersonalStakeBalance((Number(transaction) / 1e18)))
     transaction = await escrowContract.connect(signer).getcurrentlyLocked(address);
     dispatch(getLockBalance((Number(transaction) / 1e18)))
+     transaction = await escrowContract.connect(signer).totalStake();
+    dispatch(gettotalstake((Number(transaction) / 1e18)))
 
   } catch (error) {
     console.log("error :", error)
@@ -107,7 +109,7 @@ export const loadDispute = async ({ dispatch, escrowContract, provider }: Disput
     disputeevent = await escrowContract.queryFilter("Dispute");
     let dispute = await decoratedispute({ dispatch, escrowContract, provider, disputeevent });
     dispute = dispute?.sort((a: any, b: any) => Number(b?.dispute?.createdAt) - Number(a?.dispute?.createdAt))
-    console.log(dispute)
+   
     dispatch(getDispute(dispute));
   }
 }
@@ -169,10 +171,12 @@ export const loadTotalVotings = async ({ dispatch, escrowContract, provider }: t
         dealId: Number(event?.args?.dealId),
         voterAddress: event?.args?.voterAddress,
         weight: Number(event?.args?.weight),
-        support: event?.args?.support
+        support: event?.args?.support,
+        createdAt:Number(event?.args?.createdAt)
       })
     })
   }
+ decoratedVote=decoratedVote.sort((a:any,b:any)=>b?.createdAt-a?.createdAt)
   dispatch(getvotes(decoratedVote))
 }
 
@@ -193,7 +197,8 @@ export const loadStakeAndUnStakeHistory = async ({ dispatch, escrowContract, pro
       return ({
         amount: Number(event?.args?.amount),
         address: event?.args?.depositer,
-        method: "Staked"
+        method: "Staked",
+        createdAt:Number(event?.args?.createdAt)
       })
     })
 
@@ -201,12 +206,14 @@ export const loadStakeAndUnStakeHistory = async ({ dispatch, escrowContract, pro
       return ({
         amount: Number(event?.args?.amount),
         address: event?.args?.withdrawer,
-        method: "Unstaked"
+        method: "Unstaked",
+        createdAt:Number(event?.args?.createdAt)
       })
     })
   }
 
   decoratedEvent = [...stakeEvent, ...unstakeEvent]
+  decoratedEvent=decoratedEvent.sort((a:any,b:any)=>b?.createdAt-a?.createdAt)
   dispatch(getStakeHistory(decoratedEvent))
 }
 

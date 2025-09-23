@@ -5,6 +5,7 @@ import React from 'react'
 const Guide1 = () => {
     return (
         <div>
+         
             <div>
                 <span className='pr-2'>1.</span>
                 Escrow secures your deals with trustless transactions.
