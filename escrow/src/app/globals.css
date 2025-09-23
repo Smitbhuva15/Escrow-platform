@@ -5,6 +5,15 @@
     background-color: black;
 } */
 
+
+.isolate { isolation: isolate; } /* keep blending local */
+.blend-img {
+  mix-blend-mode: multiply;   /* try multiply/darken/screen — results vary */
+  display: block;
+}
+
+.flowchart-wrap { background: transparent; }
+.flowchart-img { display: block; background: transparent; }
 @keyframes slideDown {
   from {
     transform: translateY(-20px);
