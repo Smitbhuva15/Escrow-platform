@@ -46,7 +46,7 @@ const QuorumCard = () => {
                 ⚠️ <span className="text-red-400 font-medium">Important:</span> If the quorum is
                 <span className="text-white font-semibold"> not met</span>, then by default the
                 <span className="text-[#1d45fe] font-semibold"> client automatically wins </span>
-                and the total deposited funds are released to them.  Choose a value between <span className="text-white font-semibold">1% and 70%</span>.
+                and the total deposited funds are released to them.  Choose a value between <span className="text-white font-semibold">1&nbsp;% and 70&nbsp;%</span>.
             </p>
 
 
@@ -66,6 +66,8 @@ const QuorumCard = () => {
                         max={70}
                         {...register("Quorum", {
                             required: "Voting Quorum is required",
+                             min: { value: 1, message: "Voting Quorum must be at least 1 percentage." },
+                            max: { value: 70, message: "Voting Quorum cannot exceed 70 percentage." },
                         })}
                         className="border border-gray-600 rounded-xl p-3 bg-[#121217] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition duration-200 appearance-none 
         [&::-webkit-outer-spin-button]:appearance-none 

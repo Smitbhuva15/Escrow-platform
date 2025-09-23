@@ -2,57 +2,46 @@ import toast from "react-hot-toast";
 import { HandelError } from "../HandelError";
 import { LoadEscrow } from "../LoadData";
 import { depositType } from "../types";
+import { ethers } from "ethers";
 
 export const handeldeposit = async ({
   dealId, amount, dispatch, provider, escrowContract, setIsLoading
 }: depositType) => {
 
-  const isReady =
-    escrowContract && Object.keys(escrowContract).length > 0 &&
-    provider && Object.keys(provider).length > 0;
+const newvalue = ethers.BigNumber.from(amount.toString());
+  if (!escrowContract || !provider) {
+    toast.error("Escrow contract or provider not available.");
+    return;
+  }
+  setIsLoading(dealId);
 
-  setIsLoading(dealId)
-  if (isReady) {
-    toast.loading("Preparing deposit... Please confirm the transaction in your wallet.", {
-      id: "escrowTx",
-    });
+  toast.loading("Preparing deposit... Please confirm the transaction in your wallet.", { id: "escrowTx" });
 
-    try {
-      const signer = await provider.getSigner();
-      const transaction = await escrowContract.connect(signer).deposit(dealId, { value: amount });
+  try {
+    const signer = provider.getSigner();
+    const tx = await escrowContract.connect(signer).deposit(dealId, { value: newvalue});
 
-      toast.loading("Transaction submitted. Waiting for confirmation on-chain...", {
-        id: "escrowTx",
-      });
+    toast.loading("Transaction submitted. Waiting for confirmation on-chain...", { id: "escrowTx" });
 
-      const receipt = await transaction.wait();
+    const receipt = await tx.wait();
 
-      if (receipt.status !== 1) {
-        toast.error("Deposit failed. Please try again.", {
-          id: "escrowTx",
-        });
-        setIsLoading(-1);
-        return;
-      }
-
-      const event = receipt.events?.find((e: any) => e.event === "Deposit");
-
-
-      if (event) {
-        toast.success("Funds deposited successfully!!", {
-          id: "escrowTx",
-        });
-      } else {
-        toast.error("Transaction confirmed, but no Deposit event found.", {
-          id: "escrowTx",
-        });
-      }
-    } catch (error) {
-      HandelError(error, "escrowTx", "Deposit transaction failed.")
-    } finally {
-      await LoadEscrow(escrowContract, provider, dispatch);
-      setIsLoading(-1);
+    if (receipt.status !== 1) {
+      toast.error("Deposit failed. Please try again.", { id: "escrowTx" });
+      return;
     }
 
+    const event = receipt.events?.find((e: any) => e.event === "Deposit");
+    if (event) {
+      toast.success("Funds deposited successfully!", { id: "escrowTx" });
+    } else {
+      toast.error("Transaction confirmed, but no Deposit event found.", { id: "escrowTx" });
+    }
+
+  } catch (error) {
+    console.log(error)
+    HandelError(error , "escrowTx", "Deposit transaction failed.");
+  } finally {
+    await LoadEscrow(escrowContract, provider, dispatch);
+    setIsLoading(-1);
   }
-}
+};

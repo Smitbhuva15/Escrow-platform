@@ -4,12 +4,13 @@ import React, { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActiveAccount } from 'thirdweb/react';
-import { Clock, Loader2, Users, X } from 'lucide-react'; // Added icons
+import { Activity, BarChart, BarChart2, ClipboardCheck, Clock, Gauge, Loader2, PieChart, Users, X } from 'lucide-react'; // Added icons
 import { RootState } from '@/store/store';
 import { loadAdmininfo } from '@/lib/LoadData';
 import Link from 'next/link';
 import VotingCard from '@/components/admin/VotingCard';
 import QuorumCard from '@/components/admin/QuorumCard';
+import PlatformFeeCard from '@/components/admin/PlatformFeeCard';
 
 
 const Admin = () => {
@@ -20,6 +21,8 @@ const Admin = () => {
   const admin = useSelector((state: RootState) => state?.escrow?.admin);
   const votingdays = useSelector((state: RootState) => state?.escrow?.votingdays);
   const Quorum = useSelector((state: RootState) => state?.escrow?.Quorum);
+  const ownerPercentage = useSelector((state: RootState) => state?.escrow?.ownerPercentage);
+
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -65,16 +68,16 @@ const Admin = () => {
           </h1>
 
           {/* Governance Parameters Section */}
-          <div className="flex flex-col gap-6 mb-12">
+          <div className="sm:grid-cols-2 grid grid-cols-1 gap-6 mb-12">
             {/* Voting Period Setting */}
             <div className="flex items-center gap-4 p-4 bg-[#1E1E24] rounded-xl shadow-md hover:shadow-lg transition-all">
-              <Clock className="text-[#1d45fe] w-7 h-7" /> {/* Icon */}
+              <Gauge className="text-[#1d45fe] w-7 h-7" /> {/* Icon */}
               <div className="flex flex-col">
                 <span className="text-gray-400 text-sm md:text-base">
                   Voting Period
                 </span>
                 <span className="text-white font-semibold text-lg md:text-xl">
-                    {votingdays? `${Number(votingdays)>1?`${Number(votingdays)} Days`:`${Number(votingdays)} Day`}`:'0 Day'} 
+                  {votingdays ? `${Number(votingdays) > 1 ? `${Number(votingdays)} Days` : `${Number(votingdays)} Day`}` : '0 Day'}
                 </span>
               </div>
             </div>
@@ -87,16 +90,32 @@ const Admin = () => {
                   Voting Quorum
                 </span>
                 <span className="text-white font-semibold text-lg md:text-xl">
-                  {Quorum?Number(Quorum):0} %
+                  {Quorum ? Number(Quorum) : 0} %
                 </span>
               </div>
             </div>
+
+          
+            {/*paltform fee */}
+            <div className="flex items-center gap-4 p-4 bg-[#1E1E24] rounded-xl shadow-md hover:shadow-lg transition-all">
+              <PieChart className="text-[#1d45fe] w-7 h-7" /> 
+              <div className="flex flex-col">
+                <span className="text-gray-400 text-sm md:text-base">
+                Platform Fee
+                </span>
+                <span className="text-white font-semibold text-lg md:text-xl">
+                  {ownerPercentage ? Number(ownerPercentage) : 0} %
+                </span>
+              </div>
+            </div>
+
           </div>
 
           {/* Admin Controls  */}
           <div className="flex flex-col gap-12">
             <VotingCard />
             <QuorumCard />
+            <PlatformFeeCard />
           </div>
 
 

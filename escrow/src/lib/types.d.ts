@@ -10,6 +10,7 @@ export interface EscrowState {
   Quorum: Number,
   disputes: [],
   votes: [],
+  ownerPercentage:0,
   StakeHistory:[]
 }
 
@@ -85,6 +86,9 @@ export interface unstakeInputs {
 }
 export interface votingInput {
   days: string
+}
+export interface PlatformFeeInput {
+  fee: string
 }
 export interface QuorumInput {
   Quorum: string

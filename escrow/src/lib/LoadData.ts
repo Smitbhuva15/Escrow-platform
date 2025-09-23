@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import escrowAbi from '@/abi/escrow.json'
 import { config } from '@/config/config';
-import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getPersonalStakeBalance, getprovider, getQuorumDay, getStakeHistory, getvotes, getVotingDay } from '@/slice/escrowSlice';
+import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getownerPercentage, getPersonalStakeBalance, getprovider, getQuorumDay, getStakeHistory, getvotes, getVotingDay } from '@/slice/escrowSlice';
 import { AdminInfoType, decoratedisputeType, DisputeType, StakeBalanceType, totalvotingtype } from './types';
 
 declare global {
@@ -89,7 +89,8 @@ export const loadAdmininfo = async (
     dispatch(getVotingDay(Number(transaction) / (24 * 60 * 60)))
     transaction = await escrowContract.connect(signer).minmumvotedweightPercentage();
     dispatch(getQuorumDay(Number(transaction)))
-
+    transaction = await escrowContract.connect(signer).ownerPercentage();
+    dispatch(getownerPercentage(Number(transaction)))
 
   } catch (error) {
     console.log("error :", error)
@@ -104,7 +105,9 @@ export const loadDispute = async ({ dispatch, escrowContract, provider }: Disput
   let disputeevent;
   if (isReady) {
     disputeevent = await escrowContract.queryFilter("Dispute");
-    const dispute = await decoratedispute({ dispatch, escrowContract, provider, disputeevent });
+    let dispute = await decoratedispute({ dispatch, escrowContract, provider, disputeevent });
+    dispute = dispute?.sort((a: any, b: any) => Number(b?.dispute?.createdAt) - Number(a?.dispute?.createdAt))
+    console.log(dispute)
     dispatch(getDispute(dispute));
   }
 }
@@ -131,7 +134,7 @@ const decoratedispute = async ({ dispatch, escrowContract, provider, disputeeven
           description: updatedDeal?.description,
           amount: updatedDeal.amount.toString(),
           status: Number(updatedDeal?.status),
-          createdAt: Number(updatedDeal?.createdAt),
+          createdAt: Number(event?.args?.createdAt),
           dealdeadline: Number(updatedDeal?.deadline),
           isDisputed: updatedDeal?.isDisputed,
           disputedId: Number(updatedDeal?.disputedId),

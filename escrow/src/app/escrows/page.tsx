@@ -29,8 +29,12 @@ const Escrows = () => {
       if (selected == "all") {
         setDeals(Deals);
       }
-      else {
+      else if(selected=="Client"){
         const updateDeal = Deals.filter((deal: any) => deal?.deal?.client == account?.address)
+        setDeals(updateDeal)
+      }
+      else{
+         const updateDeal = Deals.filter((deal: any) => deal?.deal?.specialist == account?.address)
         setDeals(updateDeal)
       }
     }
@@ -86,12 +90,24 @@ const Escrows = () => {
             <input
               type="radio"
               name="dealType"
-              value={"my"}
-              checked={selected === "my"}
+              value={"Client"}
+              checked={selected === "Client"}
               onChange={(e) => setSelected(e.target.value)}
               className="accent-[#1d45fe] w-4 h-4"
             />
-            <span className="text-sm md:text-base">My Deals</span>
+            <span className="text-sm md:text-base">Client (Mine)</span>
+          </label>
+
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="dealType"
+              value={"Specialist"}
+              checked={selected === "Specialist"}
+              onChange={(e) => setSelected(e.target.value)}
+              className="accent-[#1d45fe] w-4 h-4"
+            />
+            <span className="text-sm md:text-base"> Specialist (Mine)</span>
           </label>
         </div>
         {
