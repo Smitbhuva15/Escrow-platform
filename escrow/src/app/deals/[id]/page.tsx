@@ -4,8 +4,9 @@ import LeftSection from '@/components/escrowId/LeftSection';
 import RightSection from '@/components/escrowId/RightSection';
 import TimeLine from '@/components/escrowId/TimeLine';
 import { LoadEscrow } from '@/lib/LoadData';
+import { SingledealType } from '@/lib/types';
 import { RootState } from '@/store/store';
-import { Check, Circle, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,11 +16,12 @@ const page = () => {
 
     const account = useActiveAccount();
     const dispatch = useDispatch();
-    const { id } = useParams();
+     const { id } = useParams<{ id: string }>()
+      const numericId = id ? Number(id) : undefined;
 
     const [isLoading, setIsLoading] = useState(true)
-    const [deal, setDeals] = useState<any>();
-
+    const [deal, setDeals] = useState<SingledealType>();
+   
     const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
     const provider = useSelector((state: RootState) => state?.escrow?.provider);
     const Deals = useSelector((state: RootState) => state?.escrow?.deals);
@@ -29,7 +31,7 @@ const page = () => {
 
     useEffect(() => {
         if (Deals && Deals.length > 0) {
-            const Deal = Deals.filter((deal: any) => (deal?.deal?.dealId) == id);
+            const Deal = Deals.filter((deal: SingledealType) => (deal?.deal?.dealId) == numericId);
             setDeals(Deal[0].deal);
         }
     }, [Deals])

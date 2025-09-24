@@ -1,4 +1,4 @@
-import { VoteInputs } from '@/lib/types';
+import { DealVote, singledisputeType, VoteInputs } from '@/lib/types';
 import { RootState } from '@/store/store';
 import { Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
@@ -11,13 +11,13 @@ import { handelvoting } from '@/lib/hooks/handelvoting';
 import { handelResolve } from '@/lib/hooks/handelResolve';
 
 
-const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
-
+const RightSectionArbitration: React.FC<{ dispute: singledisputeType }> = ({ dispute }) => {
     const dispatch = useDispatch();
     const account = useActiveAccount();
 
     const [isLoading, setIsLoading] = useState("")
-    const [totalVotes, setTotalVotes] = useState<any>();
+    const [totalVotes, setTotalVotes] = useState<DealVote[]>([]);
+
     const [clientVotePercent, setClientVotePercent] = useState(0);
     const [specialistVotePercent, setSpecialistVotePercent] = useState(0);
     const [isCloseLoading, setIsCloseLoading] = useState(false);
@@ -27,8 +27,8 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
     const votes = useSelector((state: RootState) => state?.escrow?.votes);
 
     useEffect(() => {
-        setClientVotePercent(((dispute?.dispute?.Novoting) / (dispute?.dispute?.Yesvoting + dispute?.dispute?.Novoting)) * 100);
-        setSpecialistVotePercent(((dispute?.dispute?.Yesvoting) / (dispute?.dispute?.Yesvoting + dispute?.dispute?.Novoting)) * 100);
+        setClientVotePercent(((Number(dispute?.dispute?.Novoting)) / (Number(dispute?.dispute?.Yesvoting )+ Number(dispute?.dispute?.Novoting))) * 100);
+        setSpecialistVotePercent(((Number(dispute?.dispute?.Yesvoting) )/ (Number(dispute?.dispute?.Yesvoting )+ Number(dispute?.dispute?.Novoting))) * 100);
     }, [dispute])
 
     const {
@@ -58,7 +58,7 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
 
     useEffect(() => {
         if (votes && votes.length > 0) {
-            const filtervotes = votes.filter((vote: any) => vote?.disputedId == dispute?.dispute?.disputedId)
+            const filtervotes = votes.filter((vote: DealVote) => vote?.disputedId == dispute?.dispute?.disputedId)
             setTotalVotes(filtervotes);
         }
     }, [votes])
@@ -87,10 +87,10 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
             <div className="bg-gradient-to-r from-[#1E1E24] to-[#2A2A33] p-6 rounded-2xl shadow-xl border border-[#2F2F3A]  transition-all duration-300">
                 <h2 className="text-gray-400 font-semibold text-sm mb-1 uppercase tracking-wide">Voting Deadline</h2>
                 <p className="text-3xl font-extrabold text-[#1d45fe]/70"> {
-                    dispute?.dispute?.votingremainingDays <= 0
+                    Number(dispute?.dispute?.votingremainingDays) <= 0
                         ? "Expired"
                         : ` ${dispute?.dispute?.votingremainingDays}${" "}
-                                ${dispute?.dispute?.votingremainingDays > 1 ? "days" : "day"} left`
+                                ${Number(dispute?.dispute?.votingremainingDays) > 1 ? "days" : "day"} left`
                 }</p>
             </div>
 
@@ -106,7 +106,7 @@ const RightSectionArbitration: React.FC<{ dispute: any }> = ({ dispute }) => {
                             Ending this dispute marks the case as resolved. Funds are automatically transferred based on the outcome, and no future actions can reopen this issue.
                         </p>
                         {!isCloseLoading ? (
-                            dispute?.dispute?.closed == true ? (
+                            dispute?.dispute?.closed == 1 ? (
                                 <button
                                     className="w-full bg-gray-500/70 text-gray-800 font-semibold py-3 rounded-xl cursor-not-allowed"
                                     disabled

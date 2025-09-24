@@ -5,6 +5,10 @@
     background-color: black;
 } */
 
+div{
+  font-family: Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+}
+
 @keyframes slideDown {
   from {
     transform: translateY(-20px);
@@ -25,3 +29,4 @@
 .animate-slideDown > li:nth-child(4) { animation-delay: 0.4s; }
 .animate-slideDown > li:nth-child(5) { animation-delay: 0.5s; }
 .animate-slideDown > li:nth-child(6) { animation-delay: 0.6s; }
+

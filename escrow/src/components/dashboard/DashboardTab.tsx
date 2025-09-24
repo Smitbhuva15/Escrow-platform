@@ -1,5 +1,4 @@
 "use client"
-
 import React, { useEffect, useState } from 'react'
 import {
   Tabs,
@@ -11,30 +10,29 @@ import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/store/store"
 import { loadDispute, LoadEscrow, loadStakeAndUnStakeHistory, loadTotalVotings } from "@/lib/LoadData"
 import { useActiveAccount } from 'thirdweb/react'
-import { Loader2, TableCellsMerge } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import MyDeal from './MyDeal'
 import MyVotes from './MyVotes'
 import MyStake from './MyStake'
-
+import { DealVote, SingledealType, singledisputeType, stakeDetails } from '@/lib/types'
 
 
 export default function DashboardTab() {
   const account = useActiveAccount();
 
   const [activeTab, setActiveTab] = useState("My Deals")
-  const [deals, setDeals] = useState([]);
-    const [stakeHistory,setStakeHistory] = useState([]);
+  const [deals, setDeals] = useState<SingledealType[]>([]);
+  const [stakeHistory, setStakeHistory] = useState<stakeDetails[]>([]);
   const [isLoading, setIsLoading] = useState(false)
   const [totalVotes, setTotalVotes] = useState<any>([]);
   const dispatch = useDispatch();
-
 
   const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
   const provider = useSelector((state: RootState) => state?.escrow?.provider);
   const Deals = useSelector((state: RootState) => state?.escrow?.deals);
   const votes = useSelector((state: RootState) => state?.escrow?.votes);
   const disputes = useSelector((state: RootState) => state?.escrow?.disputes);
-   const StakeHistory = useSelector((state: RootState) => state?.escrow?.StakeHistory);
+  const StakeHistory = useSelector((state: RootState) => state?.escrow?.StakeHistory);
 
 
 
@@ -63,23 +61,23 @@ export default function DashboardTab() {
 
   useEffect(() => {
     if (Deals && Deals.length > 0) {
-      const updateDeal = Deals.filter((deal: any) => deal?.deal?.client == account?.address)
+      const updateDeal = Deals.filter((deal: SingledealType) => deal?.deal?.client == account?.address)
       setDeals(updateDeal)
     }
   }, [Deals, account])
 
   useEffect(() => {
     if (votes && votes.length > 0 && disputes && disputes.length > 0) {
-      const updatedVoting = votes.map((vote: any) => {
-        const dispute = disputes.filter((dispute: any) => dispute?.dispute?.disputedId == vote.disputedId);
-    
+      const updatedVoting = votes.map((vote: DealVote) => {
+        const dispute = disputes.filter((dispute: singledisputeType) => dispute?.dispute?.disputedId == vote.disputedId);
+
         return {
           "dealId": vote?.dealId,
           "disputedId": vote?.disputedId,
           "support": vote?.support,
           "voterAddress": vote?.voterAddress,
           "weight": vote?.weight,
-          dispute:dispute[0]
+          dispute: dispute[0]
         }
       })
       const updatevotes = updatedVoting.filter((deal: any) => deal?.voterAddress == account?.address)
@@ -87,10 +85,10 @@ export default function DashboardTab() {
     }
   }, [votes, account, disputes])
 
-   useEffect(() => {
-    if (StakeHistory && StakeHistory.length>0) {
-      const updateStakeHistory  = StakeHistory.filter((deal: any) => deal?.address == account?.address)
-      setStakeHistory(updateStakeHistory)  
+  useEffect(() => {
+    if (StakeHistory && StakeHistory.length > 0) {
+      const updateStakeHistory = StakeHistory.filter((deal: stakeDetails) => deal?.address == account?.address)
+      setStakeHistory(updateStakeHistory)
     }
   }, [StakeHistory, account])
 
@@ -113,13 +111,13 @@ export default function DashboardTab() {
           </TabsTrigger>
           <TabsTrigger
             value="My Votes"
-            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "My Votes" ? "bg-[#1d45fe]": "border shadow-xs shadow-amber-50"} p-4   transition`}
+            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "My Votes" ? "bg-[#1d45fe]" : "border shadow-xs shadow-amber-50"} p-4   transition`}
           >
             My Votes
           </TabsTrigger>
           <TabsTrigger
             value="Stake History"
-            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "Stake History" ? "bg-[#1d45fe]":"border shadow-xs shadow-amber-50"} p-4  transition`}
+            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "Stake History" ? "bg-[#1d45fe]" : "border shadow-xs shadow-amber-50"} p-4  transition`}
           >
             Funds History
           </TabsTrigger>
@@ -172,19 +170,19 @@ export default function DashboardTab() {
               stakeHistory && stakeHistory.length > 0 ? (
 
                 <TabsContent value="Stake History" className="sm:mt-6 mt-32 mb-72">
-                 <MyStake stakeHistory={stakeHistory}/>
+                  <MyStake stakeHistory={stakeHistory} />
                 </TabsContent>
 
               ) : (
                 <div className={`h-[55vh] flex flex-col justify-center  text-wrap text-center items-center text-zinc-200 ${activeTab == "Stake History" ? "" : "hidden"}`}>
                   <h1 className="text-lg md:text-xl font-medium">Your Staking Journey Awaits</h1>
                   <p className="text-sm md:text-base text-zinc-300 mt-2">
-                   Stake ETH now to begin your voting history.
+                    Stake ETH now to begin your voting history.
                   </p>
                 </div>
               )
             }
-            
+
           </>
         )
         }

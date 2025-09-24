@@ -7,6 +7,7 @@ import { RootState } from "@/store/store";
 import Cart from '@/components/cart/Cart';
 import { Loader2 } from 'lucide-react';
 import Banner from '@/components/banner/Banner';
+import { SingledealType } from '@/lib/types';
 
 
 const Escrows = () => {
@@ -15,7 +16,7 @@ const Escrows = () => {
   const dispatch = useDispatch();
 
   const [selected, setSelected] = useState("all");
-  const [deals, setDeals] = useState([]);
+  const [deals, setDeals] = useState<SingledealType[]>([]);
   const [isLoading, setIsLoading] = useState(false)
 
 
@@ -23,18 +24,17 @@ const Escrows = () => {
   const provider = useSelector((state: RootState) => state?.escrow?.provider);
   const Deals = useSelector((state: RootState) => state?.escrow?.deals);
 
-
   useEffect(() => {
     if (Deals && Deals.length > 0) {
       if (selected == "all") {
         setDeals(Deals);
       }
       else if(selected=="Client"){
-        const updateDeal = Deals.filter((deal: any) => deal?.deal?.client == account?.address)
+        const updateDeal = Deals.filter((deal: SingledealType) => deal?.deal?.client == account?.address)
         setDeals(updateDeal)
       }
       else{
-         const updateDeal = Deals.filter((deal: any) => deal?.deal?.specialist == account?.address)
+         const updateDeal = Deals.filter((deal: SingledealType) => deal?.deal?.specialist == account?.address)
         setDeals(updateDeal)
       }
     }

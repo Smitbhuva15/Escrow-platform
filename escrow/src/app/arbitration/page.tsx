@@ -2,6 +2,7 @@
 import Banner from '@/components/banner/Banner';
 import DisputeCart from '@/components/cart/DisputeCart';
 import { loadDispute } from '@/lib/LoadData';
+import { singledisputeType } from '@/lib/types';
 import { RootState } from '@/store/store';
 import { Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
@@ -19,7 +20,7 @@ const Arbitration = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [selected, setSelected] = useState("Open");
-  const [isDisputes, setIsDisputes] = useState([])
+  const [isDisputes, setIsDisputes] = useState<singledisputeType[]>([])
 
   const isReady =
     escrowContract &&
@@ -27,15 +28,14 @@ const Arbitration = () => {
     provider &&
     Object.keys(provider).length > 0;
 
-
   useEffect(() => {
     if (disputes && disputes.length > 0) {
       let filterdisputes;
       if (selected == "Closed") {
-        filterdisputes = disputes.filter((dispute: any) => dispute?.dispute?.closed == true);
+        filterdisputes = disputes.filter((dispute: singledisputeType) => dispute?.dispute?.closed == 1);
       }
       else {
-        filterdisputes = disputes.filter((dispute: any) => dispute?.dispute?.closed == false);
+        filterdisputes = disputes.filter((dispute: singledisputeType) => dispute?.dispute?.closed == 0);
       }
       setIsDisputes(filterdisputes)
     }

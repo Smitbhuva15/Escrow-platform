@@ -1,6 +1,7 @@
+import { singledisputeType } from '@/lib/types';
 import React from 'react'
 
-const LeftSection: React.FC<{ deal: any, section: string }> = ({ deal, section }) => {
+const LeftSection: React.FC<{ deal:any, section: string }> = ({ deal, section }) => {
   return (
     <div className="lg:p-0 p-4 space-y-8">
       {/* Title */}

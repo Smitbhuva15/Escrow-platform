@@ -10,8 +10,10 @@ import {
     TableCell,
     TableFooter,
 } from "@/components/ui/table"
+import { stakeDetails, stakeprops } from '@/lib/types'
 
-const MyStake = ({ stakeHistory }: any) => {
+const MyStake = ({ stakeHistory }:stakeprops) => {
+ 
     return (
         <Card className="p-4 shadow-md rounded-2xl max-w-2xl mx-auto">
             <Table>
@@ -28,7 +30,7 @@ const MyStake = ({ stakeHistory }: any) => {
                 </TableHeader>
                 <TableBody>
                     {
-                        stakeHistory.map((stake: any, index: number) => (
+                        stakeHistory.map((stake: stakeDetails, index: number) => (
                             <TableRow
                                 key={index}
                                 className="hover:bg-muted/20 transition"

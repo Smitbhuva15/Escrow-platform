@@ -3,6 +3,7 @@ import RightSectionArbitration from '@/components/Arbitration/RightSectionArbitr
 import Banner from '@/components/banner/Banner';
 import LeftSection from '@/components/escrowId/LeftSection';
 import { loadDispute, loadTotalVotings } from '@/lib/LoadData';
+import { singledisputeType } from '@/lib/types';
 import { RootState } from '@/store/store';
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
@@ -13,10 +14,11 @@ import { useActiveAccount } from 'thirdweb/react';
 const page = () => {
   const account = useActiveAccount();
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const numericId = id ? Number(id) : undefined;
 
   const [isLoading, setIsLoading] = useState(true)
-  const [dispute, setDispute] = useState<any>();
+  const [dispute, setDispute] = useState<singledisputeType>();
 
   const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
   const provider = useSelector((state: RootState) => state?.escrow?.provider);
@@ -31,7 +33,7 @@ const page = () => {
         setIsLoading(true);
         if (isReady) {
           await loadDispute({ dispatch, escrowContract, provider });
-          await loadTotalVotings({ dispatch, escrowContract, provider})
+          await loadTotalVotings({ dispatch, escrowContract, provider })
         }
       } catch (err) {
         console.log("Failed to load escrow:", err);
@@ -43,9 +45,10 @@ const page = () => {
     fetchdispute();
   }, [isReady]);
 
+
   useEffect(() => {
     if (Disputes && Disputes.length > 0) {
-      const filtered = Disputes.filter((item: any) => item?.dispute?.disputedId == id)
+      const filtered = Disputes.filter((item: singledisputeType) => item?.dispute?.disputedId == numericId)
       setDispute(filtered[0]);
     }
   }, [Disputes, id]);

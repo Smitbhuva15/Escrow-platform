@@ -2,12 +2,13 @@ import React from 'react'
 import { Toaster } from 'react-hot-toast';
 import { Button } from '../ui/button';
 import Link from 'next/link';
+import { disputeprops, singledisputeType } from '@/lib/types';
 
 
-const DisputeCart = ({ disputes }: any) => {
+const DisputeCart = ({ disputes }: disputeprops) => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-            {disputes.map((dispute: any) => (
+            {disputes.map((dispute: singledisputeType) => (
                 <div
                     key={dispute?.dispute?.dealId.toString()}
                     className="relative bg-[#1E1E24] rounded-2xl p-6 shadow-lg border border-zinc-800 hover:border-[#1d45fe]/60 hover:shadow-[#1d45fe]/20 transition-all duration-300 flex flex-col"
@@ -55,8 +56,8 @@ const DisputeCart = ({ disputes }: any) => {
                             <p className="text-sm text-white font-medium">Voting Deadline</p>
                             <p className="text-xs text-gray-400">
                                 {
-                                    dispute?.dispute?.votingremainingDays<=0 ?"Expired":` ${dispute?.dispute?.votingremainingDays}${" "}
-                                ${dispute?.dispute?.votingremainingDays > 1 ? "days" : "day"} left`
+                                    Number(dispute?.dispute?.votingremainingDays)<=0 ?"Expired":` ${dispute?.dispute?.votingremainingDays}${" "}
+                                ${Number(dispute?.dispute?.votingremainingDays) > 1 ? "days" : "day"} left`
                                 }
                                
                             </p>
@@ -67,7 +68,7 @@ const DisputeCart = ({ disputes }: any) => {
                     <div className="flex justify-between items-center mb-4">
                         <span className="text-gray-400 text-sm">Amount</span>
                         <span className="text-[#1d45fe] font-bold text-lg">
-                            {(dispute?.dispute?.amount / 1e18).toFixed(3)} ETH
+                            {(Number(dispute?.dispute?.amount) / 1e18).toFixed(3)} ETH
                         </span>
                     </div>
 

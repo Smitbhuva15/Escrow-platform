@@ -10,9 +10,9 @@ export interface EscrowState {
   Quorum: Number,
   disputes: [],
   votes: [],
-  ownerPercentage:0,
-  StakeHistory:[],
-   totalstake:Number
+  ownerPercentage: 0,
+  StakeHistory: [],
+  totalstake: Number
 }
 
 export interface Inputs {
@@ -148,7 +148,7 @@ export interface votingType {
 
 
 export interface resolveType {
-    dispatch: any,
+  dispatch: any,
   escrowContract: any,
   provider: any,
   disputeId: Number,
@@ -156,10 +156,79 @@ export interface resolveType {
 }
 
 export interface unlockstakeType {
-    dispatch: any,
+  dispatch: any,
   escrowContract: any,
   provider: any,
   disputeId: Number,
   setIsLoading: React.Dispatch<React.SetStateAction<number>>,
-    index:Number
+  index: Number
+}
+
+
+export interface singledisputeType {
+  dispute:
+  {
+    Novoting: Number,
+    Yesvoting: Number,
+    amount: String,
+    client: String,
+    closed: Number,
+    createdAt: Number,
+    dealId: Number,
+    dealdeadline: Number,
+    description: String,
+    disputedId: Number,
+    isDisputed: boolean,
+    quorumTarget: Number,
+    specialist: String,
+    status: Number,
+    title: String,
+    votingEndTime: Number,
+    votingremainingDays: Number
+  }
+}
+
+export interface SingledealType {
+  deal: {
+    dealId: number;
+    title: string;
+    description: string;
+    amount: string;
+    client: string;
+    specialist: string;
+    createdAt: number;
+    deadline: number;
+    status: number;
+    isDisputed: boolean;
+    disputedId: number;
+    remainingDays: number;
+  }
+}
+
+export interface DealVote {
+  dealId: number;
+  disputedId: number;
+  createdAt: number;
+  support: boolean;
+  voterAddress: string;
+  weight: string;
+}
+
+export interface stakeDetails {
+  address: string
+  amount: number
+  createdAt: number
+  method: string
+}
+
+interface CartProps {
+  deals: SingledealType[];
+}
+
+export interface disputeprops{
+    disputes:singledisputeType[]
+}
+
+export interface stakeprops{
+   stakeHistory: stakeDetails[]
 }

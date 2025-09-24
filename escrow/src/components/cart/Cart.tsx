@@ -1,18 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { handeldeposit } from "@/lib/hooks/handeldeposit";
-import {  LoadEscrow } from "@/lib/LoadData";
+import { CartProps, SingledealType } from "@/lib/types";
 import { RootState } from "@/store/store";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import  { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
-const Cart = ({ deals }: any) => {
 
+const Cart = ({ deals }: CartProps) => {
   const [isLoading, setIsLoading] = useState(-1);
   const dispatch = useDispatch();
-
 
   const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
   const provider = useSelector((state: RootState) => state?.escrow?.provider);
@@ -24,7 +23,7 @@ const Cart = ({ deals }: any) => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-      {deals.map((deal: any) => (
+      {deals.map((deal: SingledealType) => (
         <div
           key={deal?.deal?.dealId.toString()}
           className="relative p-6 rounded-2xl bg-gradient-to-br from-[#1E1E24] to-[#141418] shadow-md hover:shadow-[#1d45fe]/40 hover:shadow-lg sm:hover:scale-[1.03] transition-all duration-300 flex flex-col justify-between"
@@ -58,7 +57,7 @@ const Cart = ({ deals }: any) => {
             {/* Amount & Status */}
             <div className="flex items-center justify-between mb-4">
               <div className="text-lg font-semibold text-[#1d45fe]">
-                {(deal?.deal?.amount / 1e18).toFixed(3)} ETH
+                {(Number(deal?.deal?.amount) / 1e18).toFixed(3)} ETH
               </div>
               <span
                 className={`px-3 py-1 rounded-full text-xs font-medium ${deal?.deal?.status == 1
@@ -93,7 +92,7 @@ const Cart = ({ deals }: any) => {
               Deposit Deadline:{" "}
               <span
                 className={`font-medium px-3 py-1 rounded-full text-xs ${deal?.deal?.remainingDays <= 0
-                  && "bg-rose-700 text-white"  }`}
+                  && "bg-rose-700 text-white"}`}
               >
                 {deal?.deal?.remainingDays <= 0
                   ? "Expired"
