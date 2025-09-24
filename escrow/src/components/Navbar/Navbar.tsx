@@ -40,7 +40,7 @@ const Navbar = () => {
             <div className="xl:max-w-6xl lg:max-w-5xl md:max-w-3xl sm:max-w-xl w-[90%] mx-auto py-5 flex justify-between items-center">
                 {/* Logo */}
                 <div className="text-4xl font-extrabold text-[#1d45fe] ml-2">
-                    <Link href={'/'}>Escrow</Link>
+                    <Link href={'/'}>Escryn</Link>
                 </div>
 
                 {/* Desktop Menu */}

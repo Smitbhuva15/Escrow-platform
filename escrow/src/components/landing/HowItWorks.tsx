@@ -14,7 +14,7 @@ const HowItWorks = () => {
                             Trust strangers
                         </h1>
                         <h3 className='lg:text-2xl text-xl font-bold'>
-                            Yes, trust even strangers, because you are protected
+                            Yes, trust even strangers,because your transactions are secure.
                         </h3>
                     </div>
                     <div className='md:hidden block py-10 justify-items-center'>
@@ -23,11 +23,10 @@ const HowItWorks = () => {
                     </div>
                     <div className='md:w-[90%] text-zinc-300 lg:text-[17px] text-sm'>
                         <p className='pt-10 pb-4'>
-                            If you are a small business or an individual, you are normally cautious about dealing with companies or people you don't know. It can happen that you pay and they don't deliver, or you deliver and they don't pay, and the risks are especially high for cross-border deals. Legal protections exist but they are slow, cumbersome, and expensive. They really work only for the big guys.
-
+                            Whether you are an individual or a small business, dealing with unknown parties can feel risky. You might pay and not get the service, or deliver your work and not get paid-especially in cross-border deals. Traditional legal protections exist, but they are slow, costly, and often favor larger players.
                         </p>
                         <p>
-                            Smart contracts are the solution. They provide a decentralized escrow where the funds are locked by the client for the full duration of the contract, and the client releases the funds to the specialist only once they have received what they had paid for. If a dispute arises, the parties can invoke an arbriter who will study the evidence like a judge and release the funds to the winning party.
+                            Smart contracts solve this problem. They act as decentralized escrow, holding funds safely until the agreed work is completed. The client releases the payment only when satisfied. If a dispute occurs, an arbitrator examines the evidence and decides who receives the funds, just like a neutral judge.
                         </p>
                     </div>
 
@@ -38,9 +37,9 @@ const HowItWorks = () => {
             </div>
             <div className='my-36 text-white items-center flex md:flex-row flex-col bg-[#24292e] p-10 rounded-xl w-full'>
                 <div className='md:w-3/4'>
-                    <h1 className='lg:text-6xl sm:text-4xl text-3xl font-extrabold pb-2 pl-3 '>For small/medium businesses and P2P trade</h1>
+                    <h1 className='lg:text-6xl sm:text-4xl text-3xl font-extrabold pb-2 pl-3 '>For SMEs and peer-to-peer trade</h1>
 
-                    <p className='pl-3 md:w-[90%] lg:text-[19px] text-sm pt-5'>Decentralized escrow is meant primarily for cross-border trade between small/medium businesses but it also works for domestic trade or trading high-value items between individuals, such as domain names, vehicles, real estate, art, collectibles, game assets, freelance work, etc.</p>
+                    <p className='pl-3 md:w-[90%] lg:text-[19px] text-sm pt-5'>Decentralized escrow is designed mainly for cross-border transactions between small and medium businesses, but it also works for domestic trade or high-value deals between individuals. Examples include domain names, vehicles, real estate, art, collectibles, game assets, freelance projects, and more.</p>
                 </div>
                 <div className='md:w-1/4  justify-items-center md:mt-0 mt-8 '>
                     <Image src={'/escrowearth.svg'} alt='escro wearth' width={300} height={200} className='h-56 w-64' />

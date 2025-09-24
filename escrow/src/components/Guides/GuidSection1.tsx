@@ -10,13 +10,13 @@ const GuidSection1 = () => {
         <section className=" my-8 ">
             <div className="rounded-2xl bg-[#131519]   shadow-md">
                 <p className="text-white md:text-xl leading-relaxed ">
-                    Welcome to Escrow! Explore this guide to learn how to stake, vote, and resolve disputes with confidence.
+                    Welcome to Escryn! Explore this guide to learn how to stake, vote, and resolve disputes with confidence.
                 </p>
                 <div className='border my-7 border-e-white'></div>
-                <h2 className='text-white text-2xl md:text-4xl font-bold my-4'>Deals Flow</h2>
+                <h2 className='text-white text-2xl md:text-4xl font-bold my-4'>Deal Flow</h2>
                 <div className='flex justify-center'>
                     <Image
-                        src="/DealFlowChart.png"
+                        src="/flowchart.png"
                         alt="Deals Flow"
                         width={850}
                         height={768}

@@ -8,18 +8,18 @@ const Guide1 = () => {
          
             <div>
                 <span className='pr-2'>1.</span>
-                Escrow secures your deals with trustless transactions.
-                <Link href={'/escrows'} className='text-[#1d45fe] hover:cursor-pointer'> Connect</Link> your wallet to start managing and creating escrow agreements effortlessly.
+                Escryn secures your deals with trustless transactions.
+                <Link href={'/deals'} className='text-[#1d45fe] hover:cursor-pointer'> Connect</Link> your wallet to start managing and creating Escryn agreements effortlessly.
             </div>
             <div >
                 <span className='pr-2'>2.</span>
                 Explore all active deals
-                <Link href={'/escrows'} className='text-[#1d45fe] hover:cursor-pointer'> here</Link>  and effortlessly manage your personal escrow agreements securely on Escrow platform.
+                <Link href={'/deals'} className='text-[#1d45fe] hover:cursor-pointer'> here</Link>  and effortlessly manage your personal Escryn agreements securely on Escryn platform.
                 <Image src={'/deals.png'} alt='deal' width={3000} height={3000} className='my-5 hover:scale-105 duration-700 ' />
             </div>
             <div >
                 <span className='pr-2'>3.</span>
-                Securely deposit your funds into Escrow, wait for the specialist to deliver the product or service, confirm receipt once satisfied, and open a dispute if any issue arises
+                Securely deposit your funds into Escryn, wait for the specialist to deliver the product or service, confirm receipt once satisfied, and open a dispute if any issue arises
                 <Image src={'/escrowdetail.png'} alt='deal' width={3000} height={3000} className='my-5 hover:scale-105  duration-700' />
             </div>
             <div >

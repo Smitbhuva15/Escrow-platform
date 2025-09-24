@@ -16,7 +16,7 @@ const Footer = () => {
                         <div className='flex justify-center'>
                             {/* <img src='./logo2.png' className="sm:w-36 w-24 text-3xl transition-colors" /> */}
                             <div className="text-4xl font-extrabold text-[#1d45fe] ml-2 my-6">
-                                <Link href={'/'}>Escrow</Link>
+                                <Link href={'/'}>Escryn</Link>
                             </div>
                         </div>
                     </Link>

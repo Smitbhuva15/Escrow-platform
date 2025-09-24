@@ -32,7 +32,7 @@ const Cart = ({ deals }: any) => {
           {/* Gradient Top Border */}
           <div className="absolute top-0 left-0 w-full h-1 rounded-t-2xl bg-gradient-to-r from-[#1d45fe] via-indigo-500 to-[#1d45fe]" />
 
-          <Link href={`escrows/${deal?.deal?.dealId.toString()}`}>
+          <Link href={`deals/${deal?.deal?.dealId.toString()}`}>
             {/* Title */}
             <h2 className="text-xl font-bold text-white mb-2 truncate">
               {deal?.deal?.title || "Untitled Deal"}

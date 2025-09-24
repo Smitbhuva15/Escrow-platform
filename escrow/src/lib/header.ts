@@ -1,14 +1,14 @@
 export const headers = [
         {
-            "name": "Escrows",
-            "link": "/escrows"
+            "name": "Deals",
+            "link": "/deals"
         },
         {
             "name": "Arbitration",
             "link": "/arbitration"
         },
         {
-            "name": "Launch Escrow",
+            "name": "Start Deal",
             "link": "/createEscrow"
         },
         {
