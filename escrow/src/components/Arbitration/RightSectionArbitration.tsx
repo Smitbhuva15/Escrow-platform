@@ -1,4 +1,4 @@
-import { DealVote, singledisputeType, VoteInputs } from '@/lib/types';
+import { DealVote, VoteInputs } from '@/lib/types';
 import { RootState } from '@/store/store';
 import { Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
@@ -11,7 +11,8 @@ import { handelvoting } from '@/lib/hooks/handelvoting';
 import { handelResolve } from '@/lib/hooks/handelResolve';
 
 
-const RightSectionArbitration: React.FC<{ dispute: singledisputeType }> = ({ dispute }) => {
+
+const  RightSectionArbitration= ({ dispute }:any) => {
     const dispatch = useDispatch();
     const account = useActiveAccount();
 

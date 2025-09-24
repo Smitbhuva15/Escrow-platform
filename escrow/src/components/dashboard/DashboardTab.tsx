@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/tabs"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/store/store"
-import { loadDispute, LoadEscrow, loadStakeAndUnStakeHistory, loadTotalVotings } from "@/lib/LoadData"
+import { loadDispute, LoadEscrow, loadStakeAndUnStakeHistory, loadTotalVotings, loadUnlockStake } from "@/lib/LoadData"
 import { useActiveAccount } from 'thirdweb/react'
 import { Loader2 } from 'lucide-react'
 import MyDeal from './MyDeal'
@@ -33,6 +33,7 @@ export default function DashboardTab() {
   const votes = useSelector((state: RootState) => state?.escrow?.votes);
   const disputes = useSelector((state: RootState) => state?.escrow?.disputes);
   const StakeHistory = useSelector((state: RootState) => state?.escrow?.StakeHistory);
+  const unlockfunds = useSelector((state: RootState) => state?.escrow?.unlockfunds);
 
 
 
@@ -48,6 +49,8 @@ export default function DashboardTab() {
           await loadTotalVotings({ dispatch, escrowContract, provider });
           await loadDispute({ dispatch, escrowContract, provider })
           await loadStakeAndUnStakeHistory({ dispatch, escrowContract, provider })
+          await loadUnlockStake({ dispatch, escrowContract, provider })
+
         }
       } catch (err) {
         console.log("Failed to load escrow:", err);
@@ -67,9 +70,11 @@ export default function DashboardTab() {
   }, [Deals, account])
 
   useEffect(() => {
-    if (votes && votes.length > 0 && disputes && disputes.length > 0) {
+    if (votes && votes.length > 0 && disputes && disputes.length > 0 && unlockfunds) {
       const updatedVoting = votes.map((vote: DealVote) => {
         const dispute = disputes.filter((dispute: singledisputeType) => dispute?.dispute?.disputedId == vote.disputedId);
+
+        const isUnlock = unlockfunds.find((fund: any) => Number(fund?.disputedId) === Number(vote.disputedId))
 
         return {
           "dealId": vote?.dealId,
@@ -77,13 +82,14 @@ export default function DashboardTab() {
           "support": vote?.support,
           "voterAddress": vote?.voterAddress,
           "weight": vote?.weight,
-          dispute: dispute[0]
+          dispute: dispute[0],
+          isUnlock: !!isUnlock,
         }
       })
       const updatevotes = updatedVoting.filter((deal: any) => deal?.voterAddress == account?.address)
       setTotalVotes(updatevotes)
     }
-  }, [votes, account, disputes])
+  }, [votes, account, disputes, unlockfunds])
 
   useEffect(() => {
     if (StakeHistory && StakeHistory.length > 0) {

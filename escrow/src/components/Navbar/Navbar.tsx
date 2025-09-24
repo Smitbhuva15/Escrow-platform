@@ -9,6 +9,7 @@ import Link from "next/link";
 import { headers } from "@/lib/header";
 import { useDispatch } from "react-redux";
 import { LoadContarct } from "@/lib/LoadData";
+import { usePathname } from "next/navigation";
 
 const client = createThirdwebClient({
     clientId: process.env.NEXT_PUBLIC_CLIENT_ID as string,
@@ -17,7 +18,8 @@ const client = createThirdwebClient({
 const Navbar = () => {
     const [display, setDisplay] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-
+   const pathname = usePathname()
+   
     const dispatch = useDispatch();
     
     useEffect(() => {
@@ -49,7 +51,7 @@ const Navbar = () => {
                         {
                             headers.map((header, index) => (
                                 <Link href={`${header.link}`} key={index}>
-                                    <li className="hover:text-[#1638d6]  transition duration-500"> {header.name}</li>
+                                    <li className={`hover:text-[#1638d6]  transition duration-500 ${pathname ==header.link &&"text-[#1638d6]"}`}> {header.name}</li>
                                 </Link>
                             ))
                         }
@@ -105,7 +107,7 @@ const Navbar = () => {
                         {
                             headers.map((header, index) => (
                                 <Link href={`${header.link}`} onClick={() => setDisplay(false)} key={index}>
-                                    <li className="hover:text-[#1638d6]  transition duration-500"> {header.name}</li>
+                                    <li className={`hover:text-[#1638d6]  transition duration-500 ${pathname ==header.link &&"text-[#1638d6]"}`}> {header.name}</li>
                                 </Link>
                             ))
                         }

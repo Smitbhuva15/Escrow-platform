@@ -1,8 +1,9 @@
 import { dealStatus } from '@/config/config'
+import { dealprops, DealType } from '@/lib/types'
 import React from 'react'
 
 
-const TimeLine: React.FC<{ deal: any }> = ({ deal }) => {
+const TimeLine = ({ deal }:dealprops) => {
 
     return (
         <div className='my-16'>

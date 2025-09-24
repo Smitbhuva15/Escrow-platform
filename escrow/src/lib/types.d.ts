@@ -13,6 +13,7 @@ export interface EscrowState {
   ownerPercentage: 0,
   StakeHistory: [],
   totalstake: Number
+  unlockfunds: []
 }
 
 export interface Inputs {
@@ -165,6 +166,7 @@ export interface unlockstakeType {
 }
 
 
+
 export interface singledisputeType {
   dispute:
   {
@@ -188,21 +190,23 @@ export interface singledisputeType {
   }
 }
 
+export interface DealType {
+  dealId: number;
+  title: string;
+  description: string;
+  amount: string;
+  client: string;
+  specialist: string;
+  createdAt: number;
+  deadline: number;
+  status: number;
+  isDisputed: boolean;
+  disputedId: number;
+  remainingDays: number;
+}
+
 export interface SingledealType {
-  deal: {
-    dealId: number;
-    title: string;
-    description: string;
-    amount: string;
-    client: string;
-    specialist: string;
-    createdAt: number;
-    deadline: number;
-    status: number;
-    isDisputed: boolean;
-    disputedId: number;
-    remainingDays: number;
-  }
+  deal: DealType
 }
 
 export interface DealVote {
@@ -213,6 +217,14 @@ export interface DealVote {
   voterAddress: string;
   weight: string;
 }
+
+export interface Unlockstake {
+  disputedId: number,
+  dealId: number,
+  unlockstatus: string,
+  createdAt: number
+}
+
 
 export interface stakeDetails {
   address: string
@@ -225,10 +237,14 @@ interface CartProps {
   deals: SingledealType[];
 }
 
-export interface disputeprops{
-    disputes:singledisputeType[]
+export interface disputeprops {
+  disputes: singledisputeType[]
 }
 
-export interface stakeprops{
-   stakeHistory: stakeDetails[]
+export interface stakeprops {
+  stakeHistory: stakeDetails[]
+}
+
+export interface dealprops {
+  deal: DealType
 }

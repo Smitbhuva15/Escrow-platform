@@ -7,10 +7,10 @@ import ProcessingLoader from './ProcessingLoader';
 import { markdelivery } from '@/lib/hooks/markdelivery';
 import { markconfirmationReceive } from '@/lib/hooks/markconfirmationReceive';
 import { markOpenDispute } from '@/lib/hooks/markOpenDispute';
+import { dealprops, DealType} from '@/lib/types';
 
 
-const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
-
+const RightSection = ({ deal }:dealprops) => {
   const dispatch = useDispatch();
   const account = useActiveAccount();
   const [isLoading, setIsLoading] = useState(false)
@@ -39,7 +39,7 @@ const RightSection: React.FC<{ deal: any }> = ({ deal }) => {
       <div className="bg-gradient-to-r from-[#1E1E24] to-[#2A2A33] p-6 rounded-2xl shadow-lg border border-[#2F2F3A]">
         <h2 className="text-gray-400 font-semibold text-sm mb-1">Amount</h2>
         <p className="text-2xl font-bold text-indigo-400">
-          {deal?.amount ? deal.amount / 1e18 : "N/A"} ETH
+          {deal?.amount ? Number(deal.amount) / 1e18 : "N/A"} ETH
         </p>
       </div>
 

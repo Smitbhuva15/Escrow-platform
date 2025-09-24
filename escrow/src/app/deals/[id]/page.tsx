@@ -4,7 +4,7 @@ import LeftSection from '@/components/escrowId/LeftSection';
 import RightSection from '@/components/escrowId/RightSection';
 import TimeLine from '@/components/escrowId/TimeLine';
 import { LoadEscrow } from '@/lib/LoadData';
-import { SingledealType } from '@/lib/types';
+import { DealType, SingledealType } from '@/lib/types';
 import { RootState } from '@/store/store';
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
@@ -20,7 +20,7 @@ const page = () => {
       const numericId = id ? Number(id) : undefined;
 
     const [isLoading, setIsLoading] = useState(true)
-    const [deal, setDeals] = useState<SingledealType>();
+    const [deal, setDeals] = useState<DealType>();
    
     const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
     const provider = useSelector((state: RootState) => state?.escrow?.provider);
@@ -32,6 +32,7 @@ const page = () => {
     useEffect(() => {
         if (Deals && Deals.length > 0) {
             const Deal = Deals.filter((deal: SingledealType) => (deal?.deal?.dealId) == numericId);
+            
             setDeals(Deal[0].deal);
         }
     }, [Deals])
@@ -67,11 +68,11 @@ const page = () => {
                                 <LeftSection deal={deal} section='deal'/>
                             </div>
                             <div className='lg:w-[50%]'>
-                                <RightSection deal={deal} />
+                                <RightSection deal={deal!} />
                             </div>
                         </div>
                         <div>
-                            <TimeLine deal={deal}/>
+                            <TimeLine deal={deal!}/>
                         </div>
                     </div>
                 )

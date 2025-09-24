@@ -1,8 +1,8 @@
 import { ethers } from 'ethers'
 import escrowAbi from '@/abi/escrow.json'
 import { config } from '@/config/config';
-import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getownerPercentage, getPersonalStakeBalance, getprovider, getQuorumDay, getStakeHistory, gettotalstake, getvotes, getVotingDay } from '@/slice/escrowSlice';
-import { AdminInfoType, decoratedisputeType, DisputeType, StakeBalanceType, totalvotingtype } from './types';
+import { getAdmin, getallDeals, getchainId, getDispute, getEscrowContract, getLockBalance, getownerPercentage, getPersonalStakeBalance, getprovider, getQuorumDay, getStakeHistory, gettotalstake, getunlockfund, getvotes, getVotingDay } from '@/slice/escrowSlice';
+import { AdminInfoType, DealVote, decoratedisputeType, DisputeType, SingledealType, singledisputeType, StakeBalanceType, stakeDetails, totalvotingtype } from './types';
 
 declare global {
   interface Window {
@@ -25,7 +25,7 @@ export const LoadEscrow = async (escrowcontract: any, provider: any, dispatch: a
 
   let escrowDeals = await escrowcontract.queryFilter("Deal");
   let deals = await decorateDeals(escrowDeals, escrowcontract, provider);
-  deals = deals.sort((a: any, b: any) => b?.deal?.createdAt - a?.deal?.createdAt)
+  deals = deals.sort((a: SingledealType, b: SingledealType) => b?.deal?.createdAt - a?.deal?.createdAt)
   dispatch(getallDeals(deals));
 
 }
@@ -73,7 +73,7 @@ export const loadstakebalance = async (
     dispatch(getPersonalStakeBalance((Number(transaction) / 1e18)))
     transaction = await escrowContract.connect(signer).getcurrentlyLocked(address);
     dispatch(getLockBalance((Number(transaction) / 1e18)))
-     transaction = await escrowContract.connect(signer).totalStake();
+    transaction = await escrowContract.connect(signer).totalStake();
     dispatch(gettotalstake((Number(transaction) / 1e18)))
 
   } catch (error) {
@@ -108,8 +108,8 @@ export const loadDispute = async ({ dispatch, escrowContract, provider }: Disput
   if (isReady) {
     disputeevent = await escrowContract.queryFilter("Dispute");
     let dispute = await decoratedispute({ dispatch, escrowContract, provider, disputeevent });
-    dispute = dispute?.sort((a: any, b: any) => Number(b?.dispute?.createdAt) - Number(a?.dispute?.createdAt))
-   
+    dispute = dispute?.sort((a: singledisputeType, b: singledisputeType) => Number(b?.dispute?.createdAt) - Number(a?.dispute?.createdAt))
+
     dispatch(getDispute(dispute));
   }
 }
@@ -159,24 +159,25 @@ export const loadTotalVotings = async ({ dispatch, escrowContract, provider }: t
     escrowContract && Object.keys(escrowContract).length > 0 &&
     provider && Object.keys(provider).length > 0;
 
-  let voteEvent;
   let decoratedVote;
 
   if (isReady) {
-    voteEvent = await escrowContract.queryFilter("Voted");
+    const voteEvent = await escrowContract.queryFilter("Voted");
 
     decoratedVote = voteEvent.map((event: any) => {
-      return ({
+      return {
         disputedId: Number(event?.args?.disputedId),
         dealId: Number(event?.args?.dealId),
         voterAddress: event?.args?.voterAddress,
         weight: Number(event?.args?.weight),
         support: event?.args?.support,
-        createdAt:Number(event?.args?.createdAt)
-      })
-    })
+        createdAt: Number(event?.args?.createdAt),
+       
+      };
+    });
   }
- decoratedVote=decoratedVote.sort((a:any,b:any)=>b?.createdAt-a?.createdAt)
+
+  decoratedVote = decoratedVote.sort((a: DealVote, b: DealVote) => b?.createdAt - a?.createdAt)
   dispatch(getvotes(decoratedVote))
 }
 
@@ -198,7 +199,7 @@ export const loadStakeAndUnStakeHistory = async ({ dispatch, escrowContract, pro
         amount: Number(event?.args?.amount),
         address: event?.args?.depositer,
         method: "Staked",
-        createdAt:Number(event?.args?.createdAt)
+        createdAt: Number(event?.args?.createdAt)
       })
     })
 
@@ -207,15 +208,38 @@ export const loadStakeAndUnStakeHistory = async ({ dispatch, escrowContract, pro
         amount: Number(event?.args?.amount),
         address: event?.args?.withdrawer,
         method: "Unstaked",
-        createdAt:Number(event?.args?.createdAt)
+        createdAt: Number(event?.args?.createdAt)
       })
     })
   }
 
   decoratedEvent = [...stakeEvent, ...unstakeEvent]
-  decoratedEvent=decoratedEvent.sort((a:any,b:any)=>b?.createdAt-a?.createdAt)
+  decoratedEvent = decoratedEvent.sort((a: stakeDetails, b: stakeDetails) => b?.createdAt - a?.createdAt)
   dispatch(getStakeHistory(decoratedEvent))
 }
 
+export const loadUnlockStake = async ({ dispatch, escrowContract, provider }: totalvotingtype) => {
+  const isReady =
+    escrowContract && Object.keys(escrowContract).length > 0 &&
+    provider && Object.keys(provider).length > 0;
+
+  let unlockEvent;
+  let decoratedEvent;
+
+  if (isReady) {
+    unlockEvent = await escrowContract.queryFilter("UnlockStake");
+
+    decoratedEvent = unlockEvent.map((event: any) => {
+      return ({
+        disputedId: Number(event?.args?.disputedId),
+        dealId: Number(event?.args?.dealId),
+        unlockstatus: event?.args?.unlockstatus,
+        createdAt: Number(event?.args?.createdAt)
+      })
+    })
+  }
+ 
+  dispatch(getunlockfund(decoratedEvent))
+}
 
 

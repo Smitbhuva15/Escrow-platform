@@ -18,7 +18,7 @@ const page = () => {
   const numericId = id ? Number(id) : undefined;
 
   const [isLoading, setIsLoading] = useState(true)
-  const [dispute, setDispute] = useState<singledisputeType>();
+  const [dispute, setDispute] = useState<any>();
 
   const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
   const provider = useSelector((state: RootState) => state?.escrow?.provider);

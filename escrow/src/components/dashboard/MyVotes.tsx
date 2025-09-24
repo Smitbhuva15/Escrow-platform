@@ -24,7 +24,6 @@ const MyVotes = ({ totalVotes }: any) => {
   const escrowContract = useSelector((state: RootState) => state?.escrow?.EscrowContract);
   const provider = useSelector((state: RootState) => state?.escrow?.provider);
 
-
   const handelUnstake = async (disputedId: string, index: Number) => {
     await handelUnlockStake({
       dispatch,
@@ -95,12 +94,19 @@ const MyVotes = ({ totalVotes }: any) => {
 
                     </>
                   ) : (
-                    <button
-                      className="px-3 py-1 text-sm font-medium rounded-lg bg-[#1d45fe] hover:bg-[#1638d6] text-white transition-colors"
+                    
+                 !vote.isUnlock==true ? (  <button
+                      className={`px-3 py-1 text-sm font-semibold rounded-lg bg-[#1d45fe] hover:bg-[#1638d6] text-white transition-colors`}
                       onClick={() => handelUnstake(vote?.disputedId, index)}
                     >
                       Release Fund
+                    </button>):(
+                      <button
+                      className={`px-7 py-1 text-sm font-semibold rounded-lg  bg-gray-500/60 text-gray-200   cursor-not-allowed  transition-colors`}
+                      disabled>
+                      Claimed
                     </button>
+                    )
                   )}
                 </div>
               </TableCell>

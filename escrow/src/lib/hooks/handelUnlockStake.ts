@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import { HandelError } from "../HandelError";
 import { unlockstakeType } from "../types";
+import { loadUnlockStake } from "../LoadData";
 
 export const handelUnlockStake = async ({
   dispatch,
@@ -49,7 +50,7 @@ export const handelUnlockStake = async ({
     } catch (error) {
       HandelError(error, "unlockStakeTx", "Transaction unsuccessful. Your stake remains locked-please retry.")
     } finally {
-
+      await loadUnlockStake({ dispatch, escrowContract, provider })
       setIsLoading(-1);
     }
   }
