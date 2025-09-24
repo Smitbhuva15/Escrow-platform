@@ -186,7 +186,8 @@ export interface singledisputeType {
     status: Number,
     title: String,
     votingEndTime: Number,
-    votingremainingDays: Number
+    votingremainingDays: Number,
+    initialAmount: number
   }
 }
 
@@ -203,6 +204,7 @@ export interface DealType {
   isDisputed: boolean;
   disputedId: number;
   remainingDays: number;
+  initialAmount: number
 }
 
 export interface SingledealType {

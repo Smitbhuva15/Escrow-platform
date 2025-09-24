@@ -57,7 +57,7 @@ const Cart = ({ deals }: CartProps) => {
             {/* Amount & Status */}
             <div className="flex items-center justify-between mb-4">
               <div className="text-lg font-semibold text-[#1d45fe]">
-                {(Number(deal?.deal?.amount) / 1e18).toFixed(3)} ETH
+                {(Number(deal?.deal?.initialAmount) / 1e18).toFixed(3)} ETH
               </div>
               <span
                 className={`px-3 py-1 rounded-full text-xs font-medium ${deal?.deal?.status == 1

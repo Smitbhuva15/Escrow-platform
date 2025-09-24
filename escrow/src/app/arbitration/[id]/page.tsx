@@ -2,6 +2,7 @@
 import RightSectionArbitration from '@/components/Arbitration/RightSectionArbitration';
 import Banner from '@/components/banner/Banner';
 import LeftSection from '@/components/escrowId/LeftSection';
+import { Loader } from '@/components/ui/Loader';
 import { loadDispute, loadTotalVotings } from '@/lib/LoadData';
 import { singledisputeType } from '@/lib/types';
 import { RootState } from '@/store/store';
@@ -57,7 +58,7 @@ const page = () => {
     account ? (
       isLoading ? (
         <div className='h-[85vh] flex justify-center items-center'>
-          <Loader2 className="h-10 w-10 animate-spin text-[white]" />
+          <Loader />
         </div>
       ) : (
         <div className='xl:max-w-5xl lg:max-w-4xl md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-8 mb-24'>

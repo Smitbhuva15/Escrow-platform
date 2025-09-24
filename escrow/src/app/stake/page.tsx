@@ -3,14 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useActiveAccount } from "thirdweb/react";
-import { Coins, Activity, Loader2, Globe, Layers, Database, BarChart3, TrendingUp, Infinity, BarChart4, Vote } from "lucide-react";
+import { Coins, BarChart3, Vote } from "lucide-react";
 import { Toaster } from "react-hot-toast";
-
 import Banner from "@/components/banner/Banner";
 import StakeComponent from "@/components/stake/StakeComponent";
 import UnstakeComponent from "@/components/stake/UnstakeComponent";
 import { RootState } from "@/store/store";
 import { loadstakebalance } from "@/lib/LoadData";
+import { Loader } from "@/components/ui/Loader";
 
 const Stake = () => {
   const account = useActiveAccount();
@@ -52,8 +52,8 @@ const Stake = () => {
 
   return account ? (
     isLoading ? (
-      <div className='h-[85vh] flex justify-center items-center'>
-        <Loader2 className="h-10 w-10 animate-spin text-[white]" />
+      <div className=' flex justify-center h-[85vh] items-center'>
+       <Loader />
       </div>
     ) : (
       <div className="max-w-3xl w-[90%] mx-auto text-white my-16">

@@ -1,6 +1,7 @@
 "use client"
 import Banner from '@/components/banner/Banner';
 import DisputeCart from '@/components/cart/DisputeCart';
+import { Loader } from '@/components/ui/Loader';
 import { loadDispute } from '@/lib/LoadData';
 import { singledisputeType } from '@/lib/types';
 import { RootState } from '@/store/store';
@@ -102,7 +103,7 @@ const Arbitration = () => {
         {
           isLoading ? (
             <div className='h-[68vh] flex justify-center items-center'>
-              <Loader2 className="h-10 w-10 animate-spin text-[white]" />
+            <Loader />
             </div>
           ) :
 

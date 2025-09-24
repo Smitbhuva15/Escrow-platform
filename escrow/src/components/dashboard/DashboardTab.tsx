@@ -15,6 +15,7 @@ import MyDeal from './MyDeal'
 import MyVotes from './MyVotes'
 import MyStake from './MyStake'
 import { DealVote, SingledealType, singledisputeType, stakeDetails } from '@/lib/types'
+import { Loader } from '../ui/Loader'
 
 
 export default function DashboardTab() {
@@ -132,7 +133,7 @@ export default function DashboardTab() {
 
         {isLoading ? (
           <div className='h-[65vh] flex justify-center items-center'>
-            <Loader2 className="h-10 w-10 animate-spin text-[white]" />
+           < Loader />
           </div>
         ) : (
           <>

@@ -39,7 +39,7 @@ const RightSection = ({ deal }:dealprops) => {
       <div className="bg-gradient-to-r from-[#1E1E24] to-[#2A2A33] p-6 rounded-2xl shadow-lg border border-[#2F2F3A]">
         <h2 className="text-gray-400 font-semibold text-sm mb-1">Amount</h2>
         <p className="text-2xl font-bold text-indigo-400">
-          {deal?.amount ? Number(deal.amount) / 1e18 : "N/A"} ETH
+          {deal?.initialAmount ? Number(deal.initialAmount) / 1e18 : "N/A"} ETH
         </p>
       </div>
 

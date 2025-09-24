@@ -11,6 +11,7 @@ import Link from 'next/link';
 import VotingCard from '@/components/admin/VotingCard';
 import QuorumCard from '@/components/admin/QuorumCard';
 import PlatformFeeCard from '@/components/admin/PlatformFeeCard';
+import { Loader } from '@/components/ui/Loader';
 
 
 const Admin = () => {
@@ -58,7 +59,7 @@ const Admin = () => {
     account ? (
       isLoading ? (
         <div className='h-[85vh] flex justify-center items-center'>
-          <Loader2 className="h-10 w-10 animate-spin text-[white]" />
+         <Loader />
         </div>
       ) :
         admin == account?.address ? (<div className="max-w-3xl w-[90%] mx-auto text-white my-16">

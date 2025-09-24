@@ -8,6 +8,7 @@ import Cart from '@/components/cart/Cart';
 import { Loader2 } from 'lucide-react';
 import Banner from '@/components/banner/Banner';
 import { SingledealType } from '@/lib/types';
+import { Loader } from '@/components/ui/Loader';
 
 
 const Escrows = () => {
@@ -113,7 +114,7 @@ const Escrows = () => {
         {
           isLoading ? (
             <div className='h-[68vh] flex justify-center items-center'>
-              <Loader2 className="h-10 w-10 animate-spin text-[white]" />
+             <Loader />
             </div>
           ) :
 

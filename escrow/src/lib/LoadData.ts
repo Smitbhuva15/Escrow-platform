@@ -55,7 +55,8 @@ const decorateDeals = async (escrowDeals: any, escrowContract: any, provider: an
         deadline: Number(updatedDeal?.deadline),
         isDisputed: updatedDeal?.isDisputed,
         disputedId: Number(updatedDeal?.disputedId),
-        remainingDays: Number(remainingDays)
+        remainingDays: Number(remainingDays),
+        initialAmount:Number(event?.args?.amount)
       }
     }
   })
@@ -126,7 +127,7 @@ const decoratedispute = async ({ dispatch, escrowContract, provider, disputeeven
       const currenttime = Math.floor(Date.now() / 1000);
       const remainingSeconds = Number(updatedDispute?.votingEndTime) - currenttime;
       const votingremainingDays = Math.ceil(remainingSeconds / (24 * 60 * 60));
-
+     console.log(event)
       return {
         dispute: {
           client: updatedDeal?.buyer,
@@ -145,7 +146,8 @@ const decoratedispute = async ({ dispatch, escrowContract, provider, disputeeven
           Novoting: Number(updatedDispute?.Novoting),
           quorumTarget: Number(updatedDispute?.quorumTarget),
           closed: Number(updatedDispute?.closed),
-          votingremainingDays: votingremainingDays
+          votingremainingDays: votingremainingDays,
+          initialAmount:Number(event?.args?.amount)
         }
       }
     }))

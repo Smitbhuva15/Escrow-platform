@@ -27,7 +27,7 @@ export const errorconfig: ErrorConfigType = {
   "0x6677ee84": { message: "The dispute has already been closed." },
   "0x55b35329": { message: "You have already voted on this dispute." },
   "0x19a2a9bd": { message: "Voting weight must be greater than zero." },
-  "0x03927cca": { message: "You’ve already used your entire stake for voting; no remaining stake is available." },
+  "0x03927cca": { message: "You’ve already used your entire stake for voting; no remaining stake is available, increase your stake to participate again" },
   "0xcd798180": { message: "The deal is currently under dispute." },
   "0x2fb9a98f": { message: "You did not contribute any stake to this dispute." },
   "0xaaabc3b2": { message: "The dispute is not yet closed." },

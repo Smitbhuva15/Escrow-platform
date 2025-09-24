@@ -3,6 +3,7 @@ import Banner from '@/components/banner/Banner';
 import LeftSection from '@/components/escrowId/LeftSection';
 import RightSection from '@/components/escrowId/RightSection';
 import TimeLine from '@/components/escrowId/TimeLine';
+import { Loader } from '@/components/ui/Loader';
 import { LoadEscrow } from '@/lib/LoadData';
 import { DealType, SingledealType } from '@/lib/types';
 import { RootState } from '@/store/store';
@@ -58,7 +59,7 @@ const page = () => {
         account ? (
             isLoading ? (
                 <div className='h-[85vh] flex justify-center items-center'>
-                    <Loader2 className="h-10 w-10 animate-spin text-[white]" />
+                    <Loader />
                 </div>
             )
                 : (
