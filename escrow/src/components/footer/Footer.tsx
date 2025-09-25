@@ -15,7 +15,7 @@ const Footer = () => {
                     <Link href="/">
                         <div className='flex justify-center'>
                             {/* <img src='./logo2.png' className="sm:w-36 w-24 text-3xl transition-colors" /> */}
-                            <div className="text-4xl font-extrabold text-[#1d45fe] ml-2 my-6">
+                            <div className="text-4xl font-extrabold text-[#1d45fe] ml-2 mb-6 mt-12" >
                                 <Link href={'/'}>Escryn</Link>
                             </div>
                         </div>
@@ -87,7 +87,7 @@ const Footer = () => {
                                 <Globe className="w-5 h-5" />
                             </Link>
                         </div>
-                        <p className="text-sm text-zinc-400 text-center sm:text-left">
+                        <p className="text-sm text-zinc-400 text-center sm:text-left mb-6">
                             Designed & Developed by <span className="font-extrabold text-[#1638d6]">Smit Bhuva</span>
                         </p>
                     </div>

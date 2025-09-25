@@ -132,7 +132,7 @@ export default function DashboardTab() {
 
 
         {isLoading ? (
-          <div className='h-[65vh] flex justify-center items-center'>
+          <div className='h-[58vh] flex justify-center items-center'>
            < Loader />
           </div>
         ) : (

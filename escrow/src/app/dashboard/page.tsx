@@ -22,7 +22,7 @@ const Dashboard = () => {
         </div>
       </div>
     ) : (
-      <div className="h-[90vh] flex items-center justify-center">
+      <div className="md:h-[90vh] h-[83vh]  flex items-center justify-center">
         <Banner
           title="Connect Your Wallet"
           subtitle="Please connect your wallet to access dashboard."

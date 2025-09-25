@@ -270,7 +270,7 @@ const CreateEscrow = () => {
           />
         </div>
         ) : (
-          <div className="h-[80vh] flex items-center justify-center">
+          <div className="md:h-[80vh] h-[72vh] flex items-center justify-center">
             <Banner
               title={'Connect Your Wallet'}
               subtitle={'Secure your transactions by linking a wallet before proceeding.'}

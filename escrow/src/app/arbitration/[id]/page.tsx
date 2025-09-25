@@ -57,7 +57,7 @@ const page = () => {
   return (
     account ? (
       isLoading ? (
-        <div className='h-[85vh] flex justify-center items-center'>
+        <div className='md:h-[85vh] h-[82vh] flex justify-center items-center'>
           <Loader />
         </div>
       ) : (
@@ -73,7 +73,7 @@ const page = () => {
         </div>
       )
     ) : (
-      <div className="h-[90vh] flex items-center justify-center">
+      <div className="md:h-[90vh] h-[83vh]  flex items-center justify-center">
         <Banner
           title={'Connect Your Wallet'}
           subtitle={'Please Connect your wallet to participate in governance voting.'}

@@ -52,7 +52,7 @@ const Stake = () => {
 
   return account ? (
     isLoading ? (
-      <div className=' flex justify-center h-[85vh] items-center'>
+      <div className=' flex justify-center md:h-[85vh] h-[82vh] items-center'>
        <Loader />
       </div>
     ) : (
@@ -116,7 +116,7 @@ const Stake = () => {
       </div>
     )
   ) : (
-    <div className="h-[90vh] flex items-center justify-center">
+    <div className="md:h-[90vh] h-[83vh]  flex items-center justify-center">
       <Banner
         title="Connect Your Wallet"
         subtitle="Please connect your wallet to stake ETH and participate in governance."
