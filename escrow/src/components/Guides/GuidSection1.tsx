@@ -1,3 +1,4 @@
+
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -16,7 +17,7 @@ const GuidSection1 = () => {
                 <h2 className='text-white text-2xl md:text-4xl font-bold my-4'>Deal Flow</h2>
                 <div className='flex justify-center'>
                     <Image
-                        src="/flowchart.png"
+                        src="/DealFlowChart.png"
                         alt="Deals Flow"
                         width={850}
                         height={768}

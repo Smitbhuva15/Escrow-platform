@@ -1,3 +1,4 @@
+
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -19,7 +20,7 @@ const Guide1 = () => {
             </div>
             <div >
                 <span className='pr-2'>3.</span>
-                Securely deposit your funds into Escryn, wait for the specialist to deliver the product or service, confirm receipt once satisfied, and open a dispute if any issue arises
+                Securely deposit your funds into Escryn, wait for the specialist to deliver the product or service, confirm receipt once satisfied, and open a dispute if any issue arises.
                 <Image src={'/escrowdetail.png'} alt='deal' width={3000} height={3000} className='my-5 hover:scale-105  duration-700' />
             </div>
             <div >

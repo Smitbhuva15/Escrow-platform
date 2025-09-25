@@ -31,8 +31,8 @@ const Guide2 = () => {
             </div>
             <div >
                 <span className='pr-2'>10.</span>
-                Admin can adjust the number of dispute voting days and modify the quorum threshold, providing flexibility to manage voting periods and participation requirements
-                <Link href={'/admin'} className='text-[#1d45fe] hover:cursor-pointer'> here</Link>,  across the entire system.
+                Admin can adjust the number of dispute voting days, modify the quorum threshold, and change the platform fee
+                <Link href={'/admin'} className='text-[#1d45fe] hover:cursor-pointer'> here</Link>, providing flexibility to manage voting periods, participation requirements, and transaction charges across the entire system.
                 <Image src={'/admin.png'} alt='mystake' width={3000} height={3000} className='my-5 hover:scale-105 duration-700 ' />
             </div>
         </div>
