@@ -139,6 +139,7 @@ event Confirmation(
 event Dispute(
     uint256 disputedId,
     uint256 votingEndTime,
+    uint256 amount,
     uint256 YesVoting,
     uint256 Novoting,
     uint256 quorumTarget,

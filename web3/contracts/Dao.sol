@@ -136,6 +136,7 @@ contract Dao {
         emit Dispute(
             disputedId,
             votingEndTime,
+            dealed.amount,
             0,
             0,
             quorumTarget,

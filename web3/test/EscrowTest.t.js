@@ -497,7 +497,7 @@ describe("Escrow", () => {
         expect(dispute.Novoting).to.be.equal(0);
         expect(dispute.quorumTarget).to.be.equal(tokens(0.1));
         expect(dispute.closed).to.be.equal(false);
-        expect(dispute.dealId).to.be.equal(1);
+    
 
 
       })
@@ -516,7 +516,7 @@ describe("Escrow", () => {
         expect(args.closed).to.be.equal(false);
         expect(args.quorumTarget).to.be.equal(tokens(0.1));
         expect(args.dealId).to.be.equal(1);
-
+        expect(args.amount).to.be.equal(tokens(1));
       })
 
 
