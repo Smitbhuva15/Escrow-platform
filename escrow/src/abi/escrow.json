@@ -1,4 +1,4 @@
-[
+ [
     {
       "inputs": [],
       "stateMutability": "nonpayable",
@@ -451,6 +451,12 @@
           "indexed": false,
           "internalType": "uint256",
           "name": "votingEndTime",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
           "type": "uint256"
         },
         {

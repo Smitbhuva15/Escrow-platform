@@ -7,7 +7,7 @@ type ConfigType = {
 export const config: ConfigType = {
   11155111: {
     escrow: {
-      address: "0x5cb338DC73cE40ad63b7656e64133c5d09A9873C",
+      address: "0x8f23080Fd8a384A3e918021d8019F57e53624E63",
     },
   },
 };

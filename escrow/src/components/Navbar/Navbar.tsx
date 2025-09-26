@@ -10,6 +10,7 @@ import { headers } from "@/lib/header";
 import { useDispatch } from "react-redux";
 import { LoadContarct } from "@/lib/LoadData";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const client = createThirdwebClient({
     clientId: process.env.NEXT_PUBLIC_CLIENT_ID as string,
@@ -42,7 +43,9 @@ const Navbar = () => {
             <div className="xl:max-w-6xl lg:max-w-5xl md:max-w-3xl sm:max-w-xl w-[90%] mx-auto py-5 flex justify-between items-center">
                 {/* Logo */}
                 <div className="text-4xl font-extrabold text-[#8f614c] ml-2">
-                    <Link href={'/'}>Escryn</Link>
+                    <Link href={'/'}>
+                    <Image src={'/escryn.png'} alt="escryn" width={100} height={70}  className=" sm:w-[80px] w-16"/>
+                    </Link>
                 </div>
 
                 {/* Desktop Menu */}

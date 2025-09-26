@@ -1,5 +1,6 @@
 import { headers } from '@/lib/header';
 import { Github, Linkedin, Globe } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -16,7 +17,9 @@ const Footer = () => {
                         <div className='flex justify-center'>
                             {/* <img src='./logo2.png' className="sm:w-36 w-24 text-3xl transition-colors" /> */}
                             <div className="text-4xl font-extrabold text-[#8f614c] ml-2 mb-6 mt-12" >
-                                <Link href={'/'}>Escryn</Link>
+                                <Link href={'/'}>
+                                   <Image src={'/escryn.png'} alt="escryn" width={100} height={70}  className=" sm:w-[85px] w-16"/>
+                                </Link>
                             </div>
                         </div>
                     </Link>
