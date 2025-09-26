@@ -10,12 +10,12 @@ const Guide1 = () => {
             <div>
                 <span className='pr-2'>1.</span>
                 Escryn secures your deals with trustless transactions.
-                <Link href={'/deals'} className='text-[#1d45fe] hover:cursor-pointer'> Connect</Link> your wallet to start managing and creating Escryn agreements effortlessly.
+                <Link href={'/deals'} className='text-[#8f614c] hover:cursor-pointer'> Connect</Link> your wallet to start managing and creating Escryn agreements effortlessly.
             </div>
             <div >
                 <span className='pr-2'>2.</span>
                 Explore all active deals
-                <Link href={'/deals'} className='text-[#1d45fe] hover:cursor-pointer'> here</Link>  and effortlessly manage your personal Escryn agreements securely on Escryn platform.
+                <Link href={'/deals'} className='text-[#8f614c] hover:cursor-pointer'> here</Link>  and effortlessly manage your personal Escryn agreements securely on Escryn platform.
                 <Image src={'/deals.png'} alt='deal' width={3000} height={3000} className='my-5 hover:scale-105 duration-700 ' />
             </div>
             <div >
@@ -26,7 +26,7 @@ const Guide1 = () => {
             <div >
                 <span className='pr-2'>4.</span>
                 Explore all open and closed disputes
-                <Link href={'/arbitration'} className='text-[#1d45fe] hover:cursor-pointer'> here</Link>,  track the progress of each case, and review outcomes to stay informed about the status of every transaction
+                <Link href={'/arbitration'} className='text-[#8f614c] hover:cursor-pointer'> here</Link>,  track the progress of each case, and review outcomes to stay informed about the status of every transaction
                 <div className='flex justify-center'>
                     <Image src={'/dispute.png'} alt='dispute' width={300} height={300} className='my-5 hover:scale-105 duration-700 ' />
                 </div>

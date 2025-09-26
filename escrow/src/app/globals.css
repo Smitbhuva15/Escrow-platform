@@ -12,7 +12,7 @@ div{
   width: 35px;
   aspect-ratio: 1;
   /* radial gradient using the new color */
-  --_g: no-repeat radial-gradient(farthest-side, #1d45fe 94%, #0000);
+  --_g: no-repeat radial-gradient(farthest-side, #d99e82 94%, #0000);
   background:
     var(--_g) 0    0,
     var(--_g) 100% 0,

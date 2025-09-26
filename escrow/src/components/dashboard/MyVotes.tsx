@@ -75,7 +75,7 @@ const MyVotes = ({ totalVotes }: any) => {
               </TableCell>
               <TableCell className='' >  <span
                 className={`px-3 py-1 rounded-full text-right text-xs font-medium ${vote?.dispute?.dispute?.closed == 1 ? "bg-rose-500 text-white"
-                  : "bg-emerald-500 text-white"
+                  : "bg-[#346660] text-white"
                   }`}
               >
                 {vote?.dispute?.dispute?.closed == 1
@@ -87,7 +87,7 @@ const MyVotes = ({ totalVotes }: any) => {
                 <div className="flex justify-end items-center gap-2">
                   {isLoading == index ? (
                     <>
-                      <div className='flex text-white bg-[#1d45fe] hover:bg-[#1638d6] font-semibold py-1 px-3 cursor-not-allowed opacity-80 gap-2 text-sm rounded-lg disabled shadow-md transition-all'>
+                      <div className='flex text-white bg-[#8f614c] hover:bg-[#a3694f] font-semibold py-1 px-3 cursor-not-allowed opacity-80 gap-2 text-sm rounded-lg disabled shadow-md transition-all'>
                         <Loader2 className="h-4 w-4 animate-spin " />
                         <span className='flex text-[12.1px]'>Processing</span>
                       </div>
@@ -96,7 +96,7 @@ const MyVotes = ({ totalVotes }: any) => {
                   ) : (
                     
                  !vote.isUnlock==true ? (  <button
-                      className={`px-3 py-1 text-sm font-semibold rounded-lg bg-[#1d45fe] hover:bg-[#1638d6] text-white transition-colors`}
+                      className={`px-3 py-1 text-sm font-semibold rounded-lg bg-[#8f614c] hover:bg-[#a3694f] text-white transition-colors`}
                       onClick={() => handelUnstake(vote?.disputedId, index)}
                     >
                       Release Fund

@@ -81,7 +81,7 @@ const Arbitration = () => {
               value="Open"
               checked={selected === "Open"}
               onChange={(e) => setSelected(e.target.value)}
-              className="accent-[#1d45fe] w-4 h-4"
+              className="accent-[#d99e82] w-4 h-4"
             />
             <span className="text-sm md:text-base">Open</span>
           </label>
@@ -94,7 +94,7 @@ const Arbitration = () => {
               value="Closed"
               checked={selected === "Closed"}
               onChange={(e) => setSelected(e.target.value)}
-              className="accent-[#1d45fe] w-4 h-4"
+              className="accent-[#d99e82] w-4 h-4"
             />
             <span className="text-sm md:text-base">Closed</span>
           </label>

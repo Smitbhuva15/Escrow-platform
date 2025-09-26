@@ -81,13 +81,13 @@ const  RightSectionArbitration= ({ dispute }:any) => {
             {/* Total Votes Card */}
             <div className="bg-gradient-to-r from-[#1E1E24] to-[#2A2A33] p-6 rounded-2xl shadow-xl border border-[#2F2F3A]  transition-all duration-300">
                 <h2 className="text-gray-400 font-semibold text-sm mb-1 uppercase tracking-wide">Total Votes</h2>
-                <p className="text-3xl font-extrabold text-indigo-500">{totalVotes?.length ? totalVotes?.length : 0}</p>
+                <p className="text-3xl font-extrabold text-[#8f614c]">{totalVotes?.length ? totalVotes?.length : 0}</p>
             </div>
 
             {/* voting deadline */}
             <div className="bg-gradient-to-r from-[#1E1E24] to-[#2A2A33] p-6 rounded-2xl shadow-xl border border-[#2F2F3A]  transition-all duration-300">
                 <h2 className="text-gray-400 font-semibold text-sm mb-1 uppercase tracking-wide">Voting Deadline</h2>
-                <p className="text-3xl font-extrabold text-[#1d45fe]/70"> {
+                <p className="text-3xl font-extrabold text-[#8f614c]/70"> {
                     Number(dispute?.dispute?.votingremainingDays) <= 0
                         ? "Expired"
                         : ` ${dispute?.dispute?.votingremainingDays}${" "}
@@ -100,7 +100,7 @@ const  RightSectionArbitration= ({ dispute }:any) => {
                 dispute?.dispute?.client === account?.address || dispute?.dispute?.specialist === account?.address ? (
 
                     <div className="bg-[#1E1E24] p-8 rounded-2xl shadow-lg border border-[#2F2F3A] space-y-3">
-                        <h2 className="text-[#1d45fe] font-bold text-xl">
+                        <h2 className="text-[#8f614c] font-bold text-xl">
                             Finalize Dispute Case
                         </h2>
                         <p className="text-gray-300 text-sm leading-relaxed">
@@ -116,7 +116,7 @@ const  RightSectionArbitration= ({ dispute }:any) => {
                                 </button>
                             ) : (
                                 <button
-                                    className="w-full bg-[#1d45fe] hover:bg-[#1638d6] text-white font-semibold py-3 rounded-xl transition"
+                                    className="w-full bg-[#8f614c] hover:bg-[#a3694f] text-white font-semibold py-3 rounded-xl transition"
                                     onClick={() => ResolveDispute()}
                                 >
                                     Resolve Dispute
@@ -133,7 +133,7 @@ const  RightSectionArbitration= ({ dispute }:any) => {
 
                         {/* Title & Description */}
                         <div>
-                            <h2 className="text-[#1d45fe] font-extrabold text-2xl md:text-3xl">
+                            <h2 className="text-[#8f614c] font-extrabold text-2xl md:text-3xl">
                                 Vote on Dispute
                             </h2>
                             <p className="text-gray-400 text-sm md:text-base mt-2">
@@ -149,7 +149,7 @@ const  RightSectionArbitration= ({ dispute }:any) => {
                             </div>
                             <div className="relative w-full h-[6px] bg-[#1E1F25] rounded-full overflow-hidden">
                                 <div
-                                    className="absolute top-0 left-0 h-[6px] rounded-full bg-[#1d45fe]/70 transition-all duration-700"
+                                    className="absolute top-0 left-0 h-[6px] rounded-full bg-[#8f614c]/70 transition-all duration-700"
                                     style={{ width: `${clientVotePercent}%` }}
                                 />
 
@@ -168,7 +168,7 @@ const  RightSectionArbitration= ({ dispute }:any) => {
                             </div>
                             <div className="relative w-full h-[6px] bg-[#1E1F25] rounded-full overflow-hidden">
                                 <div
-                                    className="absolute top-0 left-0 h-[6px] rounded-full bg-emerald-500/70 transition-all duration-700"
+                                    className="absolute top-0 left-0 h-[6px] rounded-full bg-[#346660] transition-all duration-700"
                                     style={{ width: `${specialistVotePercent}%` }}
                                 />
 
@@ -191,7 +191,7 @@ const  RightSectionArbitration= ({ dispute }:any) => {
                                         required: "ETH Amount is required",
                                         min: { value: 0.0001, message: "Minimum ETH weight is 0.0001 ETH" },
                                     })}
-                                    className="w-full px-4 py-3 rounded-xl mt-2 bg-[#1E1F25] border border-gray-700 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] focus:border-[#1d45fe] transition-all   appearance-none 
+                                    className="w-full px-4 py-3 rounded-xl mt-2 bg-[#1E1F25] border border-gray-700 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#8f614c] focus:border-[#8f614c] transition-all   appearance-none 
                                 [&::-webkit-outer-spin-button]:appearance-none 
                                 [&::-webkit-inner-spin-button]:appearance-none 
                                 [&::-moz-appearance]:textfield"
@@ -205,14 +205,14 @@ const  RightSectionArbitration= ({ dispute }:any) => {
                             <div className="flex gap-4">
                                 {isLoading == "client"
                                     ? (
-                                        <button className="w-1/2 bg-[#1d45fe] hover:bg-[#1638d6] text-white font-semibold py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-not-allowed opacity-80"
+                                        <button className="w-1/2 bg-[#8f614c] hover:bg-[#a3694f] text-white font-semibold py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-not-allowed opacity-80"
 
                                         >
                                             <Loader2 className="h-5 w-5 animate-spin" />
                                             Processing...
                                         </button>
                                     ) : (
-                                        <button className="w-1/2 bg-[#1d45fe] hover:bg-[#1638d6] text-white font-semibold py-3 rounded-xl shadow-md transition-all"
+                                        <button className="w-1/2 bg-[#8f614c] hover:bg-[#a3694f] text-white font-semibold py-3 rounded-xl shadow-md transition-all"
                                             onClick={handleSubmit((data) => onSubmit(data, "client"))}
                                         >
                                             Vote Client
@@ -222,14 +222,14 @@ const  RightSectionArbitration= ({ dispute }:any) => {
 
                                 {isLoading == "specialist"
                                     ? (
-                                        <button className="w-1/2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-not-allowed opacity-80"
+                                        <button className="w-1/2 bg-[#346660] hover:bg-[#38746d] text-white font-semibold py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-not-allowed opacity-80"
 
                                         >
                                             <Loader2 className="h-5 w-5 animate-spin" />
                                             Processing...
                                         </button>
                                     ) : (
-                                        <button className="w-1/2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-xl shadow-md transition-all"
+                                        <button className="w-1/2 bg-[#346660] hover:bg-[#38746d] text-white font-semibold py-3 rounded-xl shadow-md transition-all"
                                             onClick={handleSubmit((data) => onSubmit(data, "specialist"))}
                                         >
                                             Vote Specialist

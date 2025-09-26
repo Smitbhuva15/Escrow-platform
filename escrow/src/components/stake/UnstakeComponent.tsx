@@ -42,11 +42,11 @@ const UnstakeComponent = () => {
     };
 
     return (
-        <div className="flex flex-col bg-gradient-to-br  p-8 rounded-2xl shadow-sm bg-[#131519]/90  shadow-[#1d45fe] sm:hover:scale-105 transition-all duration-300">
+        <div className="flex flex-col bg-gradient-to-br  p-8 rounded-2xl shadow-sm bg-[#131519]/90  shadow-[#8f614c] sm:hover:scale-105 transition-all duration-300">
             {/* Header */}
             <div className="flex items-center gap-3 mb-4">
-                <ArrowDownCircle className="text-[#1d45fe] w-6 h-6" />
-                <h2 className="text-2xl font-bold text-[#1d45fe]">Unstake ETH</h2>
+                <ArrowDownCircle className="text-[#8f614c] w-6 h-6" />
+                <h2 className="text-2xl font-bold text-[#8f614c]">Unstake ETH</h2>
             </div>
 
             {/* Description */}
@@ -67,7 +67,7 @@ const UnstakeComponent = () => {
                             min: { value: 0.0001, message: "Unstake Amount must be at least 0.0001ETH" },
                         })}
 
-                        className="border border-gray-600 rounded-xl p-3 bg-[#121217] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition duration-200 appearance-none 
+                        className="border border-gray-600 rounded-xl p-3 bg-[#121217] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#8f614c] transition duration-200 appearance-none 
                       [&::-webkit-outer-spin-button]:appearance-none 
                       [&::-webkit-inner-spin-button]:appearance-none 
                       [&::-moz-appearance]:textfield"
@@ -84,7 +84,7 @@ const UnstakeComponent = () => {
                 {isLoadingUnStake ? (
                     <button
                         disabled
-                        className="bg-[#1d45fe] text-white font-semibold py-3 px-6 rounded-xl shadow-md flex items-center justify-center gap-2 w-full cursor-not-allowed opacity-80"
+                        className="bg-[#8f614c] text-white font-semibold py-3 px-6 rounded-xl shadow-md flex items-center justify-center gap-2 w-full cursor-not-allowed opacity-80"
                     >
                         <Loader2 className="h-5 w-5 animate-spin" />
                         Processing...
@@ -92,7 +92,7 @@ const UnstakeComponent = () => {
                 ) : (
                     <button
                         type="submit"
-                        className="bg-[#1d45fe] hover:bg-[#1638d6] text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:shadow-xl w-full transition-all duration-300"
+                        className="bg-[#8f614c] hover:bg-[#a3694f] text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:shadow-xl w-full transition-all duration-300"
                     >
                         Unstake Now
                     </button>)

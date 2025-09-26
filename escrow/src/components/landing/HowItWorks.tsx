@@ -18,7 +18,7 @@ const HowItWorks = () => {
                         </h3>
                     </div>
                     <div className='md:hidden block py-10 justify-items-center'>
-                        <Image src={'/lockcontract.png'} alt='Trust strangers' width={300} height={200} className='h-96 w-56' />
+                        <Image src={'/secureboy.png'} alt='Trust strangers' width={300} height={200} className='h-96 w-56' />
 
                     </div>
                     <div className='md:w-[90%] text-zinc-300 lg:text-[17px] text-sm'>
@@ -32,7 +32,7 @@ const HowItWorks = () => {
 
                 </div>
                 <div className='md:w-1/2 justify-items-end md:block hidden'>
-                    <Image src={'/lockcontract.png'} alt='Trust strangers' width={300} height={400} />
+                    <Image src={'/secureboy.png'} alt='Trust strangers' width={300} height={400} />
                 </div>
             </div>
             <div className='my-36 text-white items-center flex md:flex-row flex-col bg-[#24292e] p-10 rounded-xl w-full'>
@@ -42,7 +42,7 @@ const HowItWorks = () => {
                     <p className='pl-3 md:w-[90%] lg:text-[19px] text-sm pt-5'>Decentralized escrow is designed mainly for cross-border transactions between small and medium businesses, but it also works for domestic trade or high-value deals between individuals. Examples include domain names, vehicles, real estate, art, collectibles, game assets, freelance projects, and more.</p>
                 </div>
                 <div className='md:w-1/4  justify-items-center md:mt-0 mt-8 '>
-                    <Image src={'/escrowearth.svg'} alt='escro wearth' width={300} height={200} className='h-56 w-64' />
+                    <Image src={'/escrowearth.png'} alt='escro wearth' width={300} height={200} className='h-56 w-64' />
                 </div>
             </div>
 
@@ -108,7 +108,7 @@ const HowItWorks = () => {
                         </div>
                     </div>
                       <div>
-                        <p className='mt-10 text-sm font-semibold text-gray-400'>See more detailed description of the workflow in the <span className='text-[#1d45fe] hover:text-[#1638d6]'><a href="/guides">user guide.</a></span></p>
+                        <p className='mt-10 text-sm font-semibold text-gray-400'>See more detailed description of the workflow in the <span className='text-[#8f614c] hover:text-[#a3694f]'><a href="/guides">user guide.</a></span></p>
                       </div>
                 </div>
             </div>

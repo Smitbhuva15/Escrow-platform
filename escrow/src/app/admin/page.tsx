@@ -72,7 +72,7 @@ const Admin = () => {
           <div className="sm:grid-cols-2 grid grid-cols-1 gap-6 mb-12">
             {/* Voting Period Setting */}
             <div className="flex items-center gap-4 p-4 bg-[#1E1E24] rounded-xl shadow-md hover:shadow-lg transition-all">
-              <Gauge className="text-[#1d45fe] w-7 h-7" /> {/* Icon */}
+              <Gauge className="text-[#d99e82] w-7 h-7" /> {/* Icon */}
               <div className="flex flex-col">
                 <span className="text-gray-400 text-sm md:text-base">
                   Voting Period
@@ -85,7 +85,7 @@ const Admin = () => {
 
             {/* Quorum Requirement */}
             <div className="flex items-center gap-4 p-4 bg-[#1E1E24] rounded-xl shadow-md hover:shadow-lg transition-all">
-              <Users className="text-[#1d45fe] w-7 h-7" /> {/* Icon */}
+              <Users className="text-[#d99e82] w-7 h-7" /> {/* Icon */}
               <div className="flex flex-col">
                 <span className="text-gray-400 text-sm md:text-base">
                   Voting Quorum
@@ -99,7 +99,7 @@ const Admin = () => {
           
             {/*paltform fee */}
             <div className="flex items-center gap-4 p-4 bg-[#1E1E24] rounded-xl shadow-md hover:shadow-lg transition-all">
-              <PieChart className="text-[#1d45fe] w-7 h-7" /> 
+              <PieChart className="text-[#d99e82] w-7 h-7" /> 
               <div className="flex flex-col">
                 <span className="text-gray-400 text-sm md:text-base">
                 Platform Fee
@@ -123,11 +123,11 @@ const Admin = () => {
           <Toaster position="bottom-right" reverseOrder={false} />
         </div>) : (
           <div className="h-[80vh] flex justify-center items-center">
-            <div className="bg-[#1E1E24] px-8 py-12 rounded-2xl shadow-lg border border-[#1d45fe]/30 text-center max-w-md w-[90%]">
+            <div className="bg-[#1E1E24] px-8 py-12 rounded-2xl shadow-lg border border-[#d99e82]/30 text-center max-w-md w-[90%]">
               {/* Icon */}
               <div className="flex justify-center mb-6">
-                <div className="bg-[#1d45fe]/10 p-4 rounded-full">
-                  <X className='text-[#1d45fe] size-10' />
+                <div className="bg-[#d99e82]/10 p-4 rounded-full">
+                  <X className='text-[#d99e82] size-10' />
 
                 </div>
               </div>
@@ -137,13 +137,13 @@ const Admin = () => {
 
               {/* Subtitle */}
               <p className="text-gray-400 mb-6 text-lg">
-                Only the <span className="text-[#1d45fe] font-semibold">Admin</span> can access this section.
+                Only the <span className="text-[#d99e82] font-semibold">Admin</span> can access this section.
               </p>
 
               {/* Button to go back or home */}
               <Link href={'/'}>
                 <button
-                  className="bg-[#1d45fe] hover:bg-[#1638d6] px-6 py-3 rounded-xl font-semibold text-white shadow-md hover:shadow-xl transition-all duration-300"
+                  className="bg-[#d99e82] hover:bg-[#a3694f] px-6 py-3 rounded-xl font-semibold text-white shadow-md hover:shadow-xl transition-all duration-300"
                 >
                   Go Back Home
                 </button>

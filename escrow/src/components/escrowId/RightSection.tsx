@@ -38,7 +38,7 @@ const RightSection = ({ deal }:dealprops) => {
       {/* Amount Section */}
       <div className="bg-gradient-to-r from-[#1E1E24] to-[#2A2A33] p-6 rounded-2xl shadow-lg border border-[#2F2F3A]">
         <h2 className="text-gray-400 font-semibold text-sm mb-1">Amount</h2>
-        <p className="text-2xl font-bold text-indigo-400">
+        <p className="text-2xl font-bold text-[#8f614c]">
           {deal?.initialAmount ? Number(deal.initialAmount) / 1e18 : "N/A"} ETH
         </p>
       </div>
@@ -58,7 +58,7 @@ const RightSection = ({ deal }:dealprops) => {
           {/* client Actions */}
           {deal?.client == account?.address ? (
             <div className="bg-[#1E1E24] p-8 rounded-2xl shadow-lg border border-[#2F2F3A] space-y-3">
-              <h2 className="text-[#1d45fe] font-bold text-xl">
+              <h2 className="text-[#8f614c] font-bold text-xl">
                 Confirm Receipt
               </h2>
               <p className="text-gray-300 text-sm leading-relaxed">
@@ -75,7 +75,7 @@ const RightSection = ({ deal }:dealprops) => {
                 ) : (
                   <button
                     onClick={() => markconfirm(deal?.dealId)}
-                    className="w-full bg-[#1d45fe] hover:bg-[#1638d6] text-white font-semibold py-3 rounded-xl transition"
+                    className="w-full bg-[#8f614c] hover:bg-[#a3694f] text-white font-semibold py-3 rounded-xl transition"
                   >
                     Confirm Receipt
                   </button>
@@ -87,7 +87,7 @@ const RightSection = ({ deal }:dealprops) => {
           ) : (
             /* specialist Actions */
             <div className="bg-[#1E1E24] p-8 rounded-2xl shadow-lg border border-[#2F2F3A] space-y-3">
-              <h2 className="text-[#1d45fe] font-bold text-xl">
+              <h2 className="text-[#8f614c] font-bold text-xl">
                 Mark as Delivered
               </h2>
               <p className="text-gray-300 text-sm leading-relaxed">
@@ -104,7 +104,7 @@ const RightSection = ({ deal }:dealprops) => {
                 ) : (
                   <button
                     onClick={() => markdeliver(deal?.dealId)}
-                    className="w-full bg-[#1d45fe] hover:bg-[#1638d6] text-white font-semibold py-3 rounded-xl transition"
+                    className="w-full bg-[#8f614c] hover:bg-[#a3694f] text-white font-semibold py-3 rounded-xl transition"
                   >
                     Delivered
                   </button>
@@ -117,7 +117,7 @@ const RightSection = ({ deal }:dealprops) => {
 
           {/* Dispute Section */}
           <div className="bg-[#1E1E24] p-8 rounded-2xl shadow-lg border border-[#2F2F3A] space-y-3">
-            <h2 className="text-[#1d45fe] font-bold text-xl">
+            <h2 className="text-[#8f614c] font-bold text-xl">
               Raise a Dispute
             </h2>
             <p className="text-gray-300 text-sm leading-relaxed">
@@ -136,7 +136,7 @@ const RightSection = ({ deal }:dealprops) => {
               ) : (
                 <button
                   onClick={() => markOpendispute(deal?.dealId)}
-                  className="w-full bg-[#1d45fe] hover:bg-[#1638d6] text-white font-semibold py-3 rounded-xl transition"
+                  className="w-full bg-[#8f614c] hover:bg-[#a3694f] text-white font-semibold py-3 rounded-xl transition"
                 >
                   Open Dispute
                 </button>

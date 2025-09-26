@@ -46,7 +46,7 @@ const MyStake = ({ stakeHistory }:stakeprops) => {
                                 </TableCell>
                                 <TableCell className='text-right'>
                                     <span className="px-3 py-1 rounded-full  text-xs font-medium
-                                     bg-emerald-500 text-white  text-right ">
+                                     bg-[#346660] text-white  text-right ">
                                      completed
                                     </span>
                                    

@@ -111,20 +111,20 @@ export default function DashboardTab() {
         <TabsList className="flex-col gap-3 bg-muted/40 p-2 mt-10  sm:mt-0 sm:flex-row rounded-xl w-fit sm:m-0 mx-auto">
           <TabsTrigger
             value="My Deals"
-            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "My Deals" ? "bg-[#1d45fe]" : "border shadow-xs shadow-amber-50"} p-4  transition`}
+            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "My Deals" ? "bg-[#8f614c]" : "border shadow-xs shadow-amber-50"} p-4  transition`}
 
           >
             My Deals
           </TabsTrigger>
           <TabsTrigger
             value="My Votes"
-            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "My Votes" ? "bg-[#1d45fe]" : "border shadow-xs shadow-amber-50"} p-4   transition`}
+            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "My Votes" ? "bg-[#8f614c]" : "border shadow-xs shadow-amber-50"} p-4   transition`}
           >
             My Votes
           </TabsTrigger>
           <TabsTrigger
             value="Stake History"
-            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "Stake History" ? "bg-[#1d45fe]" : "border shadow-xs shadow-amber-50"} p-4  transition`}
+            className={`rounded-lg px-4 py-2 :bg-primary ${activeTab == "Stake History" ? "bg-[#8f614c]" : "border shadow-xs shadow-amber-50"} p-4  transition`}
           >
             Funds History
           </TabsTrigger>

@@ -41,7 +41,7 @@ const Navbar = () => {
         >
             <div className="xl:max-w-6xl lg:max-w-5xl md:max-w-3xl sm:max-w-xl w-[90%] mx-auto py-5 flex justify-between items-center">
                 {/* Logo */}
-                <div className="text-4xl font-extrabold text-[#1d45fe] ml-2">
+                <div className="text-4xl font-extrabold text-[#8f614c] ml-2">
                     <Link href={'/'}>Escryn</Link>
                 </div>
 
@@ -51,7 +51,7 @@ const Navbar = () => {
                         {
                             headers.map((header, index) => (
                                 <Link href={`${header.link}`} key={index}>
-                                    <li className={`hover:text-[#1638d6]  transition duration-500 ${pathname ==header.link &&"text-[#1638d6]"}`}> {header.name}</li>
+                                    <li className={`  transition duration-500 ${pathname ==header.link &&"bg-[#a3694f] px-4 py-1 rounded-lg"}`}> {header.name}</li>
                                 </Link>
                             ))
                         }
@@ -107,7 +107,7 @@ const Navbar = () => {
                         {
                             headers.map((header, index) => (
                                 <Link href={`${header.link}`} onClick={() => setDisplay(false)} key={index}>
-                                    <li className={`hover:text-[#1638d6]  transition duration-500 ${pathname ==header.link &&"text-[#1638d6]"}`}> {header.name}</li>
+                                    <li className={`  transition duration-500 ${pathname ==header.link &&"bg-[#a3694f] px-4 py-1 rounded-lg"}`}> {header.name}</li>
                                 </Link>
                             ))
                         }

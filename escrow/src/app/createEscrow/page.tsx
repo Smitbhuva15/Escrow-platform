@@ -108,7 +108,7 @@ const CreateEscrow = () => {
         </h1>
 
           {/* Card Container with custom blue shadow */}
-          <div className="bg-[#131519]/90 rounded-2xl p-8 shadow-sm shadow-[#1d45fe]">
+          <div className="bg-[#131519]/90 rounded-2xl p-8 shadow-sm shadow-[#d99e82]">
             <form className="space-y-6 " onSubmit={handleSubmit(onSubmit)}>
               {/* Title */}
               <div className="flex flex-col">
@@ -125,7 +125,7 @@ const CreateEscrow = () => {
                       message: "Minimum length is 15 characters",
                     }
                   })}
-                  className="border border-gray-500 bg-transparent rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition w-full"
+                  className="border border-gray-500 bg-transparent rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#d99e82] transition w-full"
                 />
                 {errors.title && (
                   <p className="text-red-500 text-sm mt-2">{errors.title.message}</p>
@@ -150,7 +150,7 @@ const CreateEscrow = () => {
 
                   })}
 
-                  className="border border-gray-500 bg-transparent rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition w-full"
+                  className="border border-gray-500 bg-transparent rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#d99e82] transition w-full"
                 />
                 {errors.description && (
                   <p className="text-red-500 text-sm mt-2">{errors.description.message}</p>
@@ -180,7 +180,7 @@ const CreateEscrow = () => {
                       message: "Invalid Ethereum address format",
                     },
                   })}
-                  className="border border-gray-500 bg-transparent rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition w-full"
+                  className="border border-gray-500 bg-transparent rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#d99e82] transition w-full"
                 />
 
                 {errors.specialist && (
@@ -201,7 +201,7 @@ const CreateEscrow = () => {
                     required: "ETH Amount is required",
                     min: { value: 0.001, message: "Amount must be at least 0.001ETH" },
                   })}
-                  className="border border-gray-50 bg-transparent rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition w-full
+                  className="border border-gray-50 bg-transparent rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#d99e82] transition w-full
                 appearance-none 
                       [&::-webkit-outer-spin-button]:appearance-none 
                       [&::-webkit-inner-spin-button]:appearance-none 
@@ -230,7 +230,7 @@ const CreateEscrow = () => {
 
 
                   })}
-                  className="border border-gray-50 bg-transparent rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1d45fe] transition w-full
+                  className="border border-gray-50 bg-transparent rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#d99e82] transition w-full
                 appearance-none 
                       [&::-webkit-outer-spin-button]:appearance-none 
                       [&::-webkit-inner-spin-button]:appearance-none 
@@ -248,7 +248,7 @@ const CreateEscrow = () => {
                   <button
                     disabled
                     type="submit"
-                    className="bg-[#1d45fe] text-white font-semibold px-6 py-3 rounded-full flex items-center justify-center gap-2 w-full cursor-not-allowed opacity-80"
+                    className="bg-[#8f614c] hover:bg-[#a3694f] text-white font-semibold px-6 py-3 rounded-full flex items-center justify-center gap-2 w-full cursor-not-allowed opacity-80"
                   >
                     <Loader2 className="h-5 w-5 animate-spin" />
                     Processing...
@@ -256,7 +256,7 @@ const CreateEscrow = () => {
                 ) : (
                   <button
                     type="submit"
-                    className="bg-[#1d45fe] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#1638d6] transition w-full flex items-center justify-center"
+                    className="bg-[#8f614c]  text-white font-semibold px-6 py-3 rounded-full hover:bg-[#a3694f] transition w-full flex items-center justify-center"
                   >
                     Start Deal
                   </button>

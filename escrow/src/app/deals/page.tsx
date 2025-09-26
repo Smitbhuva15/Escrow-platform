@@ -82,7 +82,7 @@ const Escrows = () => {
               value={"all"}
               checked={selected === "all"}
               onChange={(e) => setSelected(e.target.value)}
-              className="accent-[#1d45fe] w-4 h-4"
+              className="accent-[#d99e82] w-4 h-4"
             />
             <span className="text-sm md:text-base">All Deals</span>
           </label>
@@ -94,7 +94,7 @@ const Escrows = () => {
               value={"Client"}
               checked={selected === "Client"}
               onChange={(e) => setSelected(e.target.value)}
-              className="accent-[#1d45fe] w-4 h-4"
+              className="accent-[#d99e82] w-4 h-4"
             />
             <span className="text-sm md:text-base">Client (Mine)</span>
           </label>
@@ -106,7 +106,7 @@ const Escrows = () => {
               value={"Specialist"}
               checked={selected === "Specialist"}
               onChange={(e) => setSelected(e.target.value)}
-              className="accent-[#1d45fe] w-4 h-4"
+              className="accent-[#d99e82] w-4 h-4"
             />
             <span className="text-sm md:text-base"> Specialist (Mine)</span>
           </label>

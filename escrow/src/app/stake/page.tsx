@@ -66,7 +66,7 @@ const Stake = () => {
         <div className="grid sm:grid-cols-2 grid-cols-1 gap-6 mb-12">
           {/* Current Staked */}
           <div className="flex items-center gap-4 p-4 bg-[#1E1E24] rounded-xl shadow-md hover:shadow-lg transition-all">
-            <Coins className="text-[#1d45fe] w-7 h-7" />
+            <Coins className="text-[#d99e82] w-7 h-7" />
             <div className="flex flex-col">
               <span className="text-gray-400 text-sm md:text-base">
                 My Active Stake
@@ -79,7 +79,7 @@ const Stake = () => {
 
           {/* Used Stake for Voting */}
           <div className="flex items-center gap-4 p-4 bg-[#1E1E24] rounded-xl shadow-md hover:shadow-lg transition-all">
-            <Vote className="text-[#1d45fe] w-7 h-7" />
+            <Vote className="text-[#d99e82] w-7 h-7" />
             <div className="flex flex-col">
               <span className="text-gray-400 text-sm md:text-base">
                 Voting Locked Stake
@@ -91,7 +91,7 @@ const Stake = () => {
           </div>
 
           <div className="flex items-center gap-4 p-4 bg-[#1E1E24] rounded-xl shadow-md hover:shadow-lg transition-all">
-            <BarChart3 className="text-[#1d45fe] w-7 h-7" />
+            <BarChart3 className="text-[#d99e82] w-7 h-7" />
             <div className="flex flex-col">
               <span className="text-gray-400 text-sm md:text-base">
                 Total Platform Stake

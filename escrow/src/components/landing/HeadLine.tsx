@@ -19,7 +19,7 @@ const HeadLine = () => {
             Fair settlement through decentralized arbitration
           </h3>
           <Link href={'/deals'}>
-            <button className="mt-7 bg-[#1d45fe] text-white font-semibold rounded-full px-6 py-3 hover:bg-[#1638d6] transition">
+            <button className="mt-7 bg-[#8f614c] text-white font-semibold rounded-full px-6 py-3 hover:bg-[#a3694f] transition">
               Get Started
             </button>
           </Link>
@@ -39,13 +39,13 @@ const HeadLine = () => {
       <div className="text-gray-300 grid grid-cols-1 lg:grid-cols-3 gap-6 my-16">
         {/* Box 1 */}
         <div className="flex  items-center text-center bg-[#24292e] p-6 rounded-xl w-full ">
-          <ShieldCheck className=" size-14 text-[#1d45fe]" />
+          <ShieldCheck className=" size-14 text-[#8f614c]" />
           <p className="lg:text-lg font-bold  ml-4  w-[80%]  text-left">Secure business & peer payments</p>
         </div>
 
         {/* Box 2 */}
         <div className="flex  items-center text-center bg-[#24292e] p-6 rounded-xl w-full">
-          <FileMinus2 className=" size-14 text-[#1d45fe]" />
+          <FileMinus2 className=" size-14 text-[#8f614c]" />
           <p className="lg:text-lg font-bold  ml-4 w-[80%] text-left ">
             Decentralized smart contracts hold funds securely, protecting all parties from fraud.
           </p>
@@ -53,7 +53,7 @@ const HeadLine = () => {
 
         {/* Box 3 */}
         <div className="flex  items-center text-center bg-[#24292e] p-6 rounded-xl w-full ">
-          <Scale className=" size-14 text-[#1d45fe] " />
+          <Scale className=" size-14 text-[#8f614c] " />
           <p className="lg:text-lg font-bold  ml-4  w-[80%]  text-left">Any conflict is resolved through neutral arbitration.</p>
         </div>
       </div>

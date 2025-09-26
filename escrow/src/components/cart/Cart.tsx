@@ -26,10 +26,10 @@ const Cart = ({ deals }: CartProps) => {
       {deals.map((deal: SingledealType) => (
         <div
           key={deal?.deal?.dealId.toString()}
-          className="relative p-6 rounded-2xl bg-gradient-to-br from-[#1E1E24] to-[#141418] shadow-md hover:shadow-[#1d45fe]/40 hover:shadow-lg sm:hover:scale-[1.03] transition-all duration-300 flex flex-col justify-between"
+          className="relative p-6 rounded-2xl bg-gradient-to-br from-[#1E1E24] to-[#141418] shadow-md hover:shadow-[#8f614c]/40 hover:shadow-lg sm:hover:scale-[1.03] transition-all duration-300 flex flex-col justify-between"
         >
           {/* Gradient Top Border */}
-          <div className="absolute top-0 left-0 w-full h-1 rounded-t-2xl bg-gradient-to-r from-[#1d45fe] via-indigo-500 to-[#1d45fe]" />
+          <div className="absolute top-0 left-0 w-full h-1 rounded-t-2xl bg-gradient-to-r from-[#8f614c] via-[#765140] to-[#8f614c]" />
 
           <Link href={`deals/${deal?.deal?.dealId.toString()}`}>
             {/* Title */}
@@ -56,21 +56,11 @@ const Cart = ({ deals }: CartProps) => {
 
             {/* Amount & Status */}
             <div className="flex items-center justify-between mb-4">
-              <div className="text-lg font-semibold text-[#1d45fe]">
+              <div className="text-lg font-semibold text-[#8f614c]">
                 {(Number(deal?.deal?.initialAmount) / 1e18).toFixed(3)} ETH
               </div>
               <span
-                className={`px-3 py-1 rounded-full text-xs font-medium ${deal?.deal?.status == 1
-                  ? "bg-gray-600 text-white"
-                  : deal?.deal?.status == 2
-                    ? "bg-indigo-500 text-white"
-                    : deal?.deal?.status == 3
-                      ? "bg-slate-400 text-black"
-                      : deal?.deal?.status == 4
-                        ? "bg-emerald-500 text-white"
-                        : deal?.deal?.status == 5
-                          ? "bg-rose-500 text-white"
-                          : "bg-purple-800 text-white"
+                className={`px-3 py-1 rounded-full text-sm font-medium bg-[#346660] text-white
                   }`}
               >
                 {deal?.deal?.status == 1
@@ -92,7 +82,7 @@ const Cart = ({ deals }: CartProps) => {
               Deposit Deadline:{" "}
               <span
                 className={`font-medium px-3 py-1 rounded-full text-xs ${deal?.deal?.remainingDays <= 0
-                  && "bg-rose-700 text-white"}`}
+                  && "bg-[#6c2d29] text-white"}`}
               >
                 {deal?.deal?.remainingDays <= 0
                   ? "Expired"
@@ -106,7 +96,7 @@ const Cart = ({ deals }: CartProps) => {
           <div className="mt-6">
             {isLoading === Number(deal?.deal?.dealId) ? (
               <Button
-                className="w-full flex items-center justify-center gap-2 bg-[#1d45fe] text-white rounded-xl cursor-not-allowed opacity-80"
+                className="w-full flex items-center justify-center gap-2 bg-[#8f614c] text-white rounded-xl cursor-not-allowed opacity-80"
                 disabled
               >
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -121,7 +111,7 @@ const Cart = ({ deals }: CartProps) => {
               </Button>
             ) : (
               <Button
-                className="w-full bg-gradient-to-r from-[#1d45fe] to-indigo-600 hover:from-[#1638d6] hover:to-indigo-700 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all"
+                className="w-full bg-gradient-to-r from-[#8f614c] to-[#765140] hover:from-[#6a4a3d] hover:to-[#4f3327] text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all"
                 onClick={() =>
                   handelDeposit(
                     Number(deal?.deal?.dealId),

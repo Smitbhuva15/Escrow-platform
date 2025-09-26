@@ -38,18 +38,8 @@ const MyDeal = ({deals}:CartProps ) => {
                                 <TableCell className="font-semibold py-3">{`${deal?.deal?.specialist.slice(0, 10)}...${deal?.deal?.specialist.slice(-10)}`} </TableCell>
                                 <TableCell className="font-semibold">{`${Number(deal?.deal?.amount) / 1e18}`} </TableCell>
                                 <TableCell className='text-right' >  <span
-                                    className={`px-3 py-1 rounded-full text-right text-xs font-medium ${deal?.deal?.status == 1
-                                        ? "bg-gray-600 text-white"
-                                        : deal?.deal?.status == 2
-                                            ? "bg-indigo-500 text-white"
-                                            : deal?.deal?.status == 3
-                                                ? "bg-slate-400 text-black"
-                                                : deal?.deal?.status == 4
-                                                    ? "bg-emerald-500 text-white"
-                                                    : deal?.deal?.status == 5
-                                                        ? "bg-rose-500 text-white"
-                                                        : "bg-purple-800 text-white"
-                                        }`}
+                                    className={`px-3 py-1 rounded-full text-right  text-sm bg-[#346660] font-medium text-white
+                  }`}
                                 >
                                     {deal?.deal?.status == 1
                                         ? "Created"

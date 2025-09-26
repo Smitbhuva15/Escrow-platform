@@ -21,14 +21,14 @@ const LeftSection: React.FC<{ deal:any, section: string }> = ({ deal, section })
       </div>
 
       {/* client Info */}
-      <div className="p-6 rounded-2xl bg-gradient-to-br from-[#1E1E24]/80 to-[#16161a]/80 border border-indigo-500/30 shadow-md hover:shadow-indigo-500/20 transition-all">
+      <div className="p-6 rounded-2xl bg-gradient-to-br from-[#1E1E24]/80 to-[#16161a]/80 border border-[#8f614c] transition-all">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-gray-400 font-medium">Client Address</span>
-          <span className="px-3 py-1 text-xs rounded-full bg-indigo-500/20 text-indigo-400 font-medium">
+          <span className="text-white font-medium">Client Address</span>
+          <span className="px-3 py-1 text-xs rounded-full bg-[#8f614c] text-white font-medium">
             Client
           </span>
         </div>
-        <span className="text-indigo-400 font-mono text-sm break-all">
+        <span className="text-gray-400 font-mono text-sm break-all">
           {
             section == 'dispute'
               ?
@@ -38,14 +38,14 @@ const LeftSection: React.FC<{ deal:any, section: string }> = ({ deal, section })
       </div>
 
       {/* specialist Info */}
-      <div className="p-6 rounded-2xl bg-gradient-to-br from-[#1E1E24]/80 to-[#16161a]/80 border border-green-500/30 shadow-md hover:shadow-green-500/20 transition-all">
+      <div className="p-6 rounded-2xl bg-gradient-to-br from-[#1E1E24]/80 to-[#16161a]/80 border border-[#8f614c] transition-all">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-gray-400 font-medium">Specialist Address</span>
-          <span className="px-3 py-1 text-xs rounded-full bg-green-500/20 text-green-400 font-medium">
+          <span className="text-white font-medium">Specialist Address</span>
+          <span className="px-3 py-1 text-xs rounded-full bg-[#8f614c] text-white  font-medium">
             Specialist
           </span>
         </div>
-        <span className="text-green-400 font-mono text-sm break-all">
+        <span className="text-gray-400 font-mono text-sm break-all">
           {
             section == 'dispute'
               ?
@@ -58,21 +58,21 @@ const LeftSection: React.FC<{ deal:any, section: string }> = ({ deal, section })
       {
         section == 'dispute'
           ?
-          (  <div className="p-6 rounded-2xl bg-gradient-to-br from-[#1E1E24]/80 to-[#16161a]/80 border border-indigo-500/30 shadow-md hover:shadow-indigo-500/20 transition-all">
-            <h2 className="text-gray-400 font-semibold text-sm mb-1">Amount</h2>
-            <p className="text-2xl font-bold text-indigo-400">
+          (  <div className="p-6 rounded-2xl bg-gradient-to-br from-[#1E1E24]/80 to-[#16161a]/80 border border-[#8f614c]  transition-all">
+            <h2 className="text-white font-semibold text-sm mb-1">Amount</h2>
+            <p className="text-2xl font-bold text-gray-400">
               {deal?.dispute?.amount ? deal?.dispute?.amount / 1e18 : "N/A"} ETH
             </p>
           </div>)
           :
           (
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-[#1E1E24]/80 to-[#16161a]/80 border border-red-500/30 shadow-md hover:shadow-red-500/20 transition-all">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-[#1E1E24]/80 to-[#16161a]/80 border border-[#8f614c]   transition-all">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-gray-400 font-medium">Dispute Status</span>
+                <span className="text-white font-medium">Dispute Status</span>
                 <span
                   className={`px-3 py-1 text-xs rounded-full font-medium ${deal?.isDisputed
-                    ? "bg-red-500/20 text-red-400"
-                    : "bg-emerald-500/20 text-emerald-400"
+                    ? "bg-[#8f614c] text-white"
+                    : "bg-[#8f614c] text-white"
                     }`}
                 >
                   {deal?.isDisputed ? "Active" : "No Dispute"}

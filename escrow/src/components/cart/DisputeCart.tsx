@@ -11,7 +11,7 @@ const DisputeCart = ({ disputes }: disputeprops) => {
             {disputes.map((dispute: singledisputeType) => (
                 <div
                     key={dispute?.dispute?.dealId.toString()}
-                    className="relative bg-[#1E1E24] rounded-2xl p-6 shadow-lg border border-zinc-800 hover:border-[#1d45fe]/60 hover:shadow-[#1d45fe]/20 transition-all duration-300 flex flex-col"
+                    className="relative bg-[#1E1E24] rounded-2xl p-6 shadow-lg border border-zinc-800 hover:border-[#8f614c]/60 hover:shadow-[#8f614c]/20 transition-all duration-300 flex flex-col"
                 >
                     {/* Header */}
                     <div className="flex items-center justify-between mb-4">
@@ -20,8 +20,8 @@ const DisputeCart = ({ disputes }: disputeprops) => {
                         </h2>
                         <span
                             className={`px-3 py-1 rounded-full text-xs font-medium ${dispute?.dispute?.status == 5
-                                    ? "bg-rose-600 text-white"
-                                    : "bg-emerald-600 text-white"
+                                    ? "bg-[#6c2d29] text-white"
+                                    : "bg-[#346660] text-white"
                                 }`}
                         >
                             {dispute?.dispute?.status == 5 ? "Disputed" : "Resolved"}
@@ -36,7 +36,7 @@ const DisputeCart = ({ disputes }: disputeprops) => {
                     
                     <div className="space-y-4 relative border-l border-zinc-700 pl-4 mb-6">
                         <div>
-                            <span className="absolute -left-2 top-1.5 w-3 h-3 bg-[#1d45fe] rounded-full"></span>
+                            <span className="absolute -left-2 top-1.5 w-3 h-3 bg-[#8f614c] rounded-full"></span>
                             <p className="text-sm text-white font-medium">Client</p>
                             <p className="text-xs text-gray-400">
                                 {dispute?.dispute?.client?.slice(0, 6)}...
@@ -44,7 +44,7 @@ const DisputeCart = ({ disputes }: disputeprops) => {
                             </p>
                         </div>
                         <div>
-                            <span className="absolute -left-2 top-14 w-3 h-3 bg-green-500 rounded-full"></span>
+                            <span className="absolute -left-2 top-14 w-3 h-3 bg-[#8f614c] rounded-full"></span>
                             <p className="text-sm text-white font-medium">Specialist</p>
                             <p className="text-xs text-gray-400">
                                 {dispute?.dispute?.specialist?.slice(0, 6)}...
@@ -52,7 +52,7 @@ const DisputeCart = ({ disputes }: disputeprops) => {
                             </p>
                         </div>
                         <div>
-                            <span className="absolute -left-2 top-28 w-3 h-3 bg-amber-500 rounded-full"></span>
+                            <span className="absolute -left-2 top-28 w-3 h-3 bg-[#8f614c] rounded-full"></span>
                             <p className="text-sm text-white font-medium">Voting Deadline</p>
                             <p className="text-xs text-gray-400">
                                 {
@@ -67,14 +67,14 @@ const DisputeCart = ({ disputes }: disputeprops) => {
                     {/* Amount */}
                     <div className="flex justify-between items-center mb-4">
                         <span className="text-gray-400 text-sm">Amount</span>
-                        <span className="text-[#1d45fe] font-bold text-lg">
+                        <span className="text-[#8f614c] font-bold text-lg">
                             {(Number(dispute?.dispute?.amount) / 1e18).toFixed(3)} ETH
                         </span>
                     </div>
 
                     {/* Button */}
                     <Link href={`arbitration/${dispute?.dispute?.disputedId.toString()}`}>
-                        <Button className="w-full bg-gradient-to-r from-[#1d45fe] to-indigo-600 hover:from-[#1638d6] hover:to-indigo-700 text-white font-semibold rounded-xl transition-all">
+                        <Button className="w-full bg-gradient-to-r from-[#8f614c] to-[#765140] hover:from-[#6a4a3d] hover:to-[#4f3327] text-white font-semibold rounded-xl transition-all">
                             View Case
                         </Button>
                     </Link>
