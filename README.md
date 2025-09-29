@@ -1,4 +1,4 @@
- <h1 align="center"> Escryn</h1>
+ <h1 align="center"> <img src='escrow/public/escryn.png' width="75" alt="Website Demo"></h1>
 
 Welcome to **Escryn** - a trustless deals platform where users can stake ETH for voting power, create/participate in deals, deposit funds into escrow, confirm delivery, and open/resolve disputes via DAO-governed voting.
 

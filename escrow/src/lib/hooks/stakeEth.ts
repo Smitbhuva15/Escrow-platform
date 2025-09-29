@@ -12,6 +12,7 @@ export const stakeEth = async ({
   setIsLoadingStake,
   address
 }: stakeType) => {
+  
   const isReady =
     escrowContract && Object.keys(escrowContract).length > 0 &&
     provider && Object.keys(provider).length > 0;

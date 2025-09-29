@@ -12,8 +12,8 @@ const Guide1 = () => {
                 Escryn secures your deals with trustless transactions.
                 <Link href={'/deals'} className='text-[#8f614c] hover:cursor-pointer'> Connect</Link> your wallet to start managing and creating Escryn agreements effortlessly.
             </div>
-            <div >
-                <span className='pr-2'>2.</span>
+            <div className='mt-2'>
+                <span className='pr-2 '>2.</span>
                 Explore all active deals
                 <Link href={'/deals'} className='text-[#8f614c] hover:cursor-pointer'> here</Link>  and effortlessly manage your personal Escryn agreements securely on Escryn platform.
                 <Image src={'/deals.png'} alt='deal' width={3000} height={3000} className='my-5 hover:scale-105 duration-700 ' />
