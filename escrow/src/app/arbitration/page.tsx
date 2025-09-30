@@ -108,7 +108,7 @@ const Arbitration = () => {
           ) :
 
             (isDisputes && isDisputes.length > 0 ?
-              (<div className='my-10'>
+              (<div className='my-10 min-h-screen'>
                 <DisputeCart disputes={isDisputes} />
               </div>)
               :
@@ -126,7 +126,7 @@ const Arbitration = () => {
         }
       </div>
     ) : (
-      <div className="md:h-[90vh] h-[83vh]  flex items-center justify-center">
+      <div className="md:h-[80vh] h-[77vh]  flex items-center justify-center">
         <Banner
           title="Connect Your Wallet"
           subtitle="Please connect your wallet to create and manage escrow deals."

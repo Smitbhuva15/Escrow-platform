@@ -61,7 +61,7 @@ const LeftSection: React.FC<{ deal:any, section: string }> = ({ deal, section })
           (  <div className="p-6 rounded-2xl bg-gradient-to-br from-[#1E1E24]/80 to-[#16161a]/80 border border-[#8f614c]  transition-all">
             <h2 className="text-white font-semibold text-sm mb-1">Amount</h2>
             <p className="text-2xl font-bold text-gray-400">
-              {deal?.dispute?.amount ? deal?.dispute?.amount / 1e18 : "N/A"} ETH
+              {deal?.dispute?.initialAmount ? deal?.dispute?.initialAmount / 1e18 : "N/A"} ETH
             </p>
           </div>)
           :

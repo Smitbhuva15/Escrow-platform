@@ -127,7 +127,7 @@ const decoratedispute = async ({ dispatch, escrowContract, provider, disputeeven
       const currenttime = Math.floor(Date.now() / 1000);
       const remainingSeconds = Number(updatedDispute?.votingEndTime) - currenttime;
       const votingremainingDays = Math.ceil(remainingSeconds / (24 * 60 * 60));
-     console.log(event)
+
       return {
         dispute: {
           client: updatedDeal?.buyer,

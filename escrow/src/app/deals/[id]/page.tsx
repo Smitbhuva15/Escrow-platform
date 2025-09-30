@@ -63,7 +63,7 @@ const page = () => {
                 </div>
             )
                 : (
-                    <div className='xl:max-w-5xl lg:max-w-4xl md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-8 '>
+                    <div className='xl:max-w-5xl lg:max-w-4xl min-h-screen md:max-w-2xl sm:max-w-lg w-[90%] mx-auto text-white py-8 '>
                         <div className='lg:flex lg:gap-16'>
                             <div className='lg:w-[50%]'>
                                 <LeftSection deal={deal} section='deal'/>
@@ -78,7 +78,7 @@ const page = () => {
                     </div>
                 )
         ) : (
-            <div className="md:h-[90vh] h-[83vh]  flex items-center justify-center">
+            <div className="md:h-[80vh] h-[77vh]  flex items-center justify-center">
                 <Banner
                     title={'Connect Your Wallet'}
                     subtitle={'Please connect your wallet to create and manage escrow deals.'}

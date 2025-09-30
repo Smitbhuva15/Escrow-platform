@@ -56,14 +56,14 @@ const Stake = () => {
        <Loader />
       </div>
     ) : (
-      <div className="max-w-3xl w-[90%] mx-auto text-white my-16">
+      <div className="max-w-3xl w-[90%] mx-auto min-h-screen text-white my-16">
         {/* Title */}
         <h1 className="sm:text-4xl text-3xl md:text-5xl font-bold mb-8 text-center ">
           Governance Dashboard
         </h1>
 
         {/* Stake Info */}
-        <div className="grid sm:grid-cols-2 grid-cols-1 gap-6 mb-12">
+        <div className="grid sm:grid-cols-2 grid-cols-1   gap-6 mb-12">
           {/* Current Staked */}
           <div className="flex items-center gap-4 p-4 bg-[#1E1E24] rounded-xl shadow-md hover:shadow-lg transition-all">
             <Coins className="text-[#d99e82] w-7 h-7" />
@@ -116,7 +116,7 @@ const Stake = () => {
       </div>
     )
   ) : (
-    <div className="md:h-[90vh] h-[83vh]  flex items-center justify-center">
+    <div className="md:h-[80vh] h-[77vh]  flex items-center justify-center">
       <Banner
         title="Connect Your Wallet"
         subtitle="Please connect your wallet to stake ETH and participate in governance."

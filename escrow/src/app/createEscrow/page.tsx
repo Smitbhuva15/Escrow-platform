@@ -108,7 +108,10 @@ const CreateEscrow = () => {
         </h1>
 
           {/* Card Container with custom blue shadow */}
-          <div className="bg-[#131519]/90 rounded-2xl p-8 shadow-sm shadow-[#d99e82]">
+          <div className="min-h-screen">
+
+          
+          <div className="bg-[#131519]/90 rounded-2xl p-8  shadow-sm shadow-[#d99e82]">
             <form className="space-y-6 " onSubmit={handleSubmit(onSubmit)}>
               {/* Title */}
               <div className="flex flex-col">
@@ -269,8 +272,9 @@ const CreateEscrow = () => {
             reverseOrder={false}
           />
         </div>
+        </div>
         ) : (
-          <div className="md:h-[80vh] h-[72vh] flex items-center justify-center">
+          <div className="md:h-[72vh] h-[66vh] flex items-center justify-center">
             <Banner
               title={'Connect Your Wallet'}
               subtitle={'Secure your transactions by linking a wallet before proceeding.'}

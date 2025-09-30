@@ -62,7 +62,7 @@ const Admin = () => {
          <Loader />
         </div>
       ) :
-        admin == account?.address ? (<div className="max-w-3xl w-[90%] mx-auto text-white my-16">
+        admin == account?.address ? (<div className="max-w-3xl w-[90%] min-h-screen mx-auto text-white my-16">
           {/* Page Title */}
           <h1 className="sm:text-4xl text-3xl md:text-5xl font-bold mb-8 text-center ">
             Admin Controls
@@ -153,7 +153,7 @@ const Admin = () => {
 
         )
     ) : (
-      <div className="md:h-[90vh] h-[83vh]  flex items-center justify-center">
+      <div className="md:h-[80vh] h-[77vh]  flex items-center justify-center">
         <Banner
           title="Connect Your Wallet"
           subtitle="Please connect your wallet to access governance settings."

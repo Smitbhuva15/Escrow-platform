@@ -68,7 +68,7 @@ const DisputeCart = ({ disputes }: disputeprops) => {
                     <div className="flex justify-between items-center mb-4">
                         <span className="text-gray-400 text-sm">Amount</span>
                         <span className="text-[#8f614c] font-bold text-lg">
-                            {(Number(dispute?.dispute?.amount) / 1e18).toFixed(3)} ETH
+                            {(Number(dispute?.dispute?.initialAmount) / 1e18).toFixed(3)} ETH
                         </span>
                     </div>
 
